@@ -1,0 +1,40 @@
+CREATE TABLE BoletoEntity(
+     id INTEGER NOT NULL PRIMARY KEY,
+     idSorteo TEXT NOT NULL,
+     gameID TEXT NOT NULL,
+     tipo TEXT NOT NULL,
+     combinaciones TEXT NOT NULL,
+     fecha TEXT NOT NULL,
+     apertura TEXT NOT NULL,
+     cierre TEXT NOT NULL,
+     precio TEXT NOT NULL,
+     premio TEXT NOT NULL,
+     numSorteo TEXT NOT NULL,
+     apuestaMultiple INTEGER NOT NULL,
+     joker TEXT,
+     reintegro TEXT,
+     numeroClave TEXT,
+     dreams TEXT,
+     estrellas TEXT,
+     numeroElMillon TEXT,
+     numeroLoteria TEXT
+
+);
+
+insertBoleto:
+INSERT INTO BoletoEntity(id, idSorteo, gameID, tipo, combinaciones, fecha, apertura,cierre, precio, premio, numSorteo,apuestaMultiple, joker, reintegro,numeroClave, dreams, estrellas,numeroElMillon, numeroLoteria)
+VALUES ?;
+
+getAllBoletos:
+SELECT *
+FROM BoletoEntity;
+
+getBoletoById:
+SELECT *
+FROM BoletoEntity WHERE id = ?;
+
+deleteBoletoById:
+DELETE FROM BoletoEntity WHERE id = ?;
+
+deleteAllBoletos:
+DELETE FROM BoletoEntity;
