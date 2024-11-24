@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.lottery42.boleto.data.crearBoleto
+import com.example.lottery42.boleto.data.database.Boleto
 import com.example.lottery42.boleto.data.database.toEntity
 import com.example.lottery42.boleto.domain.DatabaseRepo
 import com.example.lottery42.boleto.domain.ScannerRepo
@@ -39,26 +40,22 @@ class ListScreenViewModel(
         }
     }
 
-    val boletos = databaseRepo.getAllBoletos()
-
     init {
         getAllBoletos()
     }
 
 
-    private val _boletoState = MutableStateFlow<BoletoListState>(BoletoListState())
+    private val _boletoState = MutableStateFlow<List<Boleto>>(emptyList())
     val boletoState = _boletoState.asStateFlow()
 
     fun getAllBoletos(){
         viewModelScope.launch(Dispatchers.IO)  {
-            boletos.collect { boletos ->
-                _boletoState.update {
-                    it.copy(
-                        boletos = boletos,
-                        Loading = false
-                    )
-                }
-            }
+           databaseRepo.getAllBoletos().collect{ boletos ->
+               boletos.map { boleto ->
+                   boleto.fecha
+               }
+               _boletoState.value = boletos
+           }
         }
     }
 

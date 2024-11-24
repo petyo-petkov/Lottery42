@@ -15,9 +15,9 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.koin.androidx.compose.koinViewModel
-
 @Composable
 fun ListScreen(
     listScreenViewModel: ListScreenViewModel = koinViewModel(),
@@ -34,8 +34,8 @@ fun ListScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             LazyColumn {
-                items(state.boletos) { boleto ->
-                    Text(text = boleto.id.toString())
+                items(state, key = { it.id }) { boleto ->
+                    BoletoItem(boleto)
 
                 }
             }

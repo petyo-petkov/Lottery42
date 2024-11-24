@@ -58,6 +58,10 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation(libs.androidx.material.icons.extended)
+    implementation("androidx.emoji2:emoji2:1.5.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.1")
+
 
     implementation(libs.androidx.material3.adaptive.navigation.suite)
     implementation(libs.androidx.adaptive)

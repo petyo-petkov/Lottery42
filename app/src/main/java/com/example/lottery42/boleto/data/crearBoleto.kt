@@ -8,11 +8,15 @@ import kotlinx.serialization.json.jsonPrimitive
 
 fun crearBoleto(data: String): Boleto {
     val info = parceJson(data)
+    val fecha = info["S"]?.jsonPrimitive?.content?.slice(3..9) ?: ""
 
     val (tipo, gameId) = when (info["P"]?.jsonPrimitive?.content) {
         "1" -> "Primitiva" to "LAPR"
         "4" -> "El Gordo" to "ELGR"
         "2" -> "Bonoloto" to "BONO"
+        "5" -> "Loteria Nacional" to "LNAC"
+        "7" -> "Euro Millones" to "EMIL"
+        "14" -> "Euro Dreams" to "EDMS"
         else -> "Desconosido" to "DESCONOCIDO"
     }
     val combinaciones =
@@ -33,7 +37,7 @@ fun crearBoleto(data: String): Boleto {
     return Boleto(
         id = info["A"]?.jsonPrimitive?.content?.slice(0..10)?.toLong() ?: 0L,
         gameID = gameId,
-        fecha = info["S"]?.jsonPrimitive?.content?.slice(3..9) ?: "",
+        fecha = fechaConvertida(fecha),
         precio = "precio!!!",
         idSorteo = "IdSorteo",
         numSorteo = info["A"]?.jsonPrimitive?.content?.takeLast(3) ?: "",

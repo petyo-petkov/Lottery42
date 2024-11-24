@@ -27,7 +27,8 @@ VALUES ?;
 
 getAllBoletos:
 SELECT *
-FROM BoletoEntity;
+FROM BoletoEntity
+ORDER BY fecha DESC;
 
 getBoletoById:
 SELECT *

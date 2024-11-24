@@ -10,6 +10,8 @@ import androidx.compose.material3.adaptive.navigation.rememberListDetailPaneScaf
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.example.lottery42.boleto.presentation.boleto_list.ListScreen
+import com.example.lottery42.boleto.presentation.boleto_list.ListScreenViewModel
+import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3AdaptiveApi::class)
 @Composable
