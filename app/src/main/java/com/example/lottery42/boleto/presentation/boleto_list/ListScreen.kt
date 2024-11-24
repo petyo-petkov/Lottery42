@@ -2,7 +2,9 @@ package com.example.lottery42.boleto.presentation.boleto_list
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -22,29 +24,30 @@ import org.koin.androidx.compose.koinViewModel
 fun ListScreen(
     listScreenViewModel: ListScreenViewModel = koinViewModel(),
 ) {
-    val state by listScreenViewModel.boletoState.collectAsState()
+    val state by listScreenViewModel.listState.collectAsState()
 
     Surface(
         modifier = Modifier.fillMaxSize(),
 
     ) {
         Column(
-            modifier = Modifier.statusBarsPadding().padding(48.dp),
-            verticalArrangement = Arrangement.spacedBy(32.dp),
+            modifier = Modifier.padding(horizontal = 8.dp).statusBarsPadding(),
+            verticalArrangement = Arrangement.spacedBy(64.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+
+            BalanceCard(
+                ganado = state.ganado,
+                gastado = state.gastado,
+                balance = state.balance
+            )
+
             LazyColumn {
-                items(state, key = { it.id }) { boleto ->
+                items(state.boletos, key = { it.id }) { boleto ->
                     BoletoItem(boleto)
+                    Spacer(modifier = Modifier.height(4.dp))
 
                 }
-            }
-
-            Button(onClick = {
-                listScreenViewModel.startScanning()
-            }
-            ) {
-                Text(text = "CLICK_ME")
             }
             Button(onClick = {
                 listScreenViewModel.deleteAllBoletos()

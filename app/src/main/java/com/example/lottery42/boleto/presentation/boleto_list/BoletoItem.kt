@@ -6,6 +6,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -69,9 +70,10 @@ fun BoletoItem(
                 ),
                 contentDescription = null,
                 modifier = Modifier
+                    .padding(top = 3.dp)
                     .clip(shape = RoundedCornerShape(2.dp))
                     .size(24.dp)
-                    .background(Color.LightGray),
+                    .background(Color.Transparent),
                 alignment = Alignment.BottomCenter
             )
 

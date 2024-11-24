@@ -4,7 +4,6 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.lottery42.boleto.data.crearBoleto
-import com.example.lottery42.boleto.data.database.Boleto
 import com.example.lottery42.boleto.data.database.toEntity
 import com.example.lottery42.boleto.domain.DatabaseRepo
 import com.example.lottery42.boleto.domain.ScannerRepo
@@ -13,12 +12,12 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlin.math.round
 
 class ListScreenViewModel(
     val databaseRepo: DatabaseRepo,
     val scannerRepo: ScannerRepo
-): ViewModel() {
-
+) : ViewModel() {
 
     fun startScanning() {
         viewModelScope.launch(Dispatchers.IO) {
@@ -44,22 +43,30 @@ class ListScreenViewModel(
         getAllBoletos()
     }
 
+    val _listState = MutableStateFlow(ListScreenState())
+    val listState = _listState.asStateFlow()
 
-    private val _boletoState = MutableStateFlow<List<Boleto>>(emptyList())
-    val boletoState = _boletoState.asStateFlow()
+    fun getAllBoletos() {
+        viewModelScope.launch(Dispatchers.IO) {
+            databaseRepo.getAllBoletos().collect { boletos ->
+                val ganado = boletos.sumOf { it.premio.toDouble() }
+                val gastado = boletos.sumOf { it.precio.toDouble() }
+                val balance = ganado - gastado
+                _listState.update {
+                    it.copy(
+                        boletos = boletos,
+                        ganado = Round(ganado).toString(),
+                        gastado = Round(gastado).toString(),
+                        balance = Round(balance).toString(),
+                        Loading = false
+                    )
 
-    fun getAllBoletos(){
-        viewModelScope.launch(Dispatchers.IO)  {
-           databaseRepo.getAllBoletos().collect{ boletos ->
-               boletos.map { boleto ->
-                   boleto.fecha
-               }
-               _boletoState.value = boletos
-           }
+                }
+            }
         }
     }
 
-    fun deleteAllBoletos(){
+    fun deleteAllBoletos() {
         viewModelScope.launch(Dispatchers.IO) {
             databaseRepo.deleteAllBoletos()
         }
@@ -67,5 +74,9 @@ class ListScreenViewModel(
     }
 
 
+}
 
+// redondea hasta las dos decimas ganado, gastado y balance
+private fun Round(dato: Double): Double {
+    return round(dato * 100) / 100
 }
