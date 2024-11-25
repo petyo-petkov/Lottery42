@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
@@ -16,17 +17,25 @@ import androidx.compose.material3.adaptive.navigation.BackNavigationBehavior
 import androidx.compose.material3.adaptive.navigation.NavigableListDetailPaneScaffold
 import androidx.compose.material3.adaptive.navigation.rememberListDetailPaneScaffoldNavigator
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.lottery42.boleto.presentation.boleto_list.FAB
 import com.example.lottery42.boleto.presentation.boleto_list.ListScreen
+import com.example.lottery42.boleto.presentation.boleto_list.ListScreenActions.onBoletoClick
+import com.example.lottery42.boleto.presentation.boleto_list.ListScreenActions.onBorrarClick
+import com.example.lottery42.boleto.presentation.boleto_list.ListScreenActions.onFABClick
 import com.example.lottery42.boleto.presentation.boleto_list.ListScreenViewModel
 import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3AdaptiveApi::class)
 @Composable
-fun App() {
+fun App(
+    vm: ListScreenViewModel = koinViewModel()
+) {
     val navigator = rememberListDetailPaneScaffoldNavigator<Any>()
-    val vm: ListScreenViewModel = koinViewModel()
+    val state by vm.listState.collectAsStateWithLifecycle()
+
     Scaffold(
         modifier = Modifier.fillMaxWidth(),
         floatingActionButton = {
@@ -35,7 +44,11 @@ fun App() {
                 enter = fadeIn(),
                 exit = fadeOut()
             ) {
-                FAB(vm)
+                FAB(
+                    onFABClick = {
+                        vm.onAction(onFABClick)
+                    }
+                )
             }
         },
         containerColor = MaterialTheme.colorScheme.background,
@@ -47,7 +60,18 @@ fun App() {
             navigator = navigator,
             listPane = {
                 AnimatedPane {
-                    ListScreen()
+                    ListScreen(
+                        boletos = state.boletos,
+                        ganado = state.ganado,
+                        gastado = state.gastado,
+                        balance = state.balance,
+                        onBoletoClick = {
+                            vm.onAction(onBoletoClick(it))
+                        },
+                        onBorrarClick = {
+                            vm.onAction(onBorrarClick)
+                        }
+                    )
                 }
             },
             detailPane = {

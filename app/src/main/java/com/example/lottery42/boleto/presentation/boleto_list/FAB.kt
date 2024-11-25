@@ -8,9 +8,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
 @Composable
-fun FAB( vm: ListScreenViewModel ) {
+fun FAB(
+    onFABClick : () -> Unit
+) {
     ExtendedFloatingActionButton(
-        onClick = { vm.startScanning() },
+        onClick = { onFABClick() },
         containerColor = Color(0xFFFFE082),
         contentColor = Color.Black,
     ) {

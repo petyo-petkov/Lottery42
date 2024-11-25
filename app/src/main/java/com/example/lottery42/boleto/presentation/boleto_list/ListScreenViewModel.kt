@@ -15,8 +15,8 @@ import kotlinx.coroutines.launch
 import kotlin.math.round
 
 class ListScreenViewModel(
-    val databaseRepo: DatabaseRepo,
-    val scannerRepo: ScannerRepo
+    private val databaseRepo: DatabaseRepo,
+    private val scannerRepo: ScannerRepo,
 ) : ViewModel() {
 
     fun startScanning() {
@@ -40,14 +40,31 @@ class ListScreenViewModel(
     }
 
     init {
-        getAllBoletos()
+        onAction(ListScreenActions.loadBoletos)
     }
 
     val _listState = MutableStateFlow(ListScreenState())
     val listState = _listState.asStateFlow()
 
-    fun getAllBoletos() {
+
+    fun onAction(action: ListScreenActions) {
         viewModelScope.launch(Dispatchers.IO) {
+            when (action) {
+                is ListScreenActions.onBoletoClick -> {
+                    Log.d("Boleto", action.boleto.toString())
+                }
+
+                ListScreenActions.loadBoletos -> getAllBoletos()
+                ListScreenActions.onFABClick -> startScanning()
+                ListScreenActions.onBorrarClick -> deleteAllBoletos()
+
+            }
+        }
+    }
+
+
+    private suspend fun getAllBoletos() {
+        try {
             databaseRepo.getAllBoletos().collect { boletos ->
                 val ganado = boletos.sumOf { it.premio.toDouble() }
                 val gastado = boletos.sumOf { it.precio.toDouble() }
@@ -58,19 +75,16 @@ class ListScreenViewModel(
                         ganado = Round(ganado).toString(),
                         gastado = Round(gastado).toString(),
                         balance = Round(balance).toString(),
-                        Loading = false
-                    )
-
+                        )
                 }
             }
+        } catch (e: Exception) {
+            Log.d("Error getAllBoletos", e.toString())
         }
     }
 
-    fun deleteAllBoletos() {
-        viewModelScope.launch(Dispatchers.IO) {
-            databaseRepo.deleteAllBoletos()
-        }
-
+    private suspend fun deleteAllBoletos() {
+        databaseRepo.deleteAllBoletos()
     }
 
 

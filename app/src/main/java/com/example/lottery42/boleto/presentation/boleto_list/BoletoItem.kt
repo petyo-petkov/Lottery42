@@ -33,7 +33,8 @@ import kotlin.text.Typography.euro
 
 @Composable
 fun BoletoItem(
-    boleto: Boleto
+    boleto: Boleto,
+    onBoletoClick: (Boleto) -> Unit
 ) {
     ListItem(
         headlineContent = { Text(boleto.tipo) },
@@ -41,6 +42,7 @@ fun BoletoItem(
             .fillMaxWidth()
             .clip(shape = RoundedCornerShape(16.dp))
             .clickable {
+                onBoletoClick(boleto)
 //                boletosViewModel.getBoletoByID(boleto.numeroSerie)
 //                navigator.navigateTo(
 //                    pane = ListDetailPaneScaffoldRole.Detail,

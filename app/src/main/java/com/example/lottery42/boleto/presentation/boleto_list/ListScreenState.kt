@@ -7,5 +7,4 @@ data class ListScreenState(
     val ganado: String = "",
     val gastado: String = "",
     val balance: String = "",
-    val Loading: Boolean = true
 )
