@@ -26,66 +26,11 @@ class ScannerRepoImpl(
         }
     }
 
-    private fun getDetails(barcode: Barcode): String {
-        return when (barcode.valueType) {
-            Barcode.TYPE_WIFI -> {
-                val ssid = barcode.wifi!!.ssid
-                val password = barcode.wifi!!.password
-                val type = barcode.wifi!!.encryptionType
-                "ssid : $ssid, password : $password, type : $type"
-            }
-
-            Barcode.TYPE_URL -> {
-                "url : ${barcode.url!!.url}"
-            }
-
-            Barcode.TYPE_PRODUCT -> {
-                "productType : ${barcode.displayValue}"
-            }
-
-            Barcode.TYPE_EMAIL -> {
-                "email : ${barcode.email}"
-            }
-
-            Barcode.TYPE_CONTACT_INFO -> {
-                "contact : ${barcode.contactInfo}"
-            }
-
-            Barcode.TYPE_PHONE -> {
-                "phone : ${barcode.phone}"
-            }
-
-            Barcode.TYPE_CALENDAR_EVENT -> {
-                "calender event : ${barcode.calendarEvent}"
-            }
-
-            Barcode.TYPE_GEO -> {
-                "geo point : ${barcode.geoPoint}"
-            }
-
-            Barcode.TYPE_ISBN -> {
-                "isbn : ${barcode.displayValue}"
-            }
-
-            Barcode.TYPE_DRIVER_LICENSE -> {
-                "driving license : ${barcode.driverLicense}"
-            }
-
-            Barcode.TYPE_SMS -> {
-                "sms : ${barcode.sms}"
-            }
-
-            Barcode.TYPE_TEXT -> {
-                "text : ${barcode.rawValue}"
-            }
-
-            Barcode.TYPE_UNKNOWN -> {
-                "unknown : ${barcode.rawValue}"
-            }
-
-            else -> {
-                "Couldn't determine"
-            }
+    private fun getTypes(barcode: Barcode): String {
+        return when (barcode.format) {
+            Barcode.FORMAT_QR_CODE -> "QR| ${barcode.rawValue}"
+            Barcode.FORMAT_CODE_128-> "BAR| ${barcode.rawValue}"
+            else -> "Unknown"
         }
 
     }

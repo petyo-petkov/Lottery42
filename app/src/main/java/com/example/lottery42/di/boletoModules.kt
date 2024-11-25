@@ -25,9 +25,10 @@ val scannerModule = module {
     single {
         GmsBarcodeScannerOptions.Builder()
             .setBarcodeFormats(
-                //Barcode.FORMAT_ALL_FORMATS,
+                //Barcode.FORMAT_ALL_FORMATS
                 Barcode.FORMAT_QR_CODE,
-                Barcode.FORMAT_AZTEC
+                Barcode.FORMAT_CODE_128
+
             )
             .build()
     }

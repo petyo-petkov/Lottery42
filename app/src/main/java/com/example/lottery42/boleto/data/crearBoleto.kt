@@ -7,6 +7,10 @@ import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.jsonPrimitive
 
 fun crearBoleto(data: String): Boleto {
+//    val barCodeType = if (data.startsWith("QR")) "QR" else "BAR"
+//    val qrData = data.removePrefix("$barCodeType|")
+
+
     val info = parceJson(data)
     val fecha = info["S"]?.jsonPrimitive?.content?.slice(3..9) ?: ""
 
