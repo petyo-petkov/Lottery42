@@ -17,7 +17,7 @@ class ScannerRepoImpl(
             scanner.startScan()
                 .addOnSuccessListener { barcode ->
                     launch {
-                        send(barcode.rawValue)
+                        send(getTypes(barcode))
                     }
                 }.addOnFailureListener {
                     it.printStackTrace()
@@ -28,8 +28,8 @@ class ScannerRepoImpl(
 
     private fun getTypes(barcode: Barcode): String {
         return when (barcode.format) {
-            Barcode.FORMAT_QR_CODE -> "QR| ${barcode.rawValue}"
-            Barcode.FORMAT_CODE_128-> "BAR| ${barcode.rawValue}"
+            Barcode.FORMAT_QR_CODE -> "QR|${barcode.rawValue}"
+            Barcode.FORMAT_CODE_128-> "BAR|${barcode.rawValue}"
             else -> "Unknown"
         }
 

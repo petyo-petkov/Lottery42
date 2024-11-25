@@ -25,10 +25,8 @@ val scannerModule = module {
     single {
         GmsBarcodeScannerOptions.Builder()
             .setBarcodeFormats(
-                //Barcode.FORMAT_ALL_FORMATS
                 Barcode.FORMAT_QR_CODE,
                 Barcode.FORMAT_CODE_128
-
             )
             .build()
     }
@@ -40,8 +38,6 @@ val scannerModule = module {
     }
 
     singleOf(::ScannerRepoImpl).bind<ScannerRepo>()
-
-    //factory<ScannerRepo> { ScannerRepoImpl(get()) }
 
 }
 
@@ -63,9 +59,6 @@ val databaseModule = module {
     }
 
     singleOf(::DatabaseRepoImpl).bind<DatabaseRepo>()
-
-    //factory<DatabaseRepo>{ DatabaseRepoImpl(get()) }
-
 
 }
 

@@ -1,10 +1,8 @@
 package com.example.lottery42.boleto.data.database
 
 import com.lottery42.BoletoEntity
-import kotlinx.serialization.json.Json
 
 fun BoletoEntity.toDomain(): Boleto {
-    val json = Json { ignoreUnknownKeys = true }
     return Boleto(
         id = id,
         idSorteo = idSorteo,
@@ -20,9 +18,7 @@ fun BoletoEntity.toDomain(): Boleto {
         combinaciones = combinaciones.removeSurrounding("[", "]").split(","),
         joker = joker,
         reintegro = reintegro,
-
-        numeroClave = numeroClave?.let { json.decodeFromString(it) } ?: emptyList(),
-
+        numeroClave = numeroClave?.removeSurrounding("[", "]")?.split(",") ?: emptyList(),
         dreams = dreams?.removeSurrounding("[", "]")?.split(",") ?: emptyList(),
         estrellas = estrellas?.removeSurrounding("[", "]")?.split(",") ?: emptyList(),
         numeroElMillon = numeroElMillon?.removeSurrounding("[", "]")?.split(",") ?: emptyList(),

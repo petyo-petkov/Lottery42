@@ -27,6 +27,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.lottery42.R.drawable
 import com.example.lottery42.boleto.data.database.Boleto
+import com.example.lottery42.boleto.data.fechaParaMostrar
 import java.lang.ref.WeakReference
 import kotlin.text.Typography.euro
 
@@ -49,7 +50,7 @@ fun BoletoItem(
 //                    content = "${boleto.numeroSerie}"
 //                )
             },
-        overlineContent = { Text(boleto.fecha) },
+        overlineContent = { Text(fechaParaMostrar(boleto.fecha)) },
         supportingContent = { Text("${boleto.precio} $euro") },
         leadingContent = {
             Image(

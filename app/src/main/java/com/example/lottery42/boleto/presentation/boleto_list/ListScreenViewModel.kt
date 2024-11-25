@@ -12,6 +12,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.datetime.LocalDateTime
+import java.time.format.DateTimeFormatter
 import kotlin.math.round
 
 class ListScreenViewModel(
@@ -27,9 +29,8 @@ class ListScreenViewModel(
                         Log.d("RawData", data)
                         try {
                             val boleto = crearBoleto(data)
-                            Log.d("Boleto", boleto.toString())
+                            Log.d("Boleto", boleto.toEntity().toString())
                             databaseRepo.insertBoleto(boleto.toEntity())
-
                         } catch (e: Exception) {
                             Log.d("Error insertar boleto", e.toString())
                         }
@@ -51,9 +52,7 @@ class ListScreenViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             when (action) {
                 is ListScreenActions.onBoletoClick -> {
-                    Log.d("Boleto", action.boleto.toString())
                 }
-
                 ListScreenActions.loadBoletos -> getAllBoletos()
                 ListScreenActions.onFABClick -> startScanning()
                 ListScreenActions.onBorrarClick -> deleteAllBoletos()
