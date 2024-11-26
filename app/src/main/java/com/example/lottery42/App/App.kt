@@ -30,8 +30,9 @@ import org.koin.androidx.compose.koinViewModel
 @OptIn(ExperimentalMaterial3AdaptiveApi::class)
 @Composable
 fun App(
-    vm: ListScreenViewModel = koinViewModel()
+
 ) {
+    val vm: ListScreenViewModel = koinViewModel()
     val navigator = rememberListDetailPaneScaffoldNavigator<Any>()
     val state by vm.listState.collectAsStateWithLifecycle()
 

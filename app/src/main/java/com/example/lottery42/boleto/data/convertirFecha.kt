@@ -9,6 +9,7 @@ private val MESES = mapOf(
     "MAY" to "05", "JUN" to "06", "JUL" to "07", "AGO" to "08",
     "SEP" to "09", "OCT" to "10", "NOV" to "11", "DIC" to "12"
 )
+
 fun fechaParaGuardar(fechaString: String): String {
     val formatter = DateTimeFormatter.ofPattern("ddMMyy", Locale("es"))
     val fechaEng = fechaString.replace(Regex("[A-Z]{3}")) { MESES[it.value] ?: it.value }
@@ -16,7 +17,7 @@ fun fechaParaGuardar(fechaString: String): String {
     return fecha.toString()
 }
 
-fun fechaParaMostrar(fechaString: String): String{
+fun fechaParaMostrar(fechaString: String): String {
     val formatter = DateTimeFormatter.ofPattern("dd MMMM yyyy", Locale("es"))
     val fechaLocaldate = LocalDate.parse(fechaString)
     return formatter.format(fechaLocaldate)

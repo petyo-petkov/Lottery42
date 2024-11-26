@@ -39,6 +39,8 @@ val scannerModule = module {
 
     singleOf(::ScannerRepoImpl).bind<ScannerRepo>()
 
+//factoryOf(::ScannerRepoImpl).bind<ScannerRepo>()
+
 }
 
 val databaseModule = module {

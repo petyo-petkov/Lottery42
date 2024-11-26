@@ -6,17 +6,16 @@ import com.example.lottery42.di.scannerModule
 import com.example.lottery42.di.viewModelModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
-import org.koin.core.context.GlobalContext
+import org.koin.core.context.startKoin
 
-class  MyApplication: Application() {
-
+class MyApplication : Application() {
     override fun onCreate() {
         super.onCreate()
-        GlobalContext.startKoin {
+
+        startKoin {
             androidLogger()
             androidContext(this@MyApplication)
             modules(scannerModule, viewModelModule, databaseModule)
-
         }
 
     }
