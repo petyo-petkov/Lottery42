@@ -17,8 +17,8 @@ fun crearBoleto(data: String): Boleto {
         "QR" -> {
             val info = parceJson(data.substringAfter("|"))
 
-            var precioBoleto: Double = 0.0
-            var reintegro: String = ""
+            var precioBoleto = 0.0
+            var reintegro = ""
             val apuestaMultiple: Boolean
             val combiPosibles: Int
             val columnas = mutableListOf<String>()
@@ -26,6 +26,7 @@ fun crearBoleto(data: String): Boleto {
             var estrellasEuromillones: List<String> = emptyList()
             var numeroELMillon: List<String> = emptyList()
             var lluviaMillones: String? = ""
+            var numeroLNAC = ""
 
 
             val fecha = info["S"]?.jsonPrimitive?.content?.slice(3..9) ?: ""
@@ -35,7 +36,7 @@ fun crearBoleto(data: String): Boleto {
                 "1" -> "Primitiva" to "LAPR"
                 "4" -> "El Gordo" to "ELGR"
                 "2" -> "Bonoloto" to "BONO"
-                "5" -> "Loteria Nacional" to "LNAC"
+                "10" -> "Loteria Nacional" to "LNAC"
                 "7" -> "Euro Millones" to "EMIL"
                 "14" -> "Euro Dreams" to "EDMS"
                 else -> "Desconosido" to "DESCO"
@@ -136,16 +137,17 @@ fun crearBoleto(data: String): Boleto {
 
                 "EDMS" -> {}
 
-                "LNAC" -> {}
+                "LNAC" -> {
+                    numeroLNAC = info["N"]?.jsonPrimitive?.content ?: ""
+                }
             }
-
             boleto = Boleto(
                 id = info["A"]?.jsonPrimitive?.content?.slice(0..10)?.toLong() ?: 0L,
                 gameID = gameId,
                 fecha = fechaParaGuardar(fecha),
                 precio = precioBoleto.toString(),
-                idSorteo = "IdSorteo",
-                numSorteo = info["A"]?.jsonPrimitive?.content?.takeLast(3) ?: "",
+                idSorteo = "idSorteo",
+                numSorteo = info["S"]?.jsonPrimitive?.content?.slice(0..2) ?: "",
                 apuestaMultiple = false,
                 premio = "6.31",
                 apertura = "fecha-apertura",
@@ -158,7 +160,7 @@ fun crearBoleto(data: String): Boleto {
                 dreams = dreams,
                 estrellas = estrellasEuromillones,
                 numeroElMillon = numeroELMillon,
-                numeroLoteria = "numeroLoteria"
+                numeroLoteria = numeroLNAC
             )
         }
 
