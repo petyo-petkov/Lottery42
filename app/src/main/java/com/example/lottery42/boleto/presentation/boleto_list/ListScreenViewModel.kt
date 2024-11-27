@@ -52,6 +52,11 @@ class ListScreenViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             when (action) {
                 is ListScreenActions.onBoletoClick -> {
+                    _listState.update{
+                        it.copy(
+                            boleto = action.boleto,
+                        )
+                    }
                 }
                 ListScreenActions.loadBoletos -> getAllBoletos()
                 ListScreenActions.onFABClick -> startScanning()

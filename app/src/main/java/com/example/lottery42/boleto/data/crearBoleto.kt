@@ -6,8 +6,6 @@ import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.jsonPrimitive
-import kotlin.text.substringAfter
-import kotlin.times
 
 fun crearBoleto(data: String): Boleto {
     val barCodeType = if (data.startsWith("QR")) "QR" else "BAR"
@@ -26,6 +24,7 @@ fun crearBoleto(data: String): Boleto {
             var estrellasEuromillones: List<String> = emptyList()
             var numeroELMillon: List<String> = emptyList()
             var lluviaMillones: String? = ""
+            var suenos: List<String> = emptyList()
             var numeroLNAC = ""
 
 
@@ -50,10 +49,6 @@ fun crearBoleto(data: String): Boleto {
             val dreams =
                 info["dreams"]?.jsonPrimitive?.content?.removeSurrounding("[", "]")?.split(",")
                     ?: emptyList()
-
-
-
-
 
 
             when (gameId) {
@@ -135,7 +130,26 @@ fun crearBoleto(data: String): Boleto {
 
                 }
 
-                "EDMS" -> {}
+                "EDMS" -> {
+                    columnas.addAll(combinaciones.map {
+                        it.substringAfter("=").chunked(2).dropLast(2).joinToString(" ")
+                    })
+                    suenos = combinaciones.map {
+                        it.substringAfter(":").chunked(2).joinToString(" ")
+                    }
+                    val combinacion = columnas[0].split(" ")        // Combinacion jugada
+                    apuestaMultiple = combinacion.size > 6 || combinacion.size == 5
+                    if (combinacion.size == 5) {
+                        combiPosibles = 35
+                    }else {
+                        combiPosibles = combinacionesPosibles(combinacion.size, 6)
+                    }
+                    precioBoleto = if (apuestaMultiple) {
+                        ((combiPosibles * 2.5) * numeroSorteosJugados)
+                    } else {
+                        ((columnas.size * 2.5) * numeroSorteosJugados)
+                    }
+                }
 
                 "LNAC" -> {
                     numeroLNAC = info["N"]?.jsonPrimitive?.content ?: ""
@@ -149,7 +163,7 @@ fun crearBoleto(data: String): Boleto {
                 idSorteo = "idSorteo",
                 numSorteo = info["S"]?.jsonPrimitive?.content?.slice(0..2) ?: "",
                 apuestaMultiple = false,
-                premio = "6.31",
+                premio = "0.0",
                 apertura = "fecha-apertura",
                 cierre = "fecha-cierre",
                 tipo = tipo,

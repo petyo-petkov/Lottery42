@@ -19,6 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.lottery42.boleto.presentation.boleto_detail.DetailScreen
 import com.example.lottery42.boleto.presentation.boleto_list.FAB
 import com.example.lottery42.boleto.presentation.boleto_list.ListScreen
 import com.example.lottery42.boleto.presentation.boleto_list.ListScreenActions.onBoletoClick
@@ -67,6 +68,7 @@ fun App(
                         balance = state.balance,
                         onBoletoClick = {
                             vm.onAction(onBoletoClick(it))
+                            navigator.navigateTo(pane = ListDetailPaneScaffoldRole.Detail)
                         },
                         onBorrarClick = {
                             vm.onAction(onBorrarClick)
@@ -76,6 +78,7 @@ fun App(
             },
             detailPane = {
                 AnimatedPane {
+                    DetailScreen(state.boleto)
                 }
             },
             extraPane = {

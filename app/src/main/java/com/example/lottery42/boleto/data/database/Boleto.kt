@@ -5,8 +5,8 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class Boleto(
     val id: Long = 0L,
-    val gameID: String = "",
-    val tipo: String = "",
+    var gameID: String = "",
+    var tipo: String = "",
     val fecha: String = "",
     val apertura: String = "",
     val cierre: String = "",
