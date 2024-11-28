@@ -15,9 +15,8 @@ import com.example.lottery42.boleto.data.database.Boleto
 
 @Composable
 fun DetallesBoleto(boleto: Boleto?, style: TextStyle) {
+
     when (boleto?.gameID) {
-
-
         "LAPR" -> {
             boleto.combinaciones.forEachIndexed { index, combi ->
                 Text(
@@ -27,12 +26,12 @@ fun DetallesBoleto(boleto: Boleto?, style: TextStyle) {
             }
             Text(
                 "Reintegro: ${boleto.reintegro}",
-                style = style
+                style = MaterialTheme.typography.titleLarge
             )
 
             Text(
                 "Joker: ${boleto.joker}",
-                style = style
+                style = MaterialTheme.typography.titleLarge
             )
 
         }
@@ -46,7 +45,7 @@ fun DetallesBoleto(boleto: Boleto?, style: TextStyle) {
             }
             Text(
                 "Reintegro: ${boleto.reintegro}",
-                style = style
+                style = MaterialTheme.typography.titleLarge
             )
         }
 
@@ -62,7 +61,7 @@ fun DetallesBoleto(boleto: Boleto?, style: TextStyle) {
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text("Numeros El Millon:", style = style)
+                Text("Numeros El Millon:", style = MaterialTheme.typography.titleLarge)
                 boleto.numeroElMillon.forEach {
                     Text(it, style = style)
                 }
@@ -73,8 +72,6 @@ fun DetallesBoleto(boleto: Boleto?, style: TextStyle) {
 //                Text("Lluvia de millones:", style = style)
 //                Text(boleto.lluvia, style = style)
 //            }
-            HorizontalDivider(color = Color.White)
-            Text("Tipo de apuesta: ${if (boleto.apuestaMultiple) "Multiple" else "Simple"}", style = style)
 
         }
 
@@ -109,4 +106,5 @@ fun DetallesBoleto(boleto: Boleto?, style: TextStyle) {
             Text(text = "")
         }
     }
+
 }

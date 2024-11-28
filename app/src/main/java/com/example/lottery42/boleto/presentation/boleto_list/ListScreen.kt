@@ -1,5 +1,6 @@
 package com.example.lottery42.boleto.presentation.boleto_list
 
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -8,11 +9,20 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Button
-import androidx.compose.material3.Text
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowDropUp
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.lottery42.boleto.data.database.Boleto
 
@@ -25,11 +35,17 @@ fun ListScreen(
     onBoletoClick: (Boleto) -> Unit,
     onBorrarClick: () -> Unit,
 ) {
+    var showBottomSheet by remember { mutableStateOf(false) }
+    val rotationState by animateFloatAsState(
+        targetValue = if (showBottomSheet) 180f else 0f, label = ""
+    )
+    val listState = rememberLazyListState(initialFirstVisibleItemIndex = 0)
+
     Column(
         modifier = Modifier
             .padding(horizontal = 8.dp)
             .statusBarsPadding(),
-        verticalArrangement = Arrangement.spacedBy(64.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp), // 64.dp by default
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
@@ -39,17 +55,36 @@ fun ListScreen(
             balance = balance
         )
 
-        LazyColumn {
+        IconButton(
+            onClick = { showBottomSheet = true },
+            modifier = Modifier
+        ) {
+            Icon(
+                Icons.Default.ArrowDropUp,
+                contentDescription = null,
+                modifier = Modifier.rotate(rotationState),
+                tint = Color(0xFFFFE082)
+            )
+        }
+
+        LazyColumn(
+            state = listState,
+        ) {
             items(boletos, key = { it.id }) { boleto ->
                 BoletoItem(boleto, onBoletoClick)
                 Spacer(modifier = Modifier.height(4.dp))
-
+            }
+            item{
+                Spacer(modifier = Modifier.height(80.dp))
             }
         }
-        Button(onClick = { onBorrarClick() }
-        ) {
-            Text(text = "BORRAR")
-        }
+
+        BottomSheet(
+            onDismiss = { showBottomSheet = false },
+            showBottomSheet = showBottomSheet,
+            onBorrarClick = onBorrarClick
+        )
+
 
     }
 }

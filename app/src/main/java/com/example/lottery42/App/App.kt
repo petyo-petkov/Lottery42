@@ -78,7 +78,9 @@ fun App(
             },
             detailPane = {
                 AnimatedPane {
-                    DetailScreen(state.boleto)
+                    DetailScreen(
+                      boleto = state.boleto
+                    )
                 }
             },
             extraPane = {

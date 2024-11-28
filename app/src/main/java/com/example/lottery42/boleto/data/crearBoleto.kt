@@ -17,7 +17,7 @@ fun crearBoleto(data: String): Boleto {
 
             var precioBoleto = 0.0
             var reintegro = ""
-            val apuestaMultiple: Boolean
+            var apuestaMultiple = false
             val combiPosibles: Int
             val columnas = mutableListOf<String>()
             var numeroClaveElGordo: List<String> = emptyList()
@@ -26,7 +26,6 @@ fun crearBoleto(data: String): Boleto {
             var lluviaMillones: String? = ""
             var suenos: List<String> = emptyList()
             var numeroLNAC = ""
-
 
             val fecha = info["S"]?.jsonPrimitive?.content?.slice(3..9) ?: ""
             val numeroSorteosJugados =
@@ -45,10 +44,6 @@ fun crearBoleto(data: String): Boleto {
                     ?.split(",")
                     ?: emptyList()
             val joker = info["J"]?.jsonPrimitive?.content ?: ""
-
-            val dreams =
-                info["dreams"]?.jsonPrimitive?.content?.removeSurrounding("[", "]")?.split(",")
-                    ?: emptyList()
 
 
             when (gameId) {
@@ -121,6 +116,7 @@ fun crearBoleto(data: String): Boleto {
                     val estrella = estrellasEuromillones[0].split(" ")
                     combiPosibles = combinacionesPosibles(combinacion.size, 5)
                     val numerosApuestasEstrellas = combinacionesPosibles(estrella.size, 2)
+
                     apuestaMultiple = combinacion.size > 5 || estrella.size > 2
                     precioBoleto = if (apuestaMultiple) {
                         ((combiPosibles * numerosApuestasEstrellas) * 2.5)
@@ -162,7 +158,7 @@ fun crearBoleto(data: String): Boleto {
                 precio = precioBoleto.toString(),
                 idSorteo = "idSorteo",
                 numSorteo = info["S"]?.jsonPrimitive?.content?.slice(0..2) ?: "",
-                apuestaMultiple = false,
+                apuestaMultiple = apuestaMultiple,
                 premio = "0.0",
                 apertura = "fecha-apertura",
                 cierre = "fecha-cierre",
@@ -171,7 +167,7 @@ fun crearBoleto(data: String): Boleto {
                 joker = joker,
                 reintegro = reintegro,
                 numeroClave = numeroClaveElGordo,
-                dreams = dreams,
+                dreams = suenos,
                 estrellas = estrellasEuromillones,
                 numeroElMillon = numeroELMillon,
                 numeroLoteria = numeroLNAC
