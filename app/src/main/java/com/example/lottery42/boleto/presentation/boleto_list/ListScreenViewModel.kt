@@ -12,8 +12,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.datetime.LocalDateTime
-import java.time.format.DateTimeFormatter
 import kotlin.math.round
 
 class ListScreenViewModel(
@@ -52,15 +50,16 @@ class ListScreenViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             when (action) {
                 is ListScreenActions.onBoletoClick -> {
-                    _listState.update{
+                    _listState.update {
                         it.copy(
                             boleto = action.boleto,
                         )
                     }
                 }
-                ListScreenActions.loadBoletos -> getAllBoletos()
-                ListScreenActions.onFABClick -> startScanning()
-                ListScreenActions.onBorrarClick -> deleteAllBoletos()
+
+                is ListScreenActions.loadBoletos -> getAllBoletos()
+                is ListScreenActions.onFABClick -> startScanning()
+                is ListScreenActions.onBorrarClick -> deleteAllBoletos()
 
             }
         }
@@ -79,7 +78,7 @@ class ListScreenViewModel(
                         ganado = Round(ganado).toString(),
                         gastado = Round(gastado).toString(),
                         balance = Round(balance).toString(),
-                        )
+                    )
                 }
             }
         } catch (e: Exception) {

@@ -3,12 +3,14 @@ package com.example.lottery42.App
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
 import androidx.compose.material3.adaptive.layout.AnimatedPane
 import androidx.compose.material3.adaptive.layout.ListDetailPaneScaffoldRole
@@ -17,6 +19,7 @@ import androidx.compose.material3.adaptive.navigation.NavigableListDetailPaneSca
 import androidx.compose.material3.adaptive.navigation.rememberListDetailPaneScaffoldNavigator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.lottery42.boleto.presentation.boleto_detail.DetailScreen
@@ -62,10 +65,7 @@ fun App(
             listPane = {
                 AnimatedPane {
                     ListScreen(
-                        boletos = state.boletos,
-                        ganado = state.ganado,
-                        gastado = state.gastado,
-                        balance = state.balance,
+                        state = state,
                         onBoletoClick = {
                             vm.onAction(onBoletoClick(it))
                             navigator.navigateTo(pane = ListDetailPaneScaffoldRole.Detail)
@@ -78,9 +78,10 @@ fun App(
             },
             detailPane = {
                 AnimatedPane {
-                    DetailScreen(
-                      boleto = state.boleto
-                    )
+                    if (state.boleto == null) EmptyScreen() else
+                        DetailScreen(
+                            boleto = state.boleto
+                        )
                 }
             },
             extraPane = {
@@ -92,4 +93,17 @@ fun App(
             )
     }
 
+}
+
+@Composable
+fun EmptyScreen() {
+    Box(
+        modifier = Modifier,
+        contentAlignment = Alignment.Center
+    ) {
+        Text(
+            text = "Selecione un boleto",
+            style = MaterialTheme.typography.headlineLarge
+        )
+    }
 }

@@ -28,10 +28,7 @@ import com.example.lottery42.boleto.data.database.Boleto
 
 @Composable
 fun ListScreen(
-    boletos: List<Boleto>,
-    ganado: String,
-    gastado: String,
-    balance: String,
+    state: ListScreenState,
     onBoletoClick: (Boleto) -> Unit,
     onBorrarClick: () -> Unit,
 ) {
@@ -39,7 +36,7 @@ fun ListScreen(
     val rotationState by animateFloatAsState(
         targetValue = if (showBottomSheet) 180f else 0f, label = ""
     )
-    val listState = rememberLazyListState(initialFirstVisibleItemIndex = 0)
+    val listState = rememberLazyListState()
 
     Column(
         modifier = Modifier
@@ -50,9 +47,9 @@ fun ListScreen(
     ) {
 
         BalanceCard(
-            ganado = ganado,
-            gastado = gastado,
-            balance = balance
+            ganado = state.ganado,
+            gastado = state.gastado,
+            balance = state.balance
         )
 
         IconButton(
@@ -70,11 +67,11 @@ fun ListScreen(
         LazyColumn(
             state = listState,
         ) {
-            items(boletos, key = { it.id }) { boleto ->
+            items(state.boletos, key = { it.id }) { boleto ->
                 BoletoItem(boleto, onBoletoClick)
                 Spacer(modifier = Modifier.height(4.dp))
             }
-            item{
+            item {
                 Spacer(modifier = Modifier.height(80.dp))
             }
         }

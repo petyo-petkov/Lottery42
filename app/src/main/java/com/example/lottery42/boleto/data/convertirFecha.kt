@@ -1,7 +1,9 @@
 package com.example.lottery42.boleto.data
 
+import android.util.Log
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import java.time.format.DateTimeParseException
 import java.util.Locale
 
 private val MESES = mapOf(
@@ -17,9 +19,13 @@ fun fechaParaGuardar(fechaString: String): String {
     return fecha.toString()
 }
 
-fun fechaParaMostrar(fechaString: String): String {
-    val formatter = DateTimeFormatter.ofPattern("dd MMMM yyyy", Locale("es"))
-    val fechaLocaldate = LocalDate.parse(fechaString)
-    return formatter.format(fechaLocaldate)
-
+fun String.toFormattedDate(): String {
+    val inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+    val outputFormatter = DateTimeFormatter.ofPattern("dd MMMM yyyy", Locale("es"))
+    return try {
+        val localDate = LocalDate.parse(this, inputFormatter)
+        outputFormatter.format(localDate)
+    } catch (e: DateTimeParseException) {
+        Log.e("DateTimeConversion", "Error al convertir la fecha: $e")
+    }.toString()
 }

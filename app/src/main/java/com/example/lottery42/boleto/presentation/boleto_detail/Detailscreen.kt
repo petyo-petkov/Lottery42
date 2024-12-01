@@ -15,7 +15,6 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.adaptive.layout.ListDetailPaneScaffoldRole
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,7 +23,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.lottery42.R
 import com.example.lottery42.boleto.data.database.Boleto
-import com.example.lottery42.boleto.presentation.boleto_list.ListScreenActions.onBorrarClick
+import com.example.lottery42.boleto.data.toFormattedDate
 import com.example.lottery42.boleto.presentation.boleto_list.loadImage
 import kotlin.text.Typography.euro
 
@@ -68,7 +67,7 @@ fun DetailScreen(
                 style = MaterialTheme.typography.displayMedium
             )
             Text(
-                boleto?.fecha ?: "",
+                text = boleto?.fecha?.toFormattedDate() ?: "",
                 modifier = Modifier,
                 style = smallStyle
             )
@@ -112,7 +111,7 @@ fun DetailScreen(
                         onClick = {
 
 //                            showDialogBorrar = true
-                                  },
+                        },
                         colors = ButtonDefaults.buttonColors(
                             containerColor = MaterialTheme.colorScheme.error,
                             contentColor = MaterialTheme.colorScheme.onError
@@ -159,6 +158,6 @@ fun DetailScreen(
 }
 
 @Composable
-fun Divisor(){
+fun Divisor() {
     HorizontalDivider(color = MaterialTheme.colorScheme.onSurface)
 }
