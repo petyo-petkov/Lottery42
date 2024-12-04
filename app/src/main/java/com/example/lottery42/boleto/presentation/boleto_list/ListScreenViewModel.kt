@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.lottery42.boleto.data.crearBoleto
 import com.example.lottery42.boleto.data.database.toEntity
 import com.example.lottery42.boleto.domain.DatabaseRepo
+import com.example.lottery42.boleto.domain.NetworkRepo
 import com.example.lottery42.boleto.domain.ScannerRepo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,6 +18,7 @@ import kotlin.math.round
 class ListScreenViewModel(
     private val databaseRepo: DatabaseRepo,
     private val scannerRepo: ScannerRepo,
+    private val networkRepo: NetworkRepo
 ) : ViewModel() {
 
     fun startScanning() {
@@ -26,7 +28,7 @@ class ListScreenViewModel(
                     if (!data.isNullOrBlank()) {
                         Log.d("RawData", data)
                         try {
-                            val boleto = crearBoleto(data)
+                            val boleto = crearBoleto(data, networkRepo)
                             Log.d("Boleto", boleto.toEntity().toString())
                             databaseRepo.insertBoleto(boleto.toEntity())
                         } catch (e: Exception) {
@@ -59,7 +61,8 @@ class ListScreenViewModel(
 
                 is ListScreenActions.loadBoletos -> getAllBoletos()
                 is ListScreenActions.onFABClick -> startScanning()
-                is ListScreenActions.onBorrarClick -> deleteAllBoletos()
+                is ListScreenActions.borrarBoleto -> deleteBoleto(action.id)
+                is ListScreenActions.onBorrarAllClick -> deleteAllBoletos()
 
             }
         }
@@ -88,6 +91,12 @@ class ListScreenViewModel(
 
     private suspend fun deleteAllBoletos() {
         databaseRepo.deleteAllBoletos()
+    }
+
+    private fun deleteBoleto(id: Long) {
+        viewModelScope.launch(Dispatchers.IO) {
+            databaseRepo.deleteBoletoById(id)
+        }
     }
 
 

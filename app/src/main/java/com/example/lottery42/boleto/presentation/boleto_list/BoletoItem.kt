@@ -44,11 +44,6 @@ fun BoletoItem(
             .clip(shape = RoundedCornerShape(16.dp))
             .clickable {
                 onBoletoClick(boleto)
-//                boletosViewModel.getBoletoByID(boleto.numeroSerie)
-//                navigator.navigateTo(
-//                    pane = ListDetailPaneScaffoldRole.Detail,
-//                    content = "${boleto.numeroSerie}"
-//                )
             },
         overlineContent = { Text(boleto.fecha.toFormattedDate()) },
         supportingContent = { Text("${boleto.precio} $euro") },

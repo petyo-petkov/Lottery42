@@ -2,7 +2,9 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
-    id("app.cash.sqldelight")
+    alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.sqldelight)
+    //id("app.cash.sqldelight")
 }
 
 android {
@@ -84,6 +86,10 @@ dependencies {
     // SQLDelight
     implementation(libs.android.driver)
     implementation(libs.coroutines.extensions)
+
+    //Ktor
+    implementation(libs.ktor.client.core)
+    implementation(libs.ktor.client.cio)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

@@ -18,6 +18,7 @@ import androidx.compose.material3.adaptive.navigation.BackNavigationBehavior
 import androidx.compose.material3.adaptive.navigation.NavigableListDetailPaneScaffold
 import androidx.compose.material3.adaptive.navigation.rememberListDetailPaneScaffoldNavigator
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -25,10 +26,13 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.lottery42.boleto.presentation.boleto_detail.DetailScreen
 import com.example.lottery42.boleto.presentation.boleto_list.FAB
 import com.example.lottery42.boleto.presentation.boleto_list.ListScreen
+import com.example.lottery42.boleto.presentation.boleto_list.ListScreenActions.borrarBoleto
 import com.example.lottery42.boleto.presentation.boleto_list.ListScreenActions.onBoletoClick
-import com.example.lottery42.boleto.presentation.boleto_list.ListScreenActions.onBorrarClick
+import com.example.lottery42.boleto.presentation.boleto_list.ListScreenActions.onBorrarAllClick
 import com.example.lottery42.boleto.presentation.boleto_list.ListScreenActions.onFABClick
 import com.example.lottery42.boleto.presentation.boleto_list.ListScreenViewModel
+import com.example.lottery42.boleto.presentation.extra_info.ExtraInfoScreen
+import com.example.lottery42.boleto.presentation.extra_info.ExtraInfoViewModel
 import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3AdaptiveApi::class)
@@ -37,8 +41,16 @@ fun App(
 
 ) {
     val vm: ListScreenViewModel = koinViewModel()
+    val vmExtra: ExtraInfoViewModel = koinViewModel()
     val navigator = rememberListDetailPaneScaffoldNavigator<Any>()
-    val state by vm.listState.collectAsStateWithLifecycle()
+    val listState by vm.listState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(listState.boleto) {
+        if (listState.boleto != null){
+            vmExtra.infoDelSorteoCelebado(listState.boleto!!)
+        }
+    }
+
 
     Scaffold(
         modifier = Modifier.fillMaxWidth(),
@@ -65,27 +77,32 @@ fun App(
             listPane = {
                 AnimatedPane {
                     ListScreen(
-                        state = state,
+                        state = listState,
                         onBoletoClick = {
                             vm.onAction(onBoletoClick(it))
                             navigator.navigateTo(pane = ListDetailPaneScaffoldRole.Detail)
                         },
                         onBorrarClick = {
-                            vm.onAction(onBorrarClick)
+                            vm.onAction(onBorrarAllClick)
                         }
                     )
                 }
             },
             detailPane = {
                 AnimatedPane {
-                    if (state.boleto == null) EmptyScreen() else
+                    if (listState.boleto == null) EmptyScreen() else
                         DetailScreen(
-                            boleto = state.boleto
+                            boleto = listState.boleto,
+                            onDeleteBoleto = {
+                                vm.onAction(borrarBoleto(listState.boleto!!.id))
+                                navigator.navigateBack()
+                            }
                         )
                 }
             },
             extraPane = {
                 AnimatedPane {
+                    ExtraInfoScreen(vmExtra = vmExtra)
                 }
             },
             defaultBackBehavior = BackNavigationBehavior.PopUntilContentChange,

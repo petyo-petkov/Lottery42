@@ -2,12 +2,13 @@ package com.example.lottery42.boleto.data
 
 import com.example.lottery42.boleto.data.database.Boleto
 import com.example.lottery42.boleto.data.database.combinacionesPosibles
+import com.example.lottery42.boleto.domain.NetworkRepo
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.jsonPrimitive
 
-fun crearBoleto(data: String): Boleto {
+suspend fun crearBoleto(data: String, networkRepo: NetworkRepo): Boleto {
     val barCodeType = if (data.startsWith("QR")) "QR" else "BAR"
     var boleto = Boleto()
 
@@ -17,6 +18,7 @@ fun crearBoleto(data: String): Boleto {
 
             var precioBoleto = 0.0
             var reintegro = ""
+            var joker = ""
             var apuestaMultiple = false
             val combiPosibles: Int
             val columnas = mutableListOf<String>()
@@ -28,6 +30,7 @@ fun crearBoleto(data: String): Boleto {
             var numeroLNAC = ""
 
             val fecha = info["S"]?.jsonPrimitive?.content?.slice(3..9) ?: ""
+            val numeroSorteo = info["S"]?.jsonPrimitive?.content?.slice(0..2) ?: ""
             val numeroSorteosJugados =
                 info["S"]?.jsonPrimitive?.content?.substringAfter(":")?.toInt() ?: 1
             val (tipo, gameId) = when (info["P"]?.jsonPrimitive?.content) {
@@ -43,12 +46,19 @@ fun crearBoleto(data: String): Boleto {
                 info["combinaciones"]?.jsonPrimitive?.content?.removeSurrounding("[", "]")
                     ?.split(",")
                     ?: emptyList()
-            val joker = info["J"]?.jsonPrimitive?.content ?: ""
 
+
+            val infoSorteo = networkRepo.getInfoSorteo(numeroSorteo, gameId)
+            val aperturaSorteo = infoSorteo.apertura
+            val cierreSorteo = infoSorteo.cierre
+            val idSorteoBoleto = infoSorteo.idSorteo
 
             when (gameId) {
                 "LAPR" -> {
                     reintegro = info["R"]?.jsonPrimitive?.content ?: ""
+                    val jokerRaw = info["J"]?.jsonPrimitive?.content ?: ""
+                    joker = if (jokerRaw.length == 6)"0".plus(jokerRaw) else jokerRaw
+
                     columnas.addAll(combinaciones.map {
                         it.substringAfter("=").chunked(2).joinToString(" ")
                     })
@@ -156,12 +166,12 @@ fun crearBoleto(data: String): Boleto {
                 gameID = gameId,
                 fecha = fechaParaGuardar(fecha),
                 precio = precioBoleto.toString(),
-                idSorteo = "idSorteo",
-                numSorteo = info["S"]?.jsonPrimitive?.content?.slice(0..2) ?: "",
+                idSorteo = idSorteoBoleto,
+                numSorteo = numeroSorteo,
                 apuestaMultiple = apuestaMultiple,
                 premio = "0.0",
-                apertura = "fecha-apertura",
-                cierre = "fecha-cierre",
+                apertura = aperturaSorteo,
+                cierre = cierreSorteo,
                 tipo = tipo,
                 combinaciones = columnas,
                 joker = joker,

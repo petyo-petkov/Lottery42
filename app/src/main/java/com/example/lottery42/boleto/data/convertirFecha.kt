@@ -29,3 +29,4 @@ fun String.toFormattedDate(): String {
         Log.e("DateTimeConversion", "Error al convertir la fecha: $e")
     }.toString()
 }
+
