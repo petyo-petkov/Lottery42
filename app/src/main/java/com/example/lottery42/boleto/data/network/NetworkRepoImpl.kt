@@ -82,15 +82,16 @@ class NetworkRepoImpl(
     }
 
     // Obtiene la info del sorteo
-    override suspend fun extraInfo(boleto: Boleto): LotteryModel {
+    override suspend fun extraInfo(boleto: Boleto): List<LotteryModel> {
         val gameId = boleto.gameID
         val fecha = boleto.fecha.replace("-", "")
         val url = urlResultadosPorFechas(gameId, fecha, fecha)
+        Log.d("URL", url)
 
         val response = getInfoFromURL<LotteryModel>(url)
         Log.d("ExtraInfo", response.toString())
 
-        return response[0]
+        return response
 
     }
 

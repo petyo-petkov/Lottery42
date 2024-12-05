@@ -1,34 +1,45 @@
 package com.example.lottery42.boleto.data.network.models
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class LotteryModel(
-    val game_id: String,
-    val id_sorteo: String,
-    val fecha_sorteo: String,
+    @SerialName("game_id")
+    val gameId: String,
+    @SerialName("id_sorteo")
+    val idSorteo: String,
+    @SerialName("fecha_sorteo")
+    val fechaSorteo: String,
     val combinacion: String,
-    val apuestas: String,
     val cdc: String,
-    val combinacion_acta: String,
-    val dia_semana: String,
+    @SerialName("combinacion_acta")
+    val combinacionActa: String,
+    @SerialName("dia_semana")
+    val diaSemana: String,
     val anyo: String,
-    val fondo_bote: String,
     val numero: Int,
-    val premio_bote: String,
-    val premios: String,
-    val recaudacion: String?,
-
+    @SerialName("premio_bote")
+    val premioBote: String,
     val escrutinio: List<Escrutinio>,
 
-    val escrutinio_joker: List<EscrutinioJoker>? = emptyList(),
+    @SerialName("fondo_bote")
+    val fondoBote: String? = null,
+    val premios: String? = null,
+    val apuestas: String? = null,
+    val recaudacion: String? = null,
+
+    @SerialName("escrutinio_joker")
+    val escrutinioJoker: List<EscrutinioJoker>? = emptyList(),
     val joker: Joker? = null,
 
-    val escrutinio_lluvia: String? = "",
-    val escrutinio_millon: List<EscrutinioMillon>? = emptyList(),
+    @SerialName("escrutinio_lluvia")
+    val escrutinioLluvia: String? = null,
+    @SerialName("escrutinio_millon")
+    val escrutinioMillon: List<EscrutinioMillon>? = emptyList(),
     val millon: Millon? = null,
-    val recaudacion_europea: String? = "",
+    val lluvia: String? = null,
+    @SerialName("recaudacion_europea")
+    val recaudacionEuropea: String? = "",
 
-
-
-)
+    )

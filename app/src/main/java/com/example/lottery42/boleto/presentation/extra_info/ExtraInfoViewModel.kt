@@ -28,7 +28,7 @@ class ExtraInfoViewModel(
             val info = networkRepo.extraInfo(boleto)
             _infoState.value = if (esAnterior) {
                 try {
-                   InfoSorteoState.Success(info = info)
+                   InfoSorteoState.Success(info = info[0])
                 } catch (e: Exception) {
                     Log.e("ERROR en obtenerInfoResultado", e.message.toString())
                     InfoSorteoState.Error(e)

@@ -25,7 +25,7 @@ suspend fun get(url: String): List<LotteryModel> {
 }
 
 suspend fun main(){
-    val url = "https://www.loteriasyapuestas.es/servicios/buscadorSorteos?game_id=EMIL&celebrados=&fechaInicioInclusiva=20241108&fechaFinInclusiva=20241108"
+    val url = "https://www.loteriasyapuestas.es/servicios/buscadorSorteos?game_id=EDMS&celebrados=&fechaInicioInclusiva=20241010&fechaFinInclusiva=20241010"
 
     val response = get(url)
     println(response)
