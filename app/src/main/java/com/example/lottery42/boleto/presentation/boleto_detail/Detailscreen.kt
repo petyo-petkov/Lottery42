@@ -16,8 +16,6 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
-import androidx.compose.material3.adaptive.layout.ListDetailPaneScaffoldRole
-import androidx.compose.material3.adaptive.navigation.ThreePaneScaffoldNavigator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -42,7 +40,6 @@ fun DetailScreen(
     boleto: Boleto?,
     onDeleteBoleto: () -> Unit,
     onExtraInfoClick: () -> Unit,
-    navigator: ThreePaneScaffoldNavigator<Any>
 ) {
     var showDialogoBorrar by remember { mutableStateOf(false) }
     val smallStyle = MaterialTheme.typography.headlineSmall

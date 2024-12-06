@@ -1,6 +1,5 @@
 package com.example.lottery42.boleto.data.network
 
-import android.content.Context
 import android.util.Log
 import com.example.lottery42.boleto.data.database.Boleto
 import com.example.lottery42.boleto.data.network.models.LotteryModel
@@ -23,8 +22,7 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 class NetworkRepoImpl(
-    val httpClient: HttpClient,
-    val context: Context
+    val httpClient: HttpClient
 ) : NetworkRepo {
 
     private suspend inline fun <reified T> getInfoFromURL(url: String): List<T> {

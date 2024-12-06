@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
@@ -22,7 +21,6 @@ import androidx.compose.ui.unit.dp
 import com.example.lottery42.boleto.data.database.Boleto
 import com.example.lottery42.boleto.data.network.models.Escrutinio
 import com.example.lottery42.boleto.data.network.models.EscrutinioJoker
-import com.example.lottery42.boleto.data.network.models.EscrutinioLluvia
 import com.example.lottery42.boleto.data.network.models.Lluvia
 import com.example.lottery42.boleto.data.network.models.LotteryModel
 import com.example.lottery42.boleto.data.toFormattedDate

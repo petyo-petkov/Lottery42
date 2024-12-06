@@ -100,8 +100,7 @@ fun App(
                             onExtraInfoClick = {
                                 vmExtra.infoDelSorteoCelebado(listState.boleto!!)
                                 navigator.navigateTo(pane = ListDetailPaneScaffoldRole.Extra)
-                            },
-                            navigator = navigator
+                            }
                         )
                 }
             },
