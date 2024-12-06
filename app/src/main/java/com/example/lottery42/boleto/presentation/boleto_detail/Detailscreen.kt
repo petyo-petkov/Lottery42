@@ -15,6 +15,9 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
+import androidx.compose.material3.adaptive.layout.ListDetailPaneScaffoldRole
+import androidx.compose.material3.adaptive.navigation.ThreePaneScaffoldNavigator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -33,10 +36,13 @@ import com.example.lottery42.boleto.presentation.boleto_list.loadImage
 import kotlin.text.Typography.euro
 
 
+@OptIn(ExperimentalMaterial3AdaptiveApi::class)
 @Composable
 fun DetailScreen(
     boleto: Boleto?,
     onDeleteBoleto: () -> Unit,
+    onExtraInfoClick: () -> Unit,
+    navigator: ThreePaneScaffoldNavigator<Any>
 ) {
     var showDialogoBorrar by remember { mutableStateOf(false) }
     val smallStyle = MaterialTheme.typography.headlineSmall
@@ -140,7 +146,7 @@ fun DetailScreen(
                     }
                     Button(
                         onClick = {
-//                            resultadosViewModel.infoDelSorteoCelebado(boleto)
+                            onExtraInfoClick()
 //                            navigator.navigateTo(
 //                                pane = ListDetailPaneScaffoldRole.Extra,
 //                            )

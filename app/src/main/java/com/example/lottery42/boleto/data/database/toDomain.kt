@@ -22,6 +22,7 @@ fun BoletoEntity.toDomain(): Boleto {
         dreams = dreams?.removeSurrounding("[", "]")?.split(",") ?: emptyList(),
         estrellas = estrellas?.removeSurrounding("[", "]")?.split(",") ?: emptyList(),
         numeroElMillon = numeroElMillon?.removeSurrounding("[", "]")?.split(",") ?: emptyList(),
+        lluvia = lluvia,
         numeroLoteria = numeroLoteria,
     )
 }

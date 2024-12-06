@@ -55,7 +55,7 @@ val databaseModule = module {
         AndroidSqliteDriver(
             schema = AppDatabase.Schema,
             context = get(),
-            name = "boletosDB"
+            name = "boletos_DB"
         )
     }
     single {
@@ -71,18 +71,11 @@ val databaseModule = module {
 }
 
 val networkModule = module {
-//    single<HttpClient> {
-//        HttpClient(CIO)
-//    }
-    singleOf<HttpClient>(::HttpClient)
 
-    //singleOf(::NetworkRepoImpl).bind<NetworkRepo>()
+    singleOf<HttpClient>(::HttpClient)
 
     factoryOf(::NetworkRepoImpl).bind<NetworkRepo>()
 
-//    factory<NetworkRepo> {
-//        NetworkRepoImpl(get(), get())
-//    }
 }
 
 val viewModelModule = module {

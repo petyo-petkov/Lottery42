@@ -26,6 +26,7 @@ data class Boleto(
 
     val estrellas: List<String> = emptyList(),
     val numeroElMillon: List<String> = emptyList(),
+    val lluvia: String? = "",
 
     val numeroLoteria: String? = "",
 

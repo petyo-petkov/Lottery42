@@ -24,6 +24,7 @@ fun Boleto.toEntity(): BoletoEntity {
         dreams = dreams.toString(),
         estrellas = estrellas.toString(),
         numeroElMillon = numeroElMillon.toString(),
+        lluvia = lluvia,
         numeroLoteria = numeroLoteria
     )
 }

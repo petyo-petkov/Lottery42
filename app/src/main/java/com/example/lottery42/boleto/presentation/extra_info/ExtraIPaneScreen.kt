@@ -13,14 +13,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.example.lottery42.boleto.data.network.models.LotteryModel
+import com.example.lottery42.boleto.data.database.Boleto
 import com.example.lottery42.boleto.presentation.extra_info.ExtraInfoViewModel.InfoSorteoState
-import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun ExtraInfoScreen(
-    vmExtra: ExtraInfoViewModel
-){
+    vmExtra: ExtraInfoViewModel,
+    boleto: Boleto
+) {
     val result = vmExtra.infoState.collectAsStateWithLifecycle()
 
     Surface(modifier = Modifier) {
@@ -28,7 +28,10 @@ fun ExtraInfoScreen(
             is InfoSorteoState.Loading -> LoadingInfo()
             is InfoSorteoState.Empty -> EmptyInfo()
             is InfoSorteoState.Error -> Text(text = "Error al obtener los resultados")
-            is InfoSorteoState.Success-> infoScreen(info = currentResult.info)
+            is InfoSorteoState.Success -> ExtraInfo(
+                resultado = currentResult.info,
+                boleto = boleto
+            )
 
 
         }
@@ -37,12 +40,6 @@ fun ExtraInfoScreen(
 
 }
 
-@Composable
-fun infoScreen(info: LotteryModel){
-    Box {
-       Text(text = info.toString())
-    }
-}
 
 @Composable
 fun EmptyInfo() {

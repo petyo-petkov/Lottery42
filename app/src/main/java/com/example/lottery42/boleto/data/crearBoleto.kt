@@ -180,6 +180,7 @@ suspend fun crearBoleto(data: String, networkRepo: NetworkRepo): Boleto {
                 dreams = suenos,
                 estrellas = estrellasEuromillones,
                 numeroElMillon = numeroELMillon,
+                lluvia = lluviaMillones,
                 numeroLoteria = numeroLNAC
             )
         }

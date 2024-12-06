@@ -17,12 +17,13 @@ CREATE TABLE BoletoEntity(
      dreams TEXT,
      estrellas TEXT,
      numeroElMillon TEXT,
+     lluvia TEXT,
      numeroLoteria TEXT
 
 );
 
 insertBoleto:
-INSERT INTO BoletoEntity(id, idSorteo, gameID, tipo, combinaciones, fecha, apertura,cierre, precio, premio, numSorteo,apuestaMultiple, joker, reintegro,numeroClave, dreams, estrellas,numeroElMillon, numeroLoteria)
+INSERT INTO BoletoEntity(id, idSorteo, gameID, tipo, combinaciones, fecha, apertura,cierre, precio, premio, numSorteo,apuestaMultiple, joker, reintegro,numeroClave, dreams, estrellas,numeroElMillon, lluvia, numeroLoteria)
 VALUES ?;
 
 getAllBoletos:

@@ -7,7 +7,6 @@ import io.ktor.client.request.get
 import io.ktor.client.statement.HttpResponse
 import io.ktor.client.statement.bodyAsText
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonObject
 
 suspend fun get(url: String): List<LotteryModel> {
 
@@ -24,10 +23,10 @@ suspend fun get(url: String): List<LotteryModel> {
 
 }
 
-suspend fun main(){
-    val url = "https://www.loteriasyapuestas.es/servicios/buscadorSorteos?game_id=EDMS&celebrados=&fechaInicioInclusiva=20241010&fechaFinInclusiva=20241010"
-
-    val response = get(url)
-    println(response)
-
-}
+//suspend fun main(){
+//    val url = "https://www.loteriasyapuestas.es/servicios/buscadorSorteos?game_id=EMIL&celebrados=&fechaInicioInclusiva=20241122&fechaFinInclusiva=20241122"
+//
+//    val response = get(url)
+//    println(response)
+//
+//}

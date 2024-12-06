@@ -10,7 +10,7 @@ interface NetworkRepo {
 
     suspend fun getInfoSorteo(numSorteo: String, gameId: String): InfoSorteo
 
-    suspend fun extraInfo(boleto: Boleto): List<LotteryModel>
+    suspend fun fetchExtraInfo(boleto: Boleto): List<LotteryModel>
 
     suspend fun getPremios(boleto: Boleto): Flow<String>
 

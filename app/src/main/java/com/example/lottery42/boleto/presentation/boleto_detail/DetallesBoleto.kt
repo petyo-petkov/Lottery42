@@ -61,17 +61,17 @@ fun DetallesBoleto(boleto: Boleto?, style: TextStyle) {
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text("Numeros El Millon:", style = MaterialTheme.typography.titleLarge)
+                Text("Numeros El Millon:", style = style)
                 boleto.numeroElMillon.forEach {
                     Text(it, style = style)
                 }
             }
 
-//            if (!boleto.lluvia.isNullOrEmpty()){
-//
-//                Text("Lluvia de millones:", style = style)
-//                Text(boleto.lluvia, style = style)
-//            }
+            if (!boleto.lluvia.isNullOrEmpty()){
+
+                Text("Lluvia de millones:", style = style)
+                Text(boleto.lluvia, style = style)
+            }
 
         }
 

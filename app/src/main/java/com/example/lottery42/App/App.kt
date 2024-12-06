@@ -46,7 +46,7 @@ fun App(
     val listState by vm.listState.collectAsStateWithLifecycle()
 
     LaunchedEffect(listState.boleto) {
-        if (listState.boleto != null){
+        if (listState.boleto != null) {
             vmExtra.infoDelSorteoCelebado(listState.boleto!!)
         }
     }
@@ -96,13 +96,21 @@ fun App(
                             onDeleteBoleto = {
                                 vm.onAction(borrarBoleto(listState.boleto!!.id))
                                 navigator.navigateBack()
-                            }
+                            },
+                            onExtraInfoClick = {
+                                vmExtra.infoDelSorteoCelebado(listState.boleto!!)
+                                navigator.navigateTo(pane = ListDetailPaneScaffoldRole.Extra)
+                            },
+                            navigator = navigator
                         )
                 }
             },
             extraPane = {
                 AnimatedPane {
-                    ExtraInfoScreen(vmExtra = vmExtra)
+                    ExtraInfoScreen(
+                        vmExtra = vmExtra,
+                        boleto = listState.boleto!!
+                    )
                 }
             },
             defaultBackBehavior = BackNavigationBehavior.PopUntilContentChange,

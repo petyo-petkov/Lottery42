@@ -25,7 +25,7 @@ class ExtraInfoViewModel(
         _infoState.value = InfoSorteoState.Loading
         viewModelScope.launch(Dispatchers.IO) {
             val esAnterior = esAnteriorA(boleto.cierre)
-            val info = networkRepo.extraInfo(boleto)
+            val info = networkRepo.fetchExtraInfo(boleto)
             _infoState.value = if (esAnterior) {
                 try {
                    InfoSorteoState.Success(info = info[0])

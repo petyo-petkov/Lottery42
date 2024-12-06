@@ -25,20 +25,25 @@ data class LotteryModel(
 
     @SerialName("fondo_bote")
     val fondoBote: String? = null,
+
     val premios: String? = null,
     val apuestas: String? = null,
     val recaudacion: String? = null,
 
     @SerialName("escrutinio_joker")
     val escrutinioJoker: List<EscrutinioJoker>? = emptyList(),
+
     val joker: Joker? = null,
 
     @SerialName("escrutinio_lluvia")
-    val escrutinioLluvia: String? = null,
+    val escrutinioLluvia: List<EscrutinioLluvia>? = emptyList(),
+
     @SerialName("escrutinio_millon")
     val escrutinioMillon: List<EscrutinioMillon>? = emptyList(),
+
     val millon: Millon? = null,
-    val lluvia: String? = null,
+    val lluvia: Lluvia? = null,
+
     @SerialName("recaudacion_europea")
     val recaudacionEuropea: String? = "",
 
