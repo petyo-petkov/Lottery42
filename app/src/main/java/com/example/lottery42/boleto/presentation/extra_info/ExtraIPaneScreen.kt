@@ -35,7 +35,6 @@ fun ExtraInfoScreen(
 
 
         }
-
     }
 
 }
