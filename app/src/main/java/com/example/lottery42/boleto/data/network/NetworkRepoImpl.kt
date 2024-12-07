@@ -63,6 +63,7 @@ class NetworkRepoImpl(
             fechaInicio = fechaInicio.format(formatter),
             fechaFin = fechaFin.format(formatter)
         )
+        Log.i("urlUltimos", urlUltimos)
 
         return try {
             coroutineScope {

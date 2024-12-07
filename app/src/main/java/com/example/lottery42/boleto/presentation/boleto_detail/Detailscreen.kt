@@ -93,7 +93,10 @@ fun DetailScreen(
                 Text(text = "Numero de sorteo: ${boleto.numSorteo}", style = smallStyle)
 
                 Divisor()
-                Text("Combinaciones:", style = MaterialTheme.typography.titleLarge)
+                Text(
+                    if (boleto.gameID == "LNAC") "Numero Loteria:" else "Combinaciones:",
+                    style = MaterialTheme.typography.titleLarge
+                )
                 DetallesBoleto(boleto, smallStyle)
                 Divisor()
 
@@ -106,13 +109,14 @@ fun DetailScreen(
                     style = smallStyle
                 )
                 Divisor()
-
-                Text(
-                    text = if ("${boleto.apuestaMultiple}" == "true") "Apuesta Multiple"
-                    else "Apuesta Simple",
-                    style = smallStyle
-                )
-                Divisor()
+                if (boleto.gameID != "LNAC") {
+                    Text(
+                        text = if ("${boleto.apuestaMultiple}" == "true") "Apuesta Multiple"
+                        else "Apuesta Simple",
+                        style = smallStyle
+                    )
+                    Divisor()
+                }
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(16.dp)
                 ) {

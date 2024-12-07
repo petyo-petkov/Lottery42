@@ -57,7 +57,7 @@ suspend fun crearBoleto(data: String, networkRepo: NetworkRepo): Boleto {
                 "LAPR" -> {
                     reintegro = info["R"]?.jsonPrimitive?.content ?: ""
                     val jokerRaw = info["J"]?.jsonPrimitive?.content ?: ""
-                    joker = if (jokerRaw.length == 6)"0".plus(jokerRaw) else jokerRaw
+                    joker = if (jokerRaw.length == 6) "0".plus(jokerRaw) else jokerRaw
 
                     columnas.addAll(combinaciones.map {
                         it.substringAfter("=").chunked(2).joinToString(" ")
@@ -115,7 +115,7 @@ suspend fun crearBoleto(data: String, networkRepo: NetworkRepo): Boleto {
 
                 "EMIL" -> {
                     numeroELMillon = data.split(";")[6].substringAfter(",").dropLast(1).split("-")
-                    lluviaMillones =  data.split(";")[7].substringAfter(",").dropLast(1)
+                    lluviaMillones = data.split(";")[7].substringAfter(",").dropLast(1)
                     columnas.addAll(combinaciones.map {
                         it.substringAfter("=").substringBefore(":").chunked(2).joinToString(" ")
                     })
@@ -147,7 +147,7 @@ suspend fun crearBoleto(data: String, networkRepo: NetworkRepo): Boleto {
                     apuestaMultiple = combinacion.size > 6 || combinacion.size == 5
                     if (combinacion.size == 5) {
                         combiPosibles = 35
-                    }else {
+                    } else {
                         combiPosibles = combinacionesPosibles(combinacion.size, 6)
                     }
                     precioBoleto = if (apuestaMultiple) {
@@ -159,6 +159,7 @@ suspend fun crearBoleto(data: String, networkRepo: NetworkRepo): Boleto {
 
                 "LNAC" -> {
                     numeroLNAC = info["N"]?.jsonPrimitive?.content ?: ""
+                    precioBoleto = infoSorteo.precio?.toDouble() ?: 0.0
                 }
             }
             boleto = Boleto(
@@ -185,11 +186,39 @@ suspend fun crearBoleto(data: String, networkRepo: NetworkRepo): Boleto {
             )
         }
 
-        "BAR" -> {}
+        "BAR" -> {
+            val info = data.substringAfter("|")
+            val gameId = "LNAC"
+            val tipo = "Loteria Nacional"
+            val numeroSorteo = info.substring(1..3)
+            val infoSorteo = networkRepo.getInfoSorteo(numeroSorteo, gameId)
+
+            boleto = Boleto(
+                id = info.slice(0..10).toLong(),
+                gameID = gameId,
+                fecha = infoSorteo.fecha.substringBefore(" "),
+                precio = infoSorteo.precio ?: "0.0",
+                idSorteo = infoSorteo.idSorteo,
+                numSorteo = numeroSorteo,
+                apuestaMultiple = false,
+                premio = "0.0",
+                apertura = infoSorteo.apertura,
+                cierre = infoSorteo.cierre,
+                tipo = tipo,
+                combinaciones = emptyList(),
+                joker = null,
+                reintegro = null,
+                numeroClave = emptyList(),
+                dreams = emptyList(),
+                estrellas = emptyList(),
+                numeroElMillon = emptyList(),
+                lluvia = null,
+                numeroLoteria = info.substring(11..15)
+            )
+
+        }
 
     }
-
-
     return boleto
 
 }
