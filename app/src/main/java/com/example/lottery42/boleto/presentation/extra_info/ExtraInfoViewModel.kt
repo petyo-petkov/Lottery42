@@ -21,7 +21,7 @@ class ExtraInfoViewModel(
     private val _infoState = MutableStateFlow<InfoSorteoState>(InfoSorteoState.Empty)
     val infoState: StateFlow<InfoSorteoState> = _infoState
 
-    fun infoDelSorteoCelebado(boleto: Boleto) {
+    fun infoSorteoCelebrado(boleto: Boleto) {
         _infoState.value = InfoSorteoState.Loading
         viewModelScope.launch(Dispatchers.IO) {
             val esAnterior = esAnteriorA(boleto.cierre)

@@ -12,7 +12,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
@@ -30,6 +29,7 @@ import com.example.lottery42.R
 import com.example.lottery42.boleto.data.database.Boleto
 import com.example.lottery42.boleto.data.toFormattedDate
 import com.example.lottery42.boleto.presentation.DialogoBorrar
+import com.example.lottery42.boleto.presentation.Divisor
 import com.example.lottery42.boleto.presentation.boleto_list.loadImage
 import kotlin.text.Typography.euro
 
@@ -37,9 +37,10 @@ import kotlin.text.Typography.euro
 @OptIn(ExperimentalMaterial3AdaptiveApi::class)
 @Composable
 fun DetailScreen(
-    boleto: Boleto?,
+    boleto: Boleto,
     onDeleteBoleto: () -> Unit,
     onExtraInfoClick: () -> Unit,
+    onComprobarClick: () -> Unit
 ) {
     var showDialogoBorrar by remember { mutableStateOf(false) }
     val smallStyle = MaterialTheme.typography.headlineSmall
@@ -47,7 +48,7 @@ fun DetailScreen(
     Box(modifier = Modifier) {
         Image(
             painter = loadImage(
-                when (boleto?.gameID) {
+                when (boleto.gameID) {
                     "LAPR" -> R.drawable.la_primitiva
                     "BONO" -> R.drawable.bonoloto
                     "EMIL" -> R.drawable.euromillones
@@ -66,17 +67,16 @@ fun DetailScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .statusBarsPadding()
-                .padding(16.dp),
+                .padding(8.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             Text(
-                text = boleto?.tipo ?: "",
-                modifier = Modifier,
+                text = boleto.tipo,
                 style = MaterialTheme.typography.displayMedium
             )
             Text(
-                text = boleto?.fecha?.toFormattedDate() ?: "",
+                text = boleto.fecha.toFormattedDate(),
                 modifier = Modifier,
                 style = smallStyle
             )
@@ -90,7 +90,7 @@ fun DetailScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                Text(text = "Numero de sorteo: ${boleto?.numSorteo}", style = smallStyle)
+                Text(text = "Numero de sorteo: ${boleto.numSorteo}", style = smallStyle)
 
                 Divisor()
                 Text("Combinaciones:", style = MaterialTheme.typography.titleLarge)
@@ -98,17 +98,17 @@ fun DetailScreen(
                 Divisor()
 
                 Text(
-                    "Precio: ${boleto?.precio} $euro",
+                    "Precio: ${boleto.precio} $euro",
                     style = smallStyle
                 )
                 Text(
-                    text = if (boleto?.premio == "0.0") "No Premiado" else "${boleto?.premio} $euro",
+                    text = if (boleto.premio == "0.0") "No Premiado" else "${boleto.premio} $euro",
                     style = smallStyle
                 )
                 Divisor()
 
                 Text(
-                    text = if ("${boleto?.apuestaMultiple}" == "true") "Apuesta Multiple"
+                    text = if ("${boleto.apuestaMultiple}" == "true") "Apuesta Multiple"
                     else "Apuesta Simple",
                     style = smallStyle
                 )
@@ -116,11 +116,10 @@ fun DetailScreen(
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
-                    Button(
-                        onClick = {
 
-                            showDialogoBorrar = true
-                        },
+                    // BOTON BORRAR
+                    Button(
+                        onClick = { showDialogoBorrar = true },
                         colors = ButtonDefaults.buttonColors(
                             containerColor = MaterialTheme.colorScheme.error,
                             contentColor = MaterialTheme.colorScheme.onError
@@ -129,8 +128,10 @@ fun DetailScreen(
                         Text(text = "Borrar")
                     }
 
+                    // BOTON COMPROBAR
                     Button(
                         onClick = {
+                            onComprobarClick()
 //                            resultadosViewModel.Premio(boleto)
 //                            showDialogResultado = true
                         },
@@ -141,13 +142,10 @@ fun DetailScreen(
                     ) {
                         Text(text = "Comprobar")
                     }
+
+                    // BOTON INFO SORTEO
                     Button(
-                        onClick = {
-                            onExtraInfoClick()
-//                            navigator.navigateTo(
-//                                pane = ListDetailPaneScaffoldRole.Extra,
-//                            )
-                        },
+                        onClick = { onExtraInfoClick() },
                         colors = ButtonDefaults.buttonColors(
                             containerColor = Color(0xFFFFE082),
                             contentColor = Color.Black
@@ -175,7 +173,4 @@ fun DetailScreen(
 
 }
 
-@Composable
-fun Divisor() {
-    HorizontalDivider(color = MaterialTheme.colorScheme.onSurface)
-}
+

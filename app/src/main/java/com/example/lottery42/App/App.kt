@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -19,7 +18,6 @@ import androidx.compose.material3.adaptive.navigation.BackNavigationBehavior
 import androidx.compose.material3.adaptive.navigation.NavigableListDetailPaneScaffold
 import androidx.compose.material3.adaptive.navigation.rememberListDetailPaneScaffoldNavigator
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -32,26 +30,18 @@ import com.example.lottery42.boleto.presentation.boleto_list.ListScreenActions.o
 import com.example.lottery42.boleto.presentation.boleto_list.ListScreenActions.onBorrarAllClick
 import com.example.lottery42.boleto.presentation.boleto_list.ListScreenActions.onFABClick
 import com.example.lottery42.boleto.presentation.boleto_list.ListScreenViewModel
-import com.example.lottery42.boleto.presentation.extra_info.ExtraInfoScreen
 import com.example.lottery42.boleto.presentation.extra_info.ExtraInfoViewModel
+import com.example.lottery42.boleto.presentation.extra_info.ExtraPaneScreen
 import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3AdaptiveApi::class)
 @Composable
-fun App(
-
-) {
+fun App() {
     val vm: ListScreenViewModel = koinViewModel()
     val vmExtra: ExtraInfoViewModel = koinViewModel()
     val navigator = rememberListDetailPaneScaffoldNavigator<Any>()
     val listState by vm.listState.collectAsStateWithLifecycle()
-
-    LaunchedEffect(listState.boleto) {
-        if (listState.boleto != null) {
-            vmExtra.infoDelSorteoCelebado(listState.boleto!!)
-        }
-    }
-
+    val infoState by vmExtra.infoState.collectAsStateWithLifecycle()
 
     Scaffold(
         modifier = Modifier.fillMaxWidth(),
@@ -72,6 +62,8 @@ fun App(
         contentWindowInsets = WindowInsets.statusBars,
 
         ) { innerPadding ->
+        val boleto = listState.boleto
+
         NavigableListDetailPaneScaffold(
             modifier = Modifier.padding(innerPadding),
             navigator = navigator,
@@ -91,31 +83,35 @@ fun App(
             },
             detailPane = {
                 AnimatedPane {
-                    if (listState.boleto == null) EmptyScreen() else
+                    if (boleto != null) {
                         DetailScreen(
-                            boleto = listState.boleto,
+                            boleto = boleto,
                             onDeleteBoleto = {
-                                vm.onAction(borrarBoleto(listState.boleto!!.id))
+                                vm.onAction(borrarBoleto(boleto.id))
                                 navigator.navigateBack()
                             },
                             onExtraInfoClick = {
-                                vmExtra.infoDelSorteoCelebado(listState.boleto!!)
+                                vmExtra.infoSorteoCelebrado(boleto)
                                 navigator.navigateTo(pane = ListDetailPaneScaffoldRole.Extra)
-                            }
+                            },
+                            onComprobarClick = { }
                         )
+
+                    }else {
+                        EmptyScreen()
+                    }
                 }
             },
             extraPane = {
                 AnimatedPane {
-                    ExtraInfoScreen(
-                        vmExtra = vmExtra,
-                        boleto = listState.boleto!!
+                    ExtraPaneScreen(
+                        infoState = infoState,
+                        boleto = boleto!!
                     )
                 }
             },
             defaultBackBehavior = BackNavigationBehavior.PopUntilContentChange,
-
-            )
+        )
     }
 
 }

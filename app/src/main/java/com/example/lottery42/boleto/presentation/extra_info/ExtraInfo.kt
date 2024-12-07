@@ -3,18 +3,14 @@ package com.example.lottery42.boleto.presentation.extra_info
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.lottery42.boleto.data.database.Boleto
 import com.example.lottery42.boleto.data.network.models.Escrutinio
@@ -22,6 +18,7 @@ import com.example.lottery42.boleto.data.network.models.EscrutinioJoker
 import com.example.lottery42.boleto.data.network.models.Lluvia
 import com.example.lottery42.boleto.data.network.models.LotteryModel
 import com.example.lottery42.boleto.data.toFormattedDate
+import com.example.lottery42.boleto.presentation.Divisor
 import com.example.lottery42.boleto.presentation.boleto_detail.DetallesBoleto
 import kotlin.text.Typography.euro
 
@@ -31,6 +28,8 @@ fun ExtraInfo(
     boleto: Boleto
 ) {
 
+    val style = MaterialTheme.typography.titleMedium
+
     Column(
         modifier = Modifier,
         verticalArrangement = Arrangement.spacedBy(4.dp),
@@ -39,32 +38,41 @@ fun ExtraInfo(
 
         Text(text = boleto.tipo, style = MaterialTheme.typography.displaySmall)
 
-        HorizontalDivider(modifier = Modifier, color = Color.White)
+        Divisor()
 
-        Text("Fecha:", style = MaterialTheme.typography.titleSmall)
+        Text("Fecha:", style = style)
 
         Text(
             text = boleto.fecha.toFormattedDate(),
-            style = MaterialTheme.typography.titleMedium
+            style = style
         )
 
-        HorizontalDivider(modifier = Modifier, color = Color.White)
+        Divisor()
 
         LazyColumn(
             modifier = Modifier,
             horizontalAlignment = Alignment.CenterHorizontally,
 
-        ) {
+            ) {
             item {
-                Text("Mis combinaciones:", style = MaterialTheme.typography.titleMedium)
+                Text("Mis combinaciones:", style = style)
+                DetallesBoleto(boleto, style = style)
 
-                DetallesBoleto(boleto, style = MaterialTheme.typography.titleSmall)
-                HorizontalDivider(modifier = Modifier, color = Color.White)
+                Divisor()
+
+                Text("Combinación ganadora:", style = style)
+
+                Text(
+                    text = resultado.combinacion,
+                    style = style
+                )
+
+                Divisor()
 
                 Column(
                     modifier = Modifier,
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                    verticalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
                     when (boleto.gameID) {
 
@@ -72,19 +80,18 @@ fun ExtraInfo(
 
                             Text(
                                 "Joker ganador: ${resultado.joker?.combinacion}",
-                                style = MaterialTheme.typography.titleMedium
+                                style = style
                             )
 
-                            HorizontalDivider(modifier = Modifier, color = Color.White)
+                            Divisor()
 
                             Escrutionio(
                                 resultado.escrutinio,
-                                resultado.combinacion
                             )
 
-                            HorizontalDivider(modifier = Modifier, color = Color.White)
+                            Divisor()
 
-                            Text("Escrutinio Joker:", style = MaterialTheme.typography.titleMedium)
+                            Text("Escrutinio Joker:", style = style)
 
                             EscrutinioJoker(resultado.escrutinioJoker!!)
 
@@ -93,14 +100,12 @@ fun ExtraInfo(
                         "BONO" -> {
                             Escrutionio(
                                 resultado.escrutinio,
-                                resultado.combinacion
                             )
                         }
 
                         "EDMS" -> {
                             Escrutionio(
                                 resultado.escrutinio,
-                                resultado.combinacion
                             )
                         }
 
@@ -108,20 +113,22 @@ fun ExtraInfo(
 
                             Text(
                                 "Numero millon ganador: ${resultado.millon?.combinacion}",
-                                style = MaterialTheme.typography.titleSmall
+                                style = style
                             )
 
+                            Divisor()
+
                             Escrutionio(
-                                resultado.escrutinio,
-                                resultado.combinacion
+                                resultado.escrutinio
                             )
 
                             if (resultado.lluvia != null) {
-                                HorizontalDivider(modifier = Modifier, color = Color.White)
+
+                                Divisor()
 
                                 Text(
                                     "Lluvia de millones:",
-                                    style = MaterialTheme.typography.titleMedium
+                                    style = style
                                 )
 
                                 Lluvia(resultado.lluvia)
@@ -130,8 +137,7 @@ fun ExtraInfo(
 
                         "ELGR" -> {
                             Escrutionio(
-                                resultado.escrutinio,
-                                resultado.combinacion
+                                resultado.escrutinio
                             )
                         }
 
@@ -148,17 +154,12 @@ fun ExtraInfo(
 }
 
 @Composable
-fun Escrutionio(escrutinio: List<Escrutinio>, combiGanadora: String) {
-    Text("Combinación ganadora:", style = MaterialTheme.typography.titleMedium)
+fun Escrutionio(escrutinio: List<Escrutinio>) {
 
-    Text(
-        text = combiGanadora,
-        style = MaterialTheme.typography.titleSmall
-    )
+    val styleSmall = MaterialTheme.typography.titleSmall
+    val styleMedium = MaterialTheme.typography.titleMedium
 
-    HorizontalDivider(modifier = Modifier, color = Color.White)
-
-    Text("Escrutinio:", style = MaterialTheme.typography.titleMedium)
+    Text("Escrutinio:", style = styleMedium)
 
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -166,21 +167,21 @@ fun Escrutionio(escrutinio: List<Escrutinio>, combiGanadora: String) {
         verticalAlignment = Alignment.CenterVertically
     ) {
         Column(modifier = Modifier.padding(start = 8.dp)) {
-            Text(text = "Categoria:", style = MaterialTheme.typography.titleSmall)
+            Text(text = "Categoria:", style = styleMedium)
 
             escrutinio.forEach { escrutinioItem ->
                 Text(
                     " ${escrutinioItem.tipo}",
-                    style = MaterialTheme.typography.titleSmall
+                    style = styleSmall
                 )
             }
         }
         Column {
-            Text(text = "Ganadores:", style = MaterialTheme.typography.titleSmall)
+            Text(text = "Ganadores:", style = styleMedium)
             escrutinio.forEach { escrutinioItem ->
                 Text(
                     escrutinioItem.ganadores,
-                    style = MaterialTheme.typography.titleSmall
+                    style = styleSmall
                 )
             }
         }
@@ -188,11 +189,11 @@ fun Escrutionio(escrutinio: List<Escrutinio>, combiGanadora: String) {
             modifier = Modifier.padding(end = 8.dp),
             horizontalAlignment = Alignment.End
         ) {
-            Text(text = "Premio:", style = MaterialTheme.typography.titleSmall)
+            Text(text = "Premio:", style = styleMedium)
             escrutinio.forEach { escrutinioItem ->
                 Text(
                     "${escrutinioItem.premio} $euro ",
-                    style = MaterialTheme.typography.titleSmall
+                    style = styleSmall
                 )
             }
         }
@@ -201,26 +202,30 @@ fun Escrutionio(escrutinio: List<Escrutinio>, combiGanadora: String) {
 
 @Composable
 fun EscrutinioJoker(escrutinio: List<EscrutinioJoker>) {
+
+    val styleSmall = MaterialTheme.typography.titleSmall
+    val styleMedium = MaterialTheme.typography.titleMedium
+
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
         Column(modifier = Modifier.padding(start = 8.dp)) {
-            Text(text = "Categoria:", style = MaterialTheme.typography.titleSmall)
+            Text(text = "Categoria:", style = styleMedium)
             escrutinio.forEach { escrutinioItem ->
                 Text(
                     " ${escrutinioItem.tipo}",
-                    style = MaterialTheme.typography.titleSmall
+                    style = styleSmall
                 )
             }
         }
         Column(modifier = Modifier.padding(end = 8.dp)) {
-            Text(text = "Premio:", style = MaterialTheme.typography.titleSmall)
+            Text(text = "Premio:", style = styleMedium)
             escrutinio.forEach { escrutinioItem ->
                 Text(
                     "${escrutinioItem.premio} $euro ",
-                    style = MaterialTheme.typography.titleSmall
+                    style = styleSmall
                 )
             }
         }
@@ -231,7 +236,7 @@ fun EscrutinioJoker(escrutinio: List<EscrutinioJoker>) {
 fun Lluvia(lluvia: Lluvia) {
     val list = lluvia.combinacion.split(",")
     Column(
-        modifier = Modifier.padding(16.dp),
+        modifier = Modifier.padding(8.dp),
     ) {
         val chunks = list.chunked(3)
         chunks.forEach { row ->

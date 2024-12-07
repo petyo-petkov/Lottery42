@@ -12,19 +12,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.lottery42.boleto.data.database.Boleto
 import com.example.lottery42.boleto.presentation.extra_info.ExtraInfoViewModel.InfoSorteoState
 
 @Composable
-fun ExtraInfoScreen(
-    vmExtra: ExtraInfoViewModel,
+fun ExtraPaneScreen(
+    infoState: InfoSorteoState,
     boleto: Boleto
 ) {
-    val result = vmExtra.infoState.collectAsStateWithLifecycle()
-
     Surface(modifier = Modifier) {
-        when (val currentResult = result.value) {
+        when (val currentResult = infoState) {
             is InfoSorteoState.Loading -> LoadingInfo()
             is InfoSorteoState.Empty -> EmptyInfo()
             is InfoSorteoState.Error -> Text(text = "Error al obtener los resultados")
