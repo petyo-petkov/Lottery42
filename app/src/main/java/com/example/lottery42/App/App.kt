@@ -23,6 +23,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.lottery42.boleto.presentation.boleto_detail.DetailScreen
+import com.example.lottery42.boleto.presentation.boleto_detail.DetailsViewModel
 import com.example.lottery42.boleto.presentation.boleto_list.FAB
 import com.example.lottery42.boleto.presentation.boleto_list.ListScreen
 import com.example.lottery42.boleto.presentation.boleto_list.ListScreenActions.borrarBoleto
@@ -39,9 +40,11 @@ import org.koin.androidx.compose.koinViewModel
 fun App() {
     val vm: ListScreenViewModel = koinViewModel()
     val vmExtra: ExtraInfoViewModel = koinViewModel()
+    val vmDetails: DetailsViewModel = koinViewModel()
     val navigator = rememberListDetailPaneScaffoldNavigator<Any>()
     val listState by vm.listState.collectAsStateWithLifecycle()
     val infoState by vmExtra.infoState.collectAsStateWithLifecycle()
+    val premioState by vmDetails.premioState.collectAsStateWithLifecycle()
 
     Scaffold(
         modifier = Modifier.fillMaxWidth(),
@@ -86,6 +89,7 @@ fun App() {
                     if (boleto != null) {
                         DetailScreen(
                             boleto = boleto,
+                            premioState = premioState,
                             onDeleteBoleto = {
                                 vm.onAction(borrarBoleto(boleto.id))
                                 navigator.navigateBack()
@@ -94,7 +98,9 @@ fun App() {
                                 vmExtra.infoSorteoCelebrado(boleto)
                                 navigator.navigateTo(pane = ListDetailPaneScaffoldRole.Extra)
                             },
-                            onComprobarClick = { }
+                            onComprobarClick = {
+                                vmDetails.GetPremio(boleto)
+                            }
                         )
 
                     }else {

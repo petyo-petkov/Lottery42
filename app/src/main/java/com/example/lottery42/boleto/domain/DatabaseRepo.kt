@@ -12,6 +12,8 @@ interface DatabaseRepo {
 
     suspend fun insertBoleto(boleto: BoletoEntity)
 
+    suspend fun updateBoleto(boleto: BoletoEntity)
+
     suspend fun deleteBoletoById(id: Long)
 
     suspend fun deleteAllBoletos()

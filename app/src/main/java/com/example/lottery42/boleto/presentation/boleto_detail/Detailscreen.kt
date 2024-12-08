@@ -19,6 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -29,6 +30,7 @@ import com.example.lottery42.R
 import com.example.lottery42.boleto.data.database.Boleto
 import com.example.lottery42.boleto.data.toFormattedDate
 import com.example.lottery42.boleto.presentation.DialogoBorrar
+import com.example.lottery42.boleto.presentation.DialogoPremio
 import com.example.lottery42.boleto.presentation.Divisor
 import com.example.lottery42.boleto.presentation.boleto_list.loadImage
 import kotlin.text.Typography.euro
@@ -38,12 +40,23 @@ import kotlin.text.Typography.euro
 @Composable
 fun DetailScreen(
     boleto: Boleto,
+    premioState: DetailsViewModel.PremioState,
     onDeleteBoleto: () -> Unit,
     onExtraInfoClick: () -> Unit,
     onComprobarClick: () -> Unit
 ) {
     var showDialogoBorrar by remember { mutableStateOf(false) }
+    var showDialogoPremio by rememberSaveable { mutableStateOf(false) }
     val smallStyle = MaterialTheme.typography.headlineSmall
+
+    val premio = when (premioState) {
+        is DetailsViewModel.PremioState.Success -> premioState.premio
+        is DetailsViewModel.PremioState.Error -> "Error"
+        is DetailsViewModel.PremioState.Empty -> ""
+        is DetailsViewModel.PremioState.Loading -> "loading"
+        DetailsViewModel.PremioState.Timeout -> "El timeout se ha superado"
+    }
+
 
     Box(modifier = Modifier) {
         Image(
@@ -136,8 +149,7 @@ fun DetailScreen(
                     Button(
                         onClick = {
                             onComprobarClick()
-//                            resultadosViewModel.Premio(boleto)
-//                            showDialogResultado = true
+                            showDialogoPremio = true
                         },
                         colors = ButtonDefaults.buttonColors(
                             containerColor = Color(0xFFFFE082),
@@ -165,6 +177,13 @@ fun DetailScreen(
         }
 
     }
+    DialogoPremio(
+        show = showDialogoPremio,
+        onDismiss = { showDialogoPremio = false },
+        boleto = boleto,
+        premio = premio
+    )
+
     DialogoBorrar(
         onDismiss = { showDialogoBorrar = false },
         onConfirm = {

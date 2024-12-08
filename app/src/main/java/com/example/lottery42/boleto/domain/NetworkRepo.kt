@@ -15,4 +15,6 @@ interface NetworkRepo {
     suspend fun getPremios(boleto: Boleto): Flow<String>
 
     suspend fun getPremioLNAC(boleto: Boleto): String
+
+
 }

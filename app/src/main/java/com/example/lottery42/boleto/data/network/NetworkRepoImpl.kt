@@ -3,6 +3,7 @@ package com.example.lottery42.boleto.data.network
 import android.util.Log
 import com.example.lottery42.boleto.data.database.Boleto
 import com.example.lottery42.boleto.data.network.models.LotteryModel
+import com.example.lottery42.boleto.data.network.models.loteriaNacional.ResultadoPorNumeroLoteria
 import com.example.lottery42.boleto.domain.NetworkRepo
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
@@ -80,7 +81,7 @@ class NetworkRepoImpl(
         }
     }
 
-    // Obtiene la info del sorteo
+    // Para extra info
     override suspend fun fetchExtraInfo(boleto: Boleto): List<LotteryModel> {
         val gameId = boleto.gameID
         val fecha = boleto.fecha.replace("-", "")
@@ -101,7 +102,9 @@ class NetworkRepoImpl(
     }
 
     override suspend fun getPremioLNAC(boleto: Boleto): String {
-        TODO("Not yet implemented")
+        val urlLNAC = urlResultadoLNACPorNumero(boleto.numeroLoteria!!, boleto.idSorteo)
+        return (getInfoFromURL<ResultadoPorNumeroLoteria>(urlLNAC)[0]
+            .premioEnCentimos / 100).toDouble().toString()
     }
 
 }

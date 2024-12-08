@@ -35,6 +35,11 @@ getBoletoById:
 SELECT *
 FROM BoletoEntity WHERE id = ?;
 
+updateBoleto:
+UPDATE BoletoEntity
+SET premio = ?
+WHERE id = ?;
+
 deleteBoletoById:
 DELETE FROM BoletoEntity WHERE id = ?;
 

@@ -37,6 +37,11 @@ class DatabaseRepoImpl(
             queries.insertBoleto(boleto)
         }
 
+    override suspend fun updateBoleto(boleto: BoletoEntity) =
+        withContext(Dispatchers.IO) {
+            queries.updateBoleto(boleto.premio, boleto.id)
+        }
+
 
 
     override suspend fun deleteBoletoById(id: Long) {

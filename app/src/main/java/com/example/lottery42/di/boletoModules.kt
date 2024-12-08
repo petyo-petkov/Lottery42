@@ -10,6 +10,7 @@ import com.example.lottery42.boleto.data.network.NetworkRepoImpl
 import com.example.lottery42.boleto.domain.DatabaseRepo
 import com.example.lottery42.boleto.domain.NetworkRepo
 import com.example.lottery42.boleto.domain.ScannerRepo
+import com.example.lottery42.boleto.presentation.boleto_detail.DetailsViewModel
 import com.example.lottery42.boleto.presentation.boleto_list.ListScreenViewModel
 import com.example.lottery42.boleto.presentation.extra_info.ExtraInfoViewModel
 import com.example.sqldelight.AppDatabase
@@ -80,4 +81,5 @@ val networkModule = module {
 val viewModelModule = module {
     viewModelOf(::ListScreenViewModel)
     viewModelOf(::ExtraInfoViewModel)
+    viewModelOf(::DetailsViewModel)
 }
