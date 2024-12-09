@@ -27,11 +27,11 @@ import androidx.compose.ui.draw.blur
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.lottery42.R
-import com.example.lottery42.boleto.data.database.Boleto
 import com.example.lottery42.boleto.data.toFormattedDate
 import com.example.lottery42.boleto.presentation.DialogoBorrar
 import com.example.lottery42.boleto.presentation.DialogoPremio
 import com.example.lottery42.boleto.presentation.Divisor
+import com.example.lottery42.boleto.presentation.boleto_list.ListScreenState
 import com.example.lottery42.boleto.presentation.boleto_list.loadImage
 import kotlin.text.Typography.euro
 
@@ -39,8 +39,8 @@ import kotlin.text.Typography.euro
 @OptIn(ExperimentalMaterial3AdaptiveApi::class)
 @Composable
 fun DetailScreen(
-    boleto: Boleto,
     premioState: DetailsViewModel.PremioState,
+    listState: ListScreenState,
     onDeleteBoleto: () -> Unit,
     onExtraInfoClick: () -> Unit,
     onComprobarClick: () -> Unit
@@ -48,6 +48,8 @@ fun DetailScreen(
     var showDialogoBorrar by remember { mutableStateOf(false) }
     var showDialogoPremio by rememberSaveable { mutableStateOf(false) }
     val smallStyle = MaterialTheme.typography.headlineSmall
+
+    val boleto = listState.boleto!!
 
     val premio = when (premioState) {
         is DetailsViewModel.PremioState.Success -> premioState.premio
@@ -118,7 +120,8 @@ fun DetailScreen(
                     style = smallStyle
                 )
                 Text(
-                    text = if (boleto.premio == "0.0") "No Premiado" else "${boleto.premio} $euro",
+                    text = if (boleto.premio == "0.0") "No Premiado" else
+                        "Premiado con: ${boleto.premio} $euro",
                     style = smallStyle
                 )
                 Divisor()
@@ -177,12 +180,17 @@ fun DetailScreen(
         }
 
     }
+
+
+
     DialogoPremio(
         show = showDialogoPremio,
         onDismiss = { showDialogoPremio = false },
         boleto = boleto,
         premio = premio
     )
+
+
 
     DialogoBorrar(
         onDismiss = { showDialogoBorrar = false },

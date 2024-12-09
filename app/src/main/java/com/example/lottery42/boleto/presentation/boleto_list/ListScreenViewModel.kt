@@ -44,7 +44,7 @@ class ListScreenViewModel(
         onAction(ListScreenActions.loadBoletos)
     }
 
-    val _listState = MutableStateFlow(ListScreenState())
+    private val _listState = MutableStateFlow(ListScreenState())
     val listState = _listState.asStateFlow()
 
 
@@ -68,6 +68,17 @@ class ListScreenViewModel(
         }
     }
 
+    fun getBoletoByID(id: Long) {
+        viewModelScope.launch(Dispatchers.IO) {
+            databaseRepo.getBoletoByID(id).collect { boleto ->
+                _listState.update {
+                    it.copy(
+                        boleto = boleto
+                    )
+                }
+            }
+        }
+    }
 
     private suspend fun getAllBoletos() {
         try {
@@ -78,9 +89,9 @@ class ListScreenViewModel(
                 _listState.update {
                     it.copy(
                         boletos = boletos,
-                        ganado = Round(ganado).toString(),
-                        gastado = Round(gastado).toString(),
-                        balance = Round(balance).toString(),
+                        ganado = redondear(ganado).toString(),
+                        gastado = redondear(gastado).toString(),
+                        balance = redondear(balance).toString(),
                     )
                 }
             }
@@ -103,6 +114,6 @@ class ListScreenViewModel(
 }
 
 // redondea hasta las dos decimas ganado, gastado y balance
-private fun Round(dato: Double): Double {
+private fun redondear(dato: Double): Double {
     return round(dato * 100) / 100
 }

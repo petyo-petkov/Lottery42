@@ -17,10 +17,13 @@ class DatabaseRepoImpl(
     private val queries = db.boletoQueries
     private val context: CoroutineContext = Dispatchers.IO
 
-    override suspend fun getBoletoByID(id: Long): BoletoEntity {
-        return withContext(Dispatchers.IO) {
-            queries.getBoletoById(id).executeAsOne()
-        }
+    override fun getBoletoByID(id: Long): Flow<Boleto> {
+        return queries.getBoletoById(id)
+            .asFlow()
+            .map { value ->
+                value.executeAsOneOrNull()?.toDomain() ?: Boleto()
+            }
+
     }
 
     override fun getAllBoletos(): Flow<List<Boleto>> {
@@ -41,8 +44,6 @@ class DatabaseRepoImpl(
         withContext(Dispatchers.IO) {
             queries.updateBoleto(boleto.premio, boleto.id)
         }
-
-
 
     override suspend fun deleteBoletoById(id: Long) {
         return withContext(Dispatchers.IO) {

@@ -45,6 +45,7 @@ fun App() {
     val listState by vm.listState.collectAsStateWithLifecycle()
     val infoState by vmExtra.infoState.collectAsStateWithLifecycle()
     val premioState by vmDetails.premioState.collectAsStateWithLifecycle()
+    val boleto = listState.boleto
 
     Scaffold(
         modifier = Modifier.fillMaxWidth(),
@@ -65,7 +66,7 @@ fun App() {
         contentWindowInsets = WindowInsets.statusBars,
 
         ) { innerPadding ->
-        val boleto = listState.boleto
+
 
         NavigableListDetailPaneScaffold(
             modifier = Modifier.padding(innerPadding),
@@ -88,8 +89,8 @@ fun App() {
                 AnimatedPane {
                     if (boleto != null) {
                         DetailScreen(
-                            boleto = boleto,
                             premioState = premioState,
+                            listState = listState,
                             onDeleteBoleto = {
                                 vm.onAction(borrarBoleto(boleto.id))
                                 navigator.navigateBack()
@@ -99,7 +100,8 @@ fun App() {
                                 navigator.navigateTo(pane = ListDetailPaneScaffoldRole.Extra)
                             },
                             onComprobarClick = {
-                                vmDetails.GetPremio(boleto)
+                                vmDetails.getPremio(boleto)
+                                vm.getBoletoByID(boleto.id)
                             }
                         )
 

@@ -1,9 +1,14 @@
 package com.example.lottery42.boleto.data.network
 
+import android.content.Context
 import android.util.Log
 import com.example.lottery42.boleto.data.database.Boleto
+import com.example.lottery42.boleto.data.network.getPremioURLS.urlPremioBONO
+import com.example.lottery42.boleto.data.network.getPremioURLS.urlPremioEMIL
+import com.example.lottery42.boleto.data.network.getPremioURLS.urlPremioLAPR
 import com.example.lottery42.boleto.data.network.models.LotteryModel
 import com.example.lottery42.boleto.data.network.models.loteriaNacional.ResultadoPorNumeroLoteria
+import com.example.lottery42.boleto.data.network.models.loteriaNacional.resultadoLNAC.ResultadosLoteriaNacional
 import com.example.lottery42.boleto.domain.NetworkRepo
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
@@ -23,7 +28,8 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 class NetworkRepoImpl(
-    val httpClient: HttpClient
+    val httpClient: HttpClient,
+    val context: Context
 ) : NetworkRepo {
 
     private suspend inline fun <reified T> getInfoFromURL(url: String): List<T> {
@@ -83,12 +89,8 @@ class NetworkRepoImpl(
 
     // Para extra info
     override suspend fun fetchExtraInfo(boleto: Boleto): List<LotteryModel> {
-        val gameId = boleto.gameID
-        val fecha = boleto.fecha.replace("-", "")
-        val url = urlResultadosPorFechas(gameId, fecha, fecha)
-
         return try {
-            val response = getInfoFromURL<LotteryModel>(url)
+            val response = getInfoFromURL<LotteryModel>(urlExtraInfo(boleto))
             response
         } catch (e: Exception) {
             Log.e("ERROR fetchExtraInfo", e.message.toString())
@@ -97,14 +99,34 @@ class NetworkRepoImpl(
 
     }
 
+    override suspend fun fetchExtraInfoLNAC(boleto: Boleto): List<ResultadosLoteriaNacional> {
+        return try {
+            val response = getInfoFromURL<ResultadosLoteriaNacional>(urlExtraInfo(boleto))
+            response
+        }catch (e: Exception) {
+            Log.e("ERROR fetchExtraInfo", e.message.toString())
+            emptyList()
+        }
+    }
+
     override suspend fun getPremios(boleto: Boleto): Flow<String> {
-        TODO("Not yet implemented")
+        val gameId = boleto.gameID
+        val url = when (gameId) {
+            "LAPR" -> urlPremioLAPR(boleto)
+            "BONO" -> urlPremioBONO(boleto)
+            "EMIL" -> urlPremioEMIL(boleto)
+            else -> ""
+        }
+
+        return getPremiosFlow(context, url, gameId)
     }
 
     override suspend fun getPremioLNAC(boleto: Boleto): String {
         val urlLNAC = urlResultadoLNACPorNumero(boleto.numeroLoteria!!, boleto.idSorteo)
         return (getInfoFromURL<ResultadoPorNumeroLoteria>(urlLNAC)[0]
             .premioEnCentimos / 100).toDouble().toString()
+
+
     }
 
 }
@@ -144,6 +166,12 @@ private fun crearInfoSorteo(proximos: JsonObject?, ultimos: JsonObject?): InfoSo
 
     }
 
+}
+
+private fun urlExtraInfo(boleto: Boleto): String {
+    val gameId = boleto.gameID
+    val fecha = boleto.fecha.replace("-", "")
+    return urlResultadosPorFechas(gameId, fecha, fecha)
 }
 
 

@@ -13,11 +13,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.lottery42.boleto.data.database.Boleto
+import com.example.lottery42.boleto.data.network.models.LotteryModel
+import com.example.lottery42.boleto.data.network.models.loteriaNacional.resultadoLNAC.ResultadosLoteriaNacional
 import com.example.lottery42.boleto.presentation.extra_info.ExtraInfoViewModel.InfoSorteoState
 
 @Composable
 fun ExtraPaneScreen(
-    infoState: InfoSorteoState,
+    infoState: InfoSorteoState<Any>,
     boleto: Boleto
 ) {
     Surface(modifier = Modifier) {
@@ -25,11 +27,18 @@ fun ExtraPaneScreen(
             is InfoSorteoState.Loading -> LoadingInfo()
             is InfoSorteoState.Empty -> EmptyInfo()
             is InfoSorteoState.Error -> Text(text = "Error al obtener los resultados")
-            is InfoSorteoState.Success -> ExtraInfo(
-                resultado = currentResult.info,
-                boleto = boleto
-            )
+            is InfoSorteoState.Success<*> -> {
+                when (val info = currentResult.info) {
+                    is ResultadosLoteriaNacional -> {
+                        ExtraInfoLNAC(boleto = boleto, resultado = info)
+                    }
+                    is LotteryModel -> {
+                        ExtraInfo(boleto = boleto, resultado = info)
+                    }
 
+                }
+
+            }
 
         }
     }

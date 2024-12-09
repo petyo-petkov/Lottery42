@@ -4,7 +4,6 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.lottery42.boleto.data.database.Boleto
-import com.example.lottery42.boleto.data.network.models.LotteryModel
 import com.example.lottery42.boleto.domain.NetworkRepo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,19 +15,25 @@ import java.time.format.DateTimeParseException
 
 class ExtraInfoViewModel(
     val networkRepo: NetworkRepo
-): ViewModel() {
+) : ViewModel() {
 
-    private val _infoState = MutableStateFlow<InfoSorteoState>(InfoSorteoState.Empty)
-    val infoState: StateFlow<InfoSorteoState> = _infoState
+    private val _infoState = MutableStateFlow<InfoSorteoState<Any>>(InfoSorteoState.Empty)
+    val infoState: StateFlow<InfoSorteoState<Any>> = _infoState
 
     fun infoSorteoCelebrado(boleto: Boleto) {
         _infoState.value = InfoSorteoState.Loading
         viewModelScope.launch(Dispatchers.IO) {
             val esAnterior = esAnteriorA(boleto.cierre)
             val info = networkRepo.fetchExtraInfo(boleto)
+            val infoLNAC = networkRepo.fetchExtraInfoLNAC(boleto)
             _infoState.value = if (esAnterior) {
                 try {
-                   InfoSorteoState.Success(info = info[0])
+                    if (info.isNotEmpty()) {
+                        InfoSorteoState.Success(info = info[0])
+                    } else {
+                        InfoSorteoState.Success(info = infoLNAC[0])
+                    }
+
                 } catch (e: Exception) {
                     Log.e("ERROR en obtenerInfoResultado", e.message.toString())
                     InfoSorteoState.Error(e)
@@ -54,11 +59,11 @@ class ExtraInfoViewModel(
         }
     }
 
-    sealed class InfoSorteoState {
-        data class Success(val info: LotteryModel) : InfoSorteoState()
-        data class Error(val exception: Exception) : InfoSorteoState()
-        object Empty : InfoSorteoState()
-        object Loading : InfoSorteoState()
+    sealed class InfoSorteoState<out T> {
+        data class Success<T>(val info: T) : InfoSorteoState<T>()
+        data class Error(val exception: Exception) : InfoSorteoState<Nothing>()
+        object Empty : InfoSorteoState<Nothing>()
+        object Loading : InfoSorteoState<Nothing>()
     }
 
 }

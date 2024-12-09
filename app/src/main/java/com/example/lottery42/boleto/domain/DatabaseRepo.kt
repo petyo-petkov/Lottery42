@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface DatabaseRepo {
 
-    suspend fun getBoletoByID(id: Long): BoletoEntity
+    fun getBoletoByID(id: Long): Flow<Boleto>
 
     fun getAllBoletos(): Flow<List<Boleto>>
 

@@ -7,7 +7,6 @@ import com.example.lottery42.boleto.data.database.Boleto
 import com.example.lottery42.boleto.data.database.toEntity
 import com.example.lottery42.boleto.domain.DatabaseRepo
 import com.example.lottery42.boleto.domain.NetworkRepo
-import com.example.lottery42.boleto.presentation.extra_info.ExtraInfoViewModel.InfoSorteoState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -27,7 +26,7 @@ class DetailsViewModel(
     private val _premioState = MutableStateFlow<PremioState>(PremioState.Empty)
     val premioState: StateFlow<PremioState> = _premioState
 
-    fun GetPremio(boleto: Boleto) {
+    fun getPremio(boleto: Boleto) {
         _premioState.value = PremioState.Loading
         viewModelScope.launch(Dispatchers.IO) {
             val esAnterior = esAnteriorA(boleto.cierre)
@@ -58,10 +57,6 @@ class DetailsViewModel(
 
     }
 
-
-
-
-
     private suspend fun manejarResultadoPremio(premio: String?, boleto: Boleto) {
         if (premio == "0.0") {
             _premioState.value = PremioState.Success("NO PREMIADO")
@@ -70,7 +65,6 @@ class DetailsViewModel(
             _premioState.value = PremioState.Success("$premio €")
         }
     }
-
 
     private fun esAnteriorA(fechaCierre: String?): Boolean {
         if (fechaCierre.isNullOrEmpty()) return false
@@ -85,7 +79,6 @@ class DetailsViewModel(
             false
         }
     }
-
 
 
     sealed class PremioState {
