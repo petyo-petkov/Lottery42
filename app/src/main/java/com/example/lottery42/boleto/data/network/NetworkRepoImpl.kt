@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.Log
 import com.example.lottery42.boleto.data.database.Boleto
 import com.example.lottery42.boleto.data.network.getPremioURLS.urlPremioBONO
+import com.example.lottery42.boleto.data.network.getPremioURLS.urlPremioELGR
 import com.example.lottery42.boleto.data.network.getPremioURLS.urlPremioEMIL
 import com.example.lottery42.boleto.data.network.getPremioURLS.urlPremioLAPR
 import com.example.lottery42.boleto.data.network.models.LotteryModel
@@ -104,7 +105,7 @@ class NetworkRepoImpl(
             val response = getInfoFromURL<ResultadosLoteriaNacional>(urlExtraInfo(boleto))
             response
         }catch (e: Exception) {
-            Log.e("ERROR fetchExtraInfo", e.message.toString())
+            Log.e("ERROR fetchExtraInfoLNAC", e.message.toString())
             emptyList()
         }
     }
@@ -115,8 +116,10 @@ class NetworkRepoImpl(
             "LAPR" -> urlPremioLAPR(boleto)
             "BONO" -> urlPremioBONO(boleto)
             "EMIL" -> urlPremioEMIL(boleto)
+            "ELGR" -> urlPremioELGR(boleto)
             else -> ""
         }
+        Log.i("urlPremios", url)
 
         return getPremiosFlow(context, url, gameId)
     }

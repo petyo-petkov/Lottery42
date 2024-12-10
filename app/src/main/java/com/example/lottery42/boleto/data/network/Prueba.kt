@@ -30,3 +30,21 @@ suspend fun get(url: String): List<JsonObject> {
 //    println(response)
 //
 //}
+
+
+//fun main() {
+//    val combinaciones = listOf("06 15 19 33 41", "06 15 37 48 53")
+//    val numeroClave = listOf("00", "08")
+//
+//    println(transformListELGR(combinaciones, numeroClave))
+//}
+//
+//private fun transformListELGR(combinaciones: List<String>, numeroClave: List<String>): String {
+//    return combinaciones.mapIndexed { index, combinacion ->
+//        val bloque = combinacion.split(" ").joinToString("y")
+//        val reintegro = numeroClave[index]
+//        "bloque${index + 1}=$bloque&reintegro${index + 1}=$reintegro"
+//    }.joinToString("&")
+//
+//}
+
