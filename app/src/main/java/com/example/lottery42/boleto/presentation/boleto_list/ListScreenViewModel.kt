@@ -4,16 +4,15 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.lottery42.boleto.data.crearBoleto
+import com.example.lottery42.boleto.data.database.Boleto
 import com.example.lottery42.boleto.data.database.toEntity
 import com.example.lottery42.boleto.domain.DatabaseRepo
 import com.example.lottery42.boleto.domain.NetworkRepo
 import com.example.lottery42.boleto.domain.ScannerRepo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import kotlin.math.round
 
 class ListScreenViewModel(
     private val databaseRepo: DatabaseRepo,
@@ -40,80 +39,32 @@ class ListScreenViewModel(
         }
     }
 
-    init {
-        onAction(ListScreenActions.loadBoletos)
-    }
-
-    private val _listState = MutableStateFlow(ListScreenState())
-    val listState = _listState.asStateFlow()
+    val boletos = databaseRepo.getAllBoletos()
+    val balance = databaseRepo.getBalance()
 
 
-    fun onAction(action: ListScreenActions) {
-        viewModelScope.launch(Dispatchers.IO) {
-            when (action) {
-                is ListScreenActions.onBoletoClick -> {
-                    _listState.update {
-                        it.copy(
-                            boleto = action.boleto,
-                        )
-                    }
-                }
-
-                is ListScreenActions.loadBoletos -> getAllBoletos()
-                is ListScreenActions.onFABClick -> startScanning()
-                is ListScreenActions.borrarBoleto -> deleteBoleto(action.id)
-                is ListScreenActions.onBorrarAllClick -> deleteAllBoletos()
-
-            }
-        }
-    }
+    private val _boletoState = MutableStateFlow<Boleto?>(null)
+    val boletoState: StateFlow<Boleto?> = _boletoState
 
     fun getBoletoByID(id: Long) {
         viewModelScope.launch(Dispatchers.IO) {
             databaseRepo.getBoletoByID(id).collect { boleto ->
-                _listState.update {
-                    it.copy(
-                        boleto = boleto
-                    )
-                }
+                _boletoState.value = boleto
             }
         }
     }
 
-    private suspend fun getAllBoletos() {
-        try {
-            databaseRepo.getAllBoletos().collect { boletos ->
-                val ganado = boletos.sumOf { it.premio.toDouble() }
-                val gastado = boletos.sumOf { it.precio.toDouble() }
-                val balance = ganado - gastado
-                _listState.update {
-                    it.copy(
-                        boletos = boletos,
-                        ganado = redondear(ganado).toString(),
-                        gastado = redondear(gastado).toString(),
-                        balance = redondear(balance).toString(),
-                    )
-                }
-            }
-        } catch (e: Exception) {
-            Log.d("Error getAllBoletos", e.toString())
+    fun deleteAllBoletos() {
+        viewModelScope.launch(Dispatchers.IO) {
+            databaseRepo.deleteAllBoletos()
         }
     }
 
-    private suspend fun deleteAllBoletos() {
-        databaseRepo.deleteAllBoletos()
-    }
-
-    private fun deleteBoleto(id: Long) {
+    fun deleteBoleto(id: Long) {
         viewModelScope.launch(Dispatchers.IO) {
             databaseRepo.deleteBoletoById(id)
         }
     }
 
-
 }
 
-// redondea hasta las dos decimas ganado, gastado y balance
-private fun redondear(dato: Double): Double {
-    return round(dato * 100) / 100
-}

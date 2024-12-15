@@ -22,14 +22,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.lottery42.boleto.data.database.BalanceState
 import com.example.lottery42.boleto.presentation.boleto_detail.DetailScreen
 import com.example.lottery42.boleto.presentation.boleto_detail.DetailsViewModel
 import com.example.lottery42.boleto.presentation.boleto_list.FAB
 import com.example.lottery42.boleto.presentation.boleto_list.ListScreen
-import com.example.lottery42.boleto.presentation.boleto_list.ListScreenActions.borrarBoleto
-import com.example.lottery42.boleto.presentation.boleto_list.ListScreenActions.onBoletoClick
-import com.example.lottery42.boleto.presentation.boleto_list.ListScreenActions.onBorrarAllClick
-import com.example.lottery42.boleto.presentation.boleto_list.ListScreenActions.onFABClick
 import com.example.lottery42.boleto.presentation.boleto_list.ListScreenViewModel
 import com.example.lottery42.boleto.presentation.extra_info.ExtraInfoViewModel
 import com.example.lottery42.boleto.presentation.extra_info.ExtraPaneScreen
@@ -38,14 +35,19 @@ import org.koin.androidx.compose.koinViewModel
 @OptIn(ExperimentalMaterial3AdaptiveApi::class)
 @Composable
 fun App() {
+    val navigator = rememberListDetailPaneScaffoldNavigator<Any>()
+
     val vm: ListScreenViewModel = koinViewModel()
     val vmExtra: ExtraInfoViewModel = koinViewModel()
     val vmDetails: DetailsViewModel = koinViewModel()
-    val navigator = rememberListDetailPaneScaffoldNavigator<Any>()
-    val listState by vm.listState.collectAsStateWithLifecycle()
+
+    val boletos by vm.boletos.collectAsStateWithLifecycle(emptyList())
+    val balance by vm.balance.collectAsStateWithLifecycle(BalanceState())
+    val boleto by vm.boletoState.collectAsStateWithLifecycle()
     val infoState by vmExtra.infoState.collectAsStateWithLifecycle()
     val premioState by vmDetails.premioState.collectAsStateWithLifecycle()
-    val boleto = listState.boleto
+
+
 
     Scaffold(
         modifier = Modifier.fillMaxWidth(),
@@ -57,7 +59,7 @@ fun App() {
             ) {
                 FAB(
                     onFABClick = {
-                        vm.onAction(onFABClick)
+                        vm.startScanning()
                     }
                 )
             }
@@ -66,22 +68,21 @@ fun App() {
         contentWindowInsets = WindowInsets.statusBars,
 
         ) { innerPadding ->
-
-
         NavigableListDetailPaneScaffold(
             modifier = Modifier.padding(innerPadding),
             navigator = navigator,
             listPane = {
                 AnimatedPane {
                     ListScreen(
-                        state = listState,
+                        balanceState = balance,
                         onBoletoClick = {
-                            vm.onAction(onBoletoClick(it))
+                            vm.getBoletoByID(it.id)
                             navigator.navigateTo(pane = ListDetailPaneScaffoldRole.Detail)
                         },
                         onBorrarClick = {
-                            vm.onAction(onBorrarAllClick)
-                        }
+                            vm.deleteAllBoletos()
+                        },
+                        boletos = boletos
                     )
                 }
             },
@@ -90,22 +91,23 @@ fun App() {
                     if (boleto != null) {
                         DetailScreen(
                             premioState = premioState,
-                            listState = listState,
+                            boleto = boleto!!,
                             onDeleteBoleto = {
-                                vm.onAction(borrarBoleto(boleto.id))
+                                vm.deleteBoleto(boleto!!.id)
                                 navigator.navigateBack()
                             },
                             onExtraInfoClick = {
-                                vmExtra.infoSorteoCelebrado(boleto)
+                                vmExtra.infoSorteoCelebrado(boleto!!)
                                 navigator.navigateTo(pane = ListDetailPaneScaffoldRole.Extra)
                             },
                             onComprobarClick = {
-                                vmDetails.getPremio(boleto)
-                                vm.getBoletoByID(boleto.id)
+                                vmDetails.getPremio(boleto!!)
+                                vm.getBoletoByID(boleto!!.id)
                             }
                         )
 
-                    }else {
+
+                    } else {
                         EmptyScreen()
                     }
                 }

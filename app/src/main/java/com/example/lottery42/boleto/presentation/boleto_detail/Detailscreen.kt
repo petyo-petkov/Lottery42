@@ -27,11 +27,11 @@ import androidx.compose.ui.draw.blur
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.lottery42.R
+import com.example.lottery42.boleto.data.database.Boleto
 import com.example.lottery42.boleto.data.toFormattedDate
 import com.example.lottery42.boleto.presentation.DialogoBorrar
 import com.example.lottery42.boleto.presentation.DialogoPremio
 import com.example.lottery42.boleto.presentation.Divisor
-import com.example.lottery42.boleto.presentation.boleto_list.ListScreenState
 import com.example.lottery42.boleto.presentation.boleto_list.loadImage
 import kotlin.text.Typography.euro
 
@@ -40,7 +40,7 @@ import kotlin.text.Typography.euro
 @Composable
 fun DetailScreen(
     premioState: DetailsViewModel.PremioState,
-    listState: ListScreenState,
+    boleto: Boleto,
     onDeleteBoleto: () -> Unit,
     onExtraInfoClick: () -> Unit,
     onComprobarClick: () -> Unit
@@ -49,14 +49,13 @@ fun DetailScreen(
     var showDialogoPremio by rememberSaveable { mutableStateOf(false) }
     val smallStyle = MaterialTheme.typography.headlineSmall
 
-    val boleto = listState.boleto!!
-
+    val boleto = boleto
     val premio = when (premioState) {
         is DetailsViewModel.PremioState.Success -> premioState.premio
         is DetailsViewModel.PremioState.Error -> "Error"
         is DetailsViewModel.PremioState.Empty -> ""
         is DetailsViewModel.PremioState.Loading -> "loading"
-        DetailsViewModel.PremioState.Timeout -> "El timeout se ha superado"
+        DetailsViewModel.PremioState.Timeout -> "Ha tardado demasiado en responder \nPrueba de nuevo"
     }
 
 

@@ -5,5 +5,4 @@ plugins {
     alias(libs.plugins.kotlin.compose) apply false
     alias(libs.plugins.kotlin.serialization) apply false
     alias(libs.plugins.sqldelight) apply false
-    //id("app.cash.sqldelight") version "2.0.2" apply false
 }

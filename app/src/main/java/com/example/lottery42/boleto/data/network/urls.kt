@@ -45,4 +45,12 @@ URL'S
  https://www.loteriasyapuestas.es/es/resultados/bonoloto/comprobar?drawId=937601050&modalidad=multiple&bloque1=4y5y6y23y36y15y27&reintegro=4
  https://www.loteriasyapuestas.es/es/resultados/bonoloto/comprobar?drawId=937601050&modalidad=simple&bloque1=4y5y6y23y36y15&bloque2=1y2y3y22y25y16&reintegro=4
 
+
+Ejemplo consulta apuesta LNAC
+https://www.loteriasyapuestas.es/es/resultados/loteria-nacional/comprobar?decimo=23450
+https://www.loteriasyapuestas.es/es/resultados/loteria-nacional/comprobar?decimo=23450&importe=12
+https://www.loteriasyapuestas.es/es/resultados/loteria-nacional/comprobar?decimo=23450&importe=12&serie=4&fraccion=9
+https://www.loteriasyapuestas.es/es/resultados/loteria-nacional/comprobar?drawId=1026209062&decimo=23450&importe=12&serie=4&fraccion=9
+
+
  */

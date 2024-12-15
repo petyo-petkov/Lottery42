@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import kotlin.coroutines.CoroutineContext
+import kotlin.math.round
 
 class DatabaseRepoImpl(
     db: AppDatabase
@@ -17,7 +18,7 @@ class DatabaseRepoImpl(
     private val queries = db.boletoQueries
     private val context: CoroutineContext = Dispatchers.IO
 
-    override fun getBoletoByID(id: Long): Flow<Boleto> {
+    override suspend fun getBoletoByID(id: Long): Flow<Boleto> {
         return queries.getBoletoById(id)
             .asFlow()
             .map { value ->
@@ -26,13 +27,27 @@ class DatabaseRepoImpl(
 
     }
 
-    override fun getAllBoletos(): Flow<List<Boleto>> {
+    override  fun getAllBoletos(): Flow<List<Boleto>> {
         return queries.getAllBoletos()
             .asFlow()
             .mapToList(context)
             .map { value ->
                 value.map { it.toDomain() }
             }
+
+    }
+
+    override  fun getBalance(): Flow<BalanceState> {
+        return getAllBoletos().map { boletos ->
+            val ganado = boletos.sumOf { it.premio.toDouble() }
+            val gastado = boletos.sumOf { it.precio.toDouble() }
+            val balance = ganado - gastado
+            BalanceState(
+                ganado = redondear(ganado).toString(),
+                gastado = redondear(gastado).toString(),
+                balance = redondear(balance).toString(),
+            )
+        }
     }
 
     override suspend fun insertBoleto(boleto: BoletoEntity) =
@@ -58,4 +73,16 @@ class DatabaseRepoImpl(
         }
     }
 
+}
+
+data class BalanceState(
+    val ganado: String = "",
+    val gastado: String = "",
+    val balance: String = "",
+)
+
+
+// redondea hasta las dos decimas ganado, gastado y balance
+private fun redondear(dato: Double): Double {
+    return round(dato * 100) / 100
 }
