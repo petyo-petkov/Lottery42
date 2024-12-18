@@ -49,9 +49,9 @@ suspend fun crearBoleto(data: String, networkRepo: NetworkRepo): Boleto {
 
 
             val infoSorteo = networkRepo.getInfoSorteo(numeroSorteo, gameId)
-            val aperturaSorteo = infoSorteo.apertura
-            val cierreSorteo = infoSorteo.cierre
-            val idSorteoBoleto = infoSorteo.idSorteo
+            val aperturaSorteo = infoSorteo?.apertura
+            val cierreSorteo = infoSorteo?.cierre
+            val idSorteoBoleto = infoSorteo?.idSorteo
 
             when (gameId) {
                 "LAPR" -> {
@@ -159,7 +159,7 @@ suspend fun crearBoleto(data: String, networkRepo: NetworkRepo): Boleto {
 
                 "LNAC" -> {
                     numeroLNAC = info["N"]?.jsonPrimitive?.content ?: ""
-                    precioBoleto = infoSorteo.precio?.toDouble() ?: 0.0
+                    precioBoleto = infoSorteo?.precio?.toDouble() ?: 0.0
                 }
             }
             boleto = Boleto(
@@ -167,12 +167,12 @@ suspend fun crearBoleto(data: String, networkRepo: NetworkRepo): Boleto {
                 gameID = gameId,
                 fecha = fechaParaGuardar(fecha),
                 precio = precioBoleto.toString(),
-                idSorteo = idSorteoBoleto,
+                idSorteo = idSorteoBoleto?: "",
                 numSorteo = numeroSorteo,
                 apuestaMultiple = apuestaMultiple,
                 premio = "0.0",
-                apertura = aperturaSorteo,
-                cierre = cierreSorteo,
+                apertura = aperturaSorteo ?: "",
+                cierre = cierreSorteo ?: "",
                 tipo = tipo,
                 combinaciones = columnas,
                 joker = joker,
@@ -196,14 +196,14 @@ suspend fun crearBoleto(data: String, networkRepo: NetworkRepo): Boleto {
             boleto = Boleto(
                 id = info.slice(0..10).toLong(),
                 gameID = gameId,
-                fecha = infoSorteo.fecha.substringBefore(" "),
-                precio = infoSorteo.precio ?: "0.0",
-                idSorteo = infoSorteo.idSorteo,
+                fecha = infoSorteo?.fecha?.substringBefore(" ") ?: "",
+                precio = infoSorteo?.precio ?: "0.0",
+                idSorteo = infoSorteo?.idSorteo ?: "",
                 numSorteo = numeroSorteo,
                 apuestaMultiple = false,
                 premio = "0.0",
-                apertura = infoSorteo.apertura,
-                cierre = infoSorteo.cierre,
+                apertura = infoSorteo?.apertura ?: "",
+                cierre = infoSorteo?.cierre ?: "",
                 tipo = tipo,
                 combinaciones = emptyList(),
                 joker = null,

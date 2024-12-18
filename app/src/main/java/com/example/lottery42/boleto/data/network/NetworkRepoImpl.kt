@@ -49,6 +49,9 @@ class NetworkRepoImpl(
         } catch (e: SerializationException) {
             Log.e("JSONError getInfoFromURL $url", e.message.toString())
             return emptyList()
+        } catch (e: Exception) {
+            Log.e("Error getInfoFromURL $url", e.message.toString())
+            return emptyList()
         }
     }
 
@@ -61,7 +64,7 @@ class NetworkRepoImpl(
     }
 
     // Para Crear el boleto
-    override suspend fun getInfoSorteo(numSorteo: String, gameId: String): InfoSorteo {
+    override suspend fun getInfoSorteo(numSorteo: String, gameId: String): InfoSorteo? {
         val formatter = DateTimeFormatter.ofPattern("yyyyMMdd")
         val fechaFin = LocalDate.now()
         val fechaInicio = fechaFin.minusMonths(3)
@@ -148,7 +151,7 @@ data class InfoSorteo(
     val cierre: String
 )
 
-private fun crearInfoSorteo(proximos: JsonObject?, ultimos: JsonObject?): InfoSorteo {
+private fun crearInfoSorteo(proximos: JsonObject?, ultimos: JsonObject?): InfoSorteo? {
     fun JsonObject?.getString(key: String) = this?.get(key)?.jsonPrimitive?.content
 
     return when {
@@ -169,9 +172,8 @@ private fun crearInfoSorteo(proximos: JsonObject?, ultimos: JsonObject?): InfoSo
             ?: "error cierre ultimos",
             precio = ultimos.getString("precioDecimo") ?: "error precio ultimos"
         )
-
-        else -> throw IllegalArgumentException("Ambos objetos JSON son nulos")
-
+        //else -> throw IllegalArgumentException("Ambos objetos JSON son nulos")
+        else -> null
     }
 
 }

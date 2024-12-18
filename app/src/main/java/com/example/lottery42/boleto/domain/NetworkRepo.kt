@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 interface NetworkRepo {
 
 
-    suspend fun getInfoSorteo(numSorteo: String, gameId: String): InfoSorteo
+    suspend fun getInfoSorteo(numSorteo: String, gameId: String): InfoSorteo?
 
     suspend fun fetchExtraInfo(boleto: Boleto): List<LotteryModel>
 

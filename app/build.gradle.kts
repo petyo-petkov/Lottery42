@@ -1,4 +1,4 @@
-import org.gradle.api.JavaVersion.VERSION_11
+import org.gradle.api.JavaVersion.VERSION_17
 
 plugins {
     alias(libs.plugins.android.application)
@@ -11,12 +11,12 @@ plugins {
 
 android {
     namespace = "com.example.lottery42"
-    compileSdk = 35
+    compileSdkPreview = "Baklava"
 
     defaultConfig {
         applicationId = "com.example.lottery42"
-        minSdkPreview = "34"
-        targetSdkPreview = "35"
+        minSdkPreview = "Baklava"
+        targetSdkPreview = "Baklava"
         versionCode = 1
         versionName = "1.0"
 
@@ -33,11 +33,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = VERSION_11
-        targetCompatibility = VERSION_11
+        sourceCompatibility = VERSION_17
+        targetCompatibility = VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = "17"
     }
     buildFeatures {
         compose = true
@@ -91,6 +91,8 @@ dependencies {
     //Ktor
     implementation(libs.ktor.client.core)
     implementation(libs.ktor.client.cio)
+
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
