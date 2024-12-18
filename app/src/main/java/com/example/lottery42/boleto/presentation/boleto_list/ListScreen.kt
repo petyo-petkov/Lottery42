@@ -67,7 +67,10 @@ fun ListScreen(
             modifier = Modifier
         ) {
             items(boletos, key = { it.id }) { boleto ->
-                BoletoItem(boleto, onBoletoClick)
+                BoletoItem(
+                    boleto,
+                    onBoletoClick
+                    )
                 Spacer(modifier = Modifier.height(6.dp))
             }
             item {

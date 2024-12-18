@@ -73,6 +73,7 @@ class NetworkRepoImpl(
             fechaFin = fechaFin.format(formatter)
         )
         Log.i("urlUltimos", urlUltimos)
+        Log.i("urlProximos", urlProximos)
 
         return try {
             coroutineScope {
@@ -80,6 +81,9 @@ class NetworkRepoImpl(
                     async { findSorteo(urlProximos, gameId, numSorteo) },
                     async { findSorteo(urlUltimos, gameId, numSorteo) }
                 )
+                Log.i("proximos", proximos.toString())
+                Log.i("ultimos", ultimos.toString())
+
                 crearInfoSorteo(proximos, ultimos)
             }
 
@@ -88,6 +92,7 @@ class NetworkRepoImpl(
             throw e
         }
     }
+
 
     // Para extra info
     override suspend fun fetchExtraInfo(boleto: Boleto): List<LotteryModel> {

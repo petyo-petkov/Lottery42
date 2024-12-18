@@ -1,3 +1,5 @@
+import org.gradle.api.JavaVersion.VERSION_11
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -9,12 +11,12 @@ plugins {
 
 android {
     namespace = "com.example.lottery42"
-    compileSdkPreview = "Baklava"
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.example.lottery42"
-        minSdkPreview = "Baklava"
-        targetSdkPreview = "Baklava"
+        minSdkPreview = "34"
+        targetSdkPreview = "35"
         versionCode = 1
         versionName = "1.0"
 
@@ -31,8 +33,8 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = VERSION_11
+        targetCompatibility = VERSION_11
     }
     kotlinOptions {
         jvmTarget = "11"
@@ -62,7 +64,6 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.androidx.material.icons.extended)
     implementation("androidx.emoji2:emoji2:1.5.0")
-    implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.1")
 
 
     implementation(libs.androidx.material3.adaptive.navigation.suite)

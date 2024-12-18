@@ -43,7 +43,7 @@ fun BoletoItem(
             .fillMaxWidth()
             .clip(shape = RoundedCornerShape(16.dp))
             .clickable {
-                onBoletoClick(boleto)
+               onBoletoClick(boleto)
             },
         overlineContent = { Text(boleto.fecha.toFormattedDate()) },
         supportingContent = { Text("${boleto.precio} $euro") },
