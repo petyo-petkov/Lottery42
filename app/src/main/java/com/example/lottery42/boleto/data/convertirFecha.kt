@@ -4,7 +4,6 @@ import android.util.Log
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
-import java.util.Locale
 
 private val MESES = mapOf(
     "ENE" to "01", "FEB" to "02", "MAR" to "03", "ABR" to "04",
@@ -13,7 +12,7 @@ private val MESES = mapOf(
 )
 
 fun fechaParaGuardar(fechaString: String): String {
-    val formatter = DateTimeFormatter.ofPattern("ddMMyy", Locale("es"))
+    val formatter = DateTimeFormatter.ofPattern("ddMMyy")
     val fechaEng = fechaString.replace(Regex("[A-Z]{3}")) { MESES[it.value] ?: it.value }
     val fecha = LocalDate.parse(fechaEng, formatter)
     return fecha.toString()
@@ -21,7 +20,7 @@ fun fechaParaGuardar(fechaString: String): String {
 
 fun String.toFormattedDate(): String {
     val inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-    val outputFormatter = DateTimeFormatter.ofPattern("dd MMMM yyyy", Locale("es"))
+    val outputFormatter = DateTimeFormatter.ofPattern("dd MMMM yyyy")
     return try {
         val localDate = LocalDate.parse(this, inputFormatter)
         outputFormatter.format(localDate)

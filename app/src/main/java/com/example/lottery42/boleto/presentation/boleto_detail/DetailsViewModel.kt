@@ -7,6 +7,7 @@ import com.example.lottery42.boleto.data.database.Boleto
 import com.example.lottery42.boleto.data.database.toEntity
 import com.example.lottery42.boleto.domain.DatabaseRepo
 import com.example.lottery42.boleto.domain.NetworkRepo
+import com.example.lottery42.boleto.presentation.esAnterior
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,8 +15,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeout
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
 
 class DetailsViewModel(
@@ -29,7 +28,13 @@ class DetailsViewModel(
     fun getPremio(boleto: Boleto) {
         _premioState.value = PremioState.Loading
         viewModelScope.launch(Dispatchers.IO) {
-            val esAnterior = esAnteriorA(boleto.cierre)
+            val esAnterior = try {
+                esAnterior(boleto.cierre)
+            } catch (e: DateTimeParseException) {
+                Log.e("Error", "Error al parsear la fecha: ${e.message}")
+                _premioState.value = PremioState.Error(e)
+                false
+            }
             if (esAnterior) {
                 try {
                     val premio = withTimeout(5000) {
@@ -65,21 +70,6 @@ class DetailsViewModel(
             _premioState.value = PremioState.Success("$premio €")
         }
     }
-
-    private fun esAnteriorA(fechaCierre: String?): Boolean {
-        if (fechaCierre.isNullOrEmpty()) return false
-        return try {
-            val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
-            val fechaCierreParseada = LocalDateTime.parse(fechaCierre, formatter)
-            val hoy = LocalDateTime.now()
-            fechaCierreParseada.plusHours(1).isBefore(hoy)
-        } catch (e: DateTimeParseException) {
-            Log.e("Error", "Error al parsear la fecha: ${e.message}")
-            _premioState.value = PremioState.Error(e)
-            false
-        }
-    }
-
 
     sealed class PremioState {
         data class Success(val premio: String) : PremioState()

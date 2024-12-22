@@ -63,7 +63,7 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.androidx.material.icons.extended)
-    implementation("androidx.emoji2:emoji2:1.5.0")
+    //implementation("androidx.emoji2:emoji2:1.5.0")
 
 
     implementation(libs.androidx.material3.adaptive.navigation.suite)
@@ -92,7 +92,6 @@ dependencies {
     implementation(libs.ktor.client.core)
     implementation(libs.ktor.client.cio)
 
-    implementation("com.squareup.okhttp3:okhttp:4.12.0")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
