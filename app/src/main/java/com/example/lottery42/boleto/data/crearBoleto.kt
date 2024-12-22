@@ -37,7 +37,7 @@ suspend fun crearBoleto(data: String, networkRepo: NetworkRepo): Boleto {
                 "1" -> "Primitiva" to "LAPR"
                 "4" -> "El Gordo" to "ELGR"
                 "2" -> "Bonoloto" to "BONO"
-                "10" -> "Loteria Nacional" to "LNAC"
+                "5" -> "Loteria Nacional" to "LNAC"
                 "7" -> "Euro Millones" to "EMIL"
                 "14" -> "Euro Dreams" to "EDMS"
                 else -> "Desconosido" to "DESCO"
