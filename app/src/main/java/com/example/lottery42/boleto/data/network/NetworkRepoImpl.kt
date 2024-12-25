@@ -133,7 +133,7 @@ class NetworkRepoImpl(
     }
 
     override suspend fun getPremioLNAC(boleto: Boleto): String {
-        val urlLNAC = urlResultadoLNACPorNumero(boleto.numeroLoteria!!, boleto.idSorteo)
+        val urlLNAC = urlPremioLNACPorNumero(boleto.numeroLoteria!!, boleto.idSorteo)
         return (getInfoFromURL<ResultadoPorNumeroLoteria>(urlLNAC)[0]
             .premioEnCentimos / 100).toDouble().toString()
 

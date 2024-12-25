@@ -33,6 +33,9 @@ class ExtraInfoViewModel(
             val info = networkRepo.fetchExtraInfo(boleto)
             val infoLNAC = networkRepo.fetchExtraInfoLNAC(boleto)
 
+            Log.d("Info", info.toString())
+            Log.d("InfoLNAC", infoLNAC.toString())
+
             _infoState.value = if (esAnterior) {
                 try {
                     if (info.isNotEmpty()) {

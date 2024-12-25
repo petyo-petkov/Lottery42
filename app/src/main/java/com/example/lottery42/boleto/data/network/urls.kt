@@ -6,7 +6,7 @@ fun urlResultadosPorFechas(gameId: String, fechaInicio: String, fechaFin: String
     return "https://www.loteriasyapuestas.es/servicios/buscadorSorteos?game_id=$gameId&celebrados=&fechaInicioInclusiva=$fechaInicio&fechaFinInclusiva=$fechaFin"
 }
 
-fun urlResultadoLNACPorNumero(numeroLoteria: String, idSorteo: String) : String {
+fun urlPremioLNACPorNumero(numeroLoteria: String, idSorteo: String) : String {
     return  "https://www.loteriasyapuestas.es/servicios/premioDecimoWebParaVariosSorteos?decimo=$numeroLoteria&serie=&fraccion=&importeComunEnCentimos&idSorteos=$idSorteo"
 
 }
@@ -19,6 +19,8 @@ URL'S
  Loteria Nacional
  const val GET_PROXIMOS_SORTEOS_LNAC = "https://www.loteriasyapuestas.es/servicios/proximosv3?game_id=LNAC&num=50"
  const val GET_ULTIMOS_CELEBRADOS_LNAC = "https://www.loteriasyapuestas.es/servicios/buscadorUltimosSorteosCelebradosLoteriaNacional"
+
+ https://www.loteriasyapuestas.es/servicios/sorteosFuturosPorTipoDeSorteo?game_id=LNAC&tipoSorteo=EX&numeroResultados=103
 
  La Primitiva
  const val GET_ULTIMOS_CELEBRADOS_LAPR = "https://www.loteriasyapuestas.es/servicios/buscadorUltimosSorteosCelebradosPrimitiva"

@@ -15,7 +15,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.lottery42"
-        minSdkPreview = "Baklava"
+        minSdkPreview = "35"
         targetSdkPreview = "Baklava"
         versionCode = 1
         versionName = "1.0"
@@ -44,6 +44,12 @@ android {
     }
 }
 
+kotlin {
+    sourceSets.all {
+        languageSettings.enableLanguageFeature("ExplicitBackingFields")
+    }
+}
+
 sqldelight {
     databases {
         create("AppDatabase") {
@@ -63,7 +69,6 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.androidx.material.icons.extended)
-    //implementation("androidx.emoji2:emoji2:1.5.0")
 
 
     implementation(libs.androidx.material3.adaptive.navigation.suite)
@@ -91,6 +96,7 @@ dependencies {
     //Ktor
     implementation(libs.ktor.client.core)
     implementation(libs.ktor.client.cio)
+    
 
 
     testImplementation(libs.junit)

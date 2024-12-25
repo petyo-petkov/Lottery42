@@ -46,6 +46,8 @@ class ListScreenViewModel(
     private val _boletoState = MutableStateFlow<Boleto?>(null)
     val boletoState: StateFlow<Boleto?> = _boletoState
 
+
+
     fun getBoletoByID(id: Long) {
         viewModelScope.launch(Dispatchers.IO) {
             databaseRepo.getBoletoByID(id).collect { boleto ->

@@ -9,21 +9,22 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
 
 
-//suspend fun main() {
-//
-//    val url = "https://www.loteriasyapuestas.es/servicios/proximosv3?game_id=TODOS&num=2"
-//
-//    val cliente = HttpClient(CIO)
-//
-//    val response: HttpResponse = cliente.get(url)
-//    val dataString = response.bodyAsText()
-//    val info = Json.decodeFromString<JsonObject>(dataString)
-//
-//
-//    println(dataString)
-//
-//}
+val url =
+    "https://www.loteriasyapuestas.es/servicios/buscadorSorteos?game_id=LAPR&celebrados=&fechaInicioInclusiva=20241226&fechaFinInclusiva=20241226"
 
 
+suspend fun main(){
 
+    val httpClient = HttpClient(CIO)
+    val json = Json {
+        coerceInputValues = true
+        ignoreUnknownKeys = true
+    }
 
+    val response: HttpResponse = httpClient.get(url)
+    val dataString = response.bodyAsText()
+    val data = json.decodeFromString<List<JsonObject>>(dataString)
+
+    println(data)
+
+}
