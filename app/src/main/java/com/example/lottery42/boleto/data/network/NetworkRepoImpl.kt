@@ -65,16 +65,16 @@ class NetworkRepoImpl(
     override suspend fun getInfoSorteo(numSorteo: String, gameId: String): InfoSorteo? {
 
         val urlProximos = GET_PROXIMOS_SORTEOS_TODOS
-//        val urlUltimos = when (gameId) {
-//            "LAPR" -> GET_ULTIMOS_CELEBRADOS_LAPR
-//            "BONO" -> GET_ULTIMOS_CELEBRADOS_BONO
-//            "EMIL" -> GET_ULTIMOS_CELEBRADOS_EMIL
-//            "ELGR" -> GET_ULTIMOS_CELEBRADOS_ELGR
-//            "LNAC" -> GET_ULTIMOS_CELEBRADOS_LNAC
-//            "EDMS" -> GET_ULTIMOS_CELEBRADOS_EDMS
-//            else -> ""
-//        }
-        val urlUltimos = urlUltimosTresMeses(gameId)
+
+        val urlUltimos = when (gameId) {
+            "LAPR" -> GET_ULTIMOS_CELEBRADOS_LAPR
+            "BONO" -> GET_ULTIMOS_CELEBRADOS_BONO
+            "EMIL" -> GET_ULTIMOS_CELEBRADOS_EMIL
+            "ELGR" -> GET_ULTIMOS_CELEBRADOS_ELGR
+            "LNAC" -> GET_ULTIMOS_CELEBRADOS_LNAC
+            "EDMS" -> GET_ULTIMOS_CELEBRADOS_EDMS
+            else -> urlUltimosTresMeses(gameId)
+        }
 
         Log.i("URL", urlUltimos)
         return try {
