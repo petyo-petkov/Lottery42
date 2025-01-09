@@ -39,6 +39,8 @@ class ListScreenViewModel(
         }
     }
 
+
+
     val boletos = databaseRepo.getAllBoletos()
     val balance = databaseRepo.getBalance()
 

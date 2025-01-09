@@ -4,7 +4,7 @@ import com.lottery42.BoletoEntity
 import kotlinx.serialization.json.Json
 
 fun Boleto.toEntity(): BoletoEntity {
-    val json = Json { encodeDefaults = true }
+    Json { encodeDefaults = true }
     return BoletoEntity(
         id = id,
         idSorteo = idSorteo,

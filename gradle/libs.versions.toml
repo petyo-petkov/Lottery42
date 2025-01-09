@@ -1,5 +1,5 @@
 [versions]
-agp = "8.9.0-alpha06"
+agp = "8.9.0-alpha08"
 kotlin = "2.1.0"
 coreKtx = "1.15.0"
 junit = "4.13.2"
@@ -52,6 +52,8 @@ koin-core = { module = "io.insert-koin:koin-core" }
 
 ktor-client-cio = { module = "io.ktor:ktor-client-cio", version.ref = "ktor_version" }
 ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor_version" }
+ktor-client-serialization = { module = "io.ktor:ktor-client-serialization", version.ref = "ktor_version" }
+ktor-network-tls-certificates = { module = "io.ktor:ktor-network-tls-certificates", version.ref = "ktor_version" }
 
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
 

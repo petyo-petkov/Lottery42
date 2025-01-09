@@ -1,7 +1,10 @@
 package com.example.lottery42.di
 
+import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
+import android.view.View
+import android.webkit.WebView
 import app.cash.sqldelight.db.SqlDriver
 import app.cash.sqldelight.driver.android.AndroidSqliteDriver
 import com.example.lottery42.boleto.data.ScannerRepoImpl
@@ -45,8 +48,6 @@ val scannerModule = module {
 
     singleOf(::ScannerRepoImpl).bind<ScannerRepo>()
 
-    //factoryOf(::ScannerRepoImpl).bind<ScannerRepo>()
-
 }
 
 val databaseModule = module {
@@ -74,7 +75,7 @@ val networkModule = module {
 
     singleOf<HttpClient>(::HttpClient)
 
-    factoryOf(::NetworkRepoImpl).bind<NetworkRepo>()
+    singleOf(::NetworkRepoImpl).bind<NetworkRepo>()
 
 }
 

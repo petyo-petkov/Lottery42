@@ -1,4 +1,4 @@
-import org.gradle.api.JavaVersion.VERSION_17
+import org.gradle.api.JavaVersion.VERSION_11
 
 plugins {
     alias(libs.plugins.android.application)
@@ -33,21 +33,16 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = VERSION_17
-        targetCompatibility = VERSION_17
+        sourceCompatibility = VERSION_11
+        targetCompatibility = VERSION_11
     }
     kotlinOptions {
-        jvmTarget = "17"
+        jvmTarget = "11"
     }
     buildFeatures {
         compose = true
     }
-}
 
-kotlin {
-    sourceSets.all {
-        languageSettings.enableLanguageFeature("ExplicitBackingFields")
-    }
 }
 
 sqldelight {
@@ -55,6 +50,12 @@ sqldelight {
         create("AppDatabase") {
             packageName.set("com.example.sqldelight")
         }
+    }
+}
+
+kotlin {
+    sourceSets.all {
+        languageSettings.enableLanguageFeature("ExplicitBackingFields")
     }
 }
 
@@ -96,7 +97,10 @@ dependencies {
     //Ktor
     implementation(libs.ktor.client.core)
     implementation(libs.ktor.client.cio)
-    
+    implementation(libs.ktor.network.tls.certificates)
+    implementation(libs.ktor.client.serialization)
+
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
 
 
     testImplementation(libs.junit)

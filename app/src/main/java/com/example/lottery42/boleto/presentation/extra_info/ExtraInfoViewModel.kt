@@ -33,8 +33,8 @@ class ExtraInfoViewModel(
             val info = networkRepo.fetchExtraInfo(boleto)
             val infoLNAC = networkRepo.fetchExtraInfoLNAC(boleto)
 
-            Log.d("Info", info.toString())
-            Log.d("InfoLNAC", infoLNAC.toString())
+            Log.i("info", info.toString())
+            Log.i("infoLNAC", infoLNAC.toString())
 
             _infoState.value = if (esAnterior) {
                 try {

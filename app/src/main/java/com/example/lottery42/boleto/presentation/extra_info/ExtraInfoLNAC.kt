@@ -60,28 +60,27 @@ fun ExtraInfoLNAC(boleto: Boleto, resultado: ResultadosLoteriaNacional) {
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
-            Column(
-                modifier = Modifier,
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(16.dp)
-            ) {
-                Text("Primer premio:", style = MaterialTheme.typography.titleMedium)
-                Text(resultado.primerPremio.decimo, style = MaterialTheme.typography.headlineMedium)
-
-            }
-            Column(
-                modifier = Modifier,
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(16.dp)
-            ) {
-                Text("Segundo premio:", style = MaterialTheme.typography.titleMedium)
-                Text(
-                    resultado.segundoPremio.decimo,
-                    style = MaterialTheme.typography.headlineMedium
-                )
-
+            Premio("Primer premio", resultado.primerPremio.decimo)
+            Premio("Segundo premio", resultado.segundoPremio.decimo)
+            if (resultado.tercerosPremios.isNotEmpty()) {
+                Premio("Tercer premio", resultado.tercerosPremios[0].decimo)
             }
         }
+        HorizontalDivider(modifier = Modifier, color = Color.White)
+        if (resultado.cuartosPremios.isNotEmpty()) {
+            Premio(
+                "Cuartos premios",
+                resultado.cuartosPremios.joinToString("   ") { it.decimo }
+            )
+        }
+        HorizontalDivider(modifier = Modifier, color = Color.White)
+        if (resultado.quintosPremios.isNotEmpty()) {
+            Premio(
+                "Quintos premios",
+                resultado.quintosPremios.joinToString("   ") { it.decimo }
+            )
+        }
+
         HorizontalDivider(modifier = Modifier, color = Color.White)
 
         Text("Reintegros:", style = MaterialTheme.typography.headlineMedium)
@@ -94,11 +93,14 @@ fun ExtraInfoLNAC(boleto: Boleto, resultado: ResultadosLoteriaNacional) {
 
             Spacer(modifier = Modifier)
 
-            Reintegro(resultado.reintegros[1].decimo)
+            if (resultado.reintegros.size > 1) {
+                Reintegro(resultado.reintegros[1].decimo)
 
-            Spacer(modifier = Modifier)
+                Spacer(modifier = Modifier)
 
-            Reintegro(resultado.reintegros[2].decimo)
+                Reintegro(resultado.reintegros[2].decimo)
+            } else ""
+
 
         }
 
@@ -123,5 +125,22 @@ fun Reintegro(numero: String) {
                 style = MaterialTheme.typography.headlineSmall
             )
         }
+    }
+}
+
+@Composable
+fun Premio(premio: String, numero: String) {
+    Column(
+        modifier = Modifier,
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        Text(premio, style = MaterialTheme.typography.titleMedium)
+        Text(
+            numero,
+            modifier = Modifier.padding(horizontal = 16.dp),
+            style = MaterialTheme.typography.headlineMedium
+        )
+
     }
 }

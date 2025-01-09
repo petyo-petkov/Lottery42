@@ -15,7 +15,9 @@ interface NetworkRepo {
 
     suspend fun fetchExtraInfoLNAC(boleto: Boleto): List<ResultadosLoteriaNacional>
 
-    suspend fun getPremios(boleto: Boleto): Flow<String>
+    //suspend fun getPremios(boleto: Boleto): Flow<String>
+
+    suspend fun getPremios(boleto: Boleto): String
 
     suspend fun getPremioLNAC(boleto: Boleto): String
 

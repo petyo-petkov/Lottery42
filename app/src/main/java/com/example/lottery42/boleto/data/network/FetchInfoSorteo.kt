@@ -5,15 +5,17 @@ import android.content.Context
 import android.view.View
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.withContext
 
-
 @SuppressLint("SetJavaScriptEnabled")
-fun Prueba(context: Context, url: String): Flow<String> = callbackFlow {
+suspend fun FetchInfoSorteo(
+    context: Context,
+    url: String
+): String {
+
+    val deferredResult = CompletableDeferred<String>()
 
     withContext(Dispatchers.Main) {
         val webView = WebView(context).apply {
@@ -21,9 +23,13 @@ fun Prueba(context: Context, url: String): Flow<String> = callbackFlow {
             visibility = View.INVISIBLE
             addJavascriptInterface(
                 JavaScriptInterface { data ->
-                    trySend(data) // Emite el premio en el flujo
-                    destroy()
-                    close()
+                    if (!deferredResult.isCompleted) {
+                        deferredResult.complete(data) // Complete with the result
+                    }
+                    post {
+                        destroy()
+                    }
+
                 }, "AndroidInterface"
             )
             loadUrl(url)
@@ -33,20 +39,17 @@ fun Prueba(context: Context, url: String): Flow<String> = callbackFlow {
             override fun onPageFinished(view: WebView?, url: String?) {
                 webView.evaluateJavascript(
                     """
-               (function() {
-                   var info = document.getElementById('qa_ultResult-EMIL');
-                   var infoText = info ? info.innerText : "no hay texto";
-                   var moreInfo = document.getElementById('more-info-EMIL');
-                   var moreInfoText = moreInfo ? moreInfo.innerText : "no hay texto";
-                   var resultado = [infoText, moreInfoText].join("'");
-                   AndroidInterface.sendData(resultado);
-                })();
-                """
+                       (function() {
+                       setTimeout(function() {
+                       var preContent = document.querySelector('pre')?.innerText
+                       AndroidInterface.sendData(preContent);
+                       }, 500); 
+                       })(); 
+                   """
                 ) { }
             }
-
         }
-
     }
-    awaitClose()
+
+    return deferredResult.await() // Wait for the result and return it
 }

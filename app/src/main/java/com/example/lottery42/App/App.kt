@@ -1,5 +1,6 @@
 package com.example.lottery42.App
 
+import android.webkit.WebView
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -31,6 +32,7 @@ import com.example.lottery42.boleto.presentation.boleto_list.ListScreenViewModel
 import com.example.lottery42.boleto.presentation.extra_info.ExtraInfoViewModel
 import com.example.lottery42.boleto.presentation.extra_info.ExtraPaneScreen
 import org.koin.androidx.compose.koinViewModel
+import org.koin.compose.koinInject
 
 @OptIn(ExperimentalMaterial3AdaptiveApi::class)
 @Composable
@@ -46,7 +48,6 @@ fun App() {
     val boleto by vm.boletoState.collectAsStateWithLifecycle()
     val infoState by vmExtra.infoState.collectAsStateWithLifecycle()
     val premioState by vmDetails.premioState.collectAsStateWithLifecycle()
-
 
 
     Scaffold(

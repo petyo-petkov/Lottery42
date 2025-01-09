@@ -25,9 +25,10 @@ class DetailsViewModel(
     private val _premioState = MutableStateFlow<PremioState>(PremioState.Empty)
     val premioState: StateFlow<PremioState> = _premioState
 
+
     fun getPremio(boleto: Boleto) {
         _premioState.value = PremioState.Loading
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.Default) {
             val esAnterior = try {
                 esAnterior(boleto.cierre)
             } catch (e: DateTimeParseException) {
@@ -41,9 +42,11 @@ class DetailsViewModel(
                         if (boleto.gameID == "LNAC") {
                             networkRepo.getPremioLNAC(boleto)
                         } else {
-                            networkRepo.getPremios(boleto).firstOrNull()?.removeSuffix("€")
-                                ?.replace(",", ".")
-                                ?: " "
+//                            networkRepo.getPremios(boleto).firstOrNull()?.removeSuffix("€")
+//                                ?.replace(",", ".")
+//                                ?: " "
+                          networkRepo.getPremios(boleto).removeSuffix("€").replace(",", ".")
+
                         }
                     }
                     manejarResultadoPremio(premio, boleto)

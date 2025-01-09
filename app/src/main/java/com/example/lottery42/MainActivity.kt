@@ -15,7 +15,6 @@ class MainActivity : ComponentActivity() {
             Lottery42Theme {
                 App()
             }
-
         }
     }
 }
