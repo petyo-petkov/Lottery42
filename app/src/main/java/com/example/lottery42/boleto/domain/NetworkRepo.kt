@@ -4,7 +4,6 @@ import com.example.lottery42.boleto.data.database.Boleto
 import com.example.lottery42.boleto.data.network.InfoSorteo
 import com.example.lottery42.boleto.data.network.models.LotteryModel
 import com.example.lottery42.boleto.data.network.models.loteriaNacional.resultadoLNAC.ResultadosLoteriaNacional
-import kotlinx.coroutines.flow.Flow
 
 interface NetworkRepo {
 
@@ -14,8 +13,6 @@ interface NetworkRepo {
     suspend fun fetchExtraInfo(boleto: Boleto): List<LotteryModel>
 
     suspend fun fetchExtraInfoLNAC(boleto: Boleto): List<ResultadosLoteriaNacional>
-
-    //suspend fun getPremios(boleto: Boleto): Flow<String>
 
     suspend fun getPremios(boleto: Boleto): String
 

@@ -40,20 +40,21 @@ class ListScreenViewModel(
     }
 
 
-
     val boletos = databaseRepo.getAllBoletos()
     val balance = databaseRepo.getBalance()
 
 
-    private val _boletoState = MutableStateFlow<Boleto?>(null)
-    val boletoState: StateFlow<Boleto?> = _boletoState
+//    private val _boletoState = MutableStateFlow<Boleto?>(null)
+//    val boletoState: StateFlow<Boleto?> = _boletoState
 
+    val boletoState: StateFlow<Boleto?>
+        field = MutableStateFlow<Boleto?>(null)
 
 
     fun getBoletoByID(id: Long) {
         viewModelScope.launch(Dispatchers.IO) {
             databaseRepo.getBoletoByID(id).collect { boleto ->
-                _boletoState.value = boleto
+                boletoState.value = boleto
             }
         }
     }

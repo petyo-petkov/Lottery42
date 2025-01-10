@@ -27,16 +27,13 @@ class NetworkRepoImpl(
     val context: Context,
 ) : NetworkRepo {
 
-
     private suspend inline fun <reified T> getInfoFromURL(url: String): List<T> {
         val json = Json {
             coerceInputValues = true
             ignoreUnknownKeys = true
         }
         try {
-            //val jsonString = FetchInfoSorteo(context = context, url = url)
             val jsonString = fetchData(context, url, ::getInfo)
-
             return json.decodeFromString(jsonString)
 
         } catch (e: IOException) {
@@ -52,15 +49,6 @@ class NetworkRepoImpl(
 
     }
 
-
-    private suspend fun findSorteo(url: String, gameID: String, numSorteo: String): JsonObject? {
-        return getInfoFromURL<JsonObject>(url)
-            .find {
-                it.get("id_sorteo").toString().substring(8..10) == numSorteo && it.get("game_id")
-                    .toString().slice(1..4) == gameID
-            }
-    }
-
     // Para Crear el boleto
     override suspend fun getInfoSorteo(numSorteo: String, gameId: String): InfoSorteo? {
 
@@ -73,23 +61,24 @@ class NetworkRepoImpl(
             "ELGR" -> GET_ULTIMOS_CELEBRADOS_ELGR
             "LNAC" -> GET_ULTIMOS_CELEBRADOS_LNAC
             "EDMS" -> GET_ULTIMOS_CELEBRADOS_EDMS
-            else -> urlUltimosTresMeses(gameId)
+            else -> ""
         }
+        val urlUltimosTresMeses = urlUltimosTresMeses(gameId)
 
         Log.i("URL", urlUltimos)
         return try {
             coroutineScope {
                 val (proximos, ultimos) = awaitAll(
                     async { findSorteo(urlProximos, gameId, numSorteo) },
-                    async { findSorteo(urlUltimos, gameId, numSorteo) }
+                    async { findSorteo(urlUltimos, gameId, numSorteo) },
                 )
                 Log.i("proximos", proximos.toString())
                 Log.i("ultimos", ultimos.toString())
 
-                val jsonObject = proximos ?: ultimos
+                var jsonObject = proximos ?: ultimos ?:
+                async { findSorteo(urlUltimosTresMeses, gameId, numSorteo) }.await()
 
                 getMissingInfoL(jsonObject!!)
-
             }
 
         } catch (e: Exception) {
@@ -120,20 +109,6 @@ class NetworkRepoImpl(
         }
     }
 
-    //    override suspend fun getPremios(boleto: Boleto): Flow<String> {
-//        val gameId = boleto.gameID
-//        val url = when (gameId) {
-//            "LAPR" -> urlPremioLAPR(boleto)
-//            "BONO" -> urlPremioBONO(boleto)
-//            "EMIL" -> urlPremioEMIL(boleto)
-//            "ELGR" -> urlPremioELGR(boleto)
-//            "EDMS" -> urlPremioEDMS(boleto)
-//            // "LNAC" -> urlPremioLNAC(boleto)
-//            else -> ""
-//        }
-//        Log.i("URL", url)
-//        return getPremiosFlow(context, url, gameId)
-//    }
     override suspend fun getPremios(boleto: Boleto): String {
         val gameId = boleto.gameID
         val url = when (gameId) {
@@ -151,7 +126,6 @@ class NetworkRepoImpl(
 
     }
 
-
     override suspend fun getPremioLNAC(boleto: Boleto): String {
         val urlLNAC = urlPremioLNACPorNumero(boleto.numeroLoteria!!, boleto.idSorteo)
         return (getInfoFromURL<ResultadoPorNumeroLoteria>(urlLNAC)[0]
@@ -160,25 +134,33 @@ class NetworkRepoImpl(
 
     }
 
+    private suspend fun findSorteo(url: String, gameID: String, numSorteo: String): JsonObject? {
+        return getInfoFromURL<JsonObject>(url)
+            .find {
+                it.get("id_sorteo").toString().substring(8..10) == numSorteo && it.get("game_id")
+                    .toString().slice(1..4) == gameID
+            }
+    }
+
+    private fun getMissingInfoL(info: JsonObject): InfoSorteo {
+        fun JsonObject.getString(key: String) = this[key]?.jsonPrimitive?.content
+        return InfoSorteo(
+            fecha = info.getString("fecha") ?: info.getString("fecha_sorteo") ?: "",
+            precio = info.getString("precio") ?: info.getString("precioDecimo") ?: "0.0",
+            idSorteo = info.getString("id_sorteo") ?: "",
+            apertura = info.getString("apertura") ?: info.getString("fecha_sorteo") ?: "",
+            cierre = info.getString("cierre") ?: info.getString("fecha_sorteo") ?: ""
+        )
+
+    }
+
+    private fun urlExtraInfo(boleto: Boleto): String {
+        val gameId = boleto.gameID
+        val fecha = boleto.fecha.replace("-", "")
+        return urlResultadosPorFechas(gameId, fecha, fecha)
+    }
 }
 
-private fun getMissingInfoL(info: JsonObject): InfoSorteo {
-    fun JsonObject.getString(key: String) = this[key]?.jsonPrimitive?.content
-    return InfoSorteo(
-        fecha = info.getString("fecha") ?: info.getString("fecha_sorteo") ?: "",
-        precio = info.getString("precio") ?: info.getString("precioDecimo") ?: "0.0",
-        idSorteo = info.getString("id_sorteo") ?: "",
-        apertura = info.getString("apertura") ?: info.getString("fecha_sorteo") ?: "",
-        cierre = info.getString("cierre") ?: info.getString("fecha_sorteo") ?: ""
-    )
-
-}
-
-private fun urlExtraInfo(boleto: Boleto): String {
-    val gameId = boleto.gameID
-    val fecha = boleto.fecha.replace("-", "")
-    return urlResultadosPorFechas(gameId, fecha, fecha)
-}
 
 @Serializable
 data class InfoSorteo(

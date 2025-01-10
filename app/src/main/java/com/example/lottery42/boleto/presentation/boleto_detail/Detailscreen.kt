@@ -53,7 +53,7 @@ fun DetailScreen(
     val premio = when (premioState) {
         is DetailsViewModel.PremioState.Success -> premioState.premio
         is DetailsViewModel.PremioState.Error -> "Error"
-        is DetailsViewModel.PremioState.Empty -> ""
+        is DetailsViewModel.PremioState.Empty -> "Sorteo no celebrado"
         is DetailsViewModel.PremioState.Loading -> "loading"
         DetailsViewModel.PremioState.Timeout -> "Ha tardado demasiado en responder \nPrueba de nuevo"
     }

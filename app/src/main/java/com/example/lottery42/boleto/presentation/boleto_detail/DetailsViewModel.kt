@@ -12,7 +12,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeout
 import java.time.format.DateTimeParseException
@@ -42,10 +41,8 @@ class DetailsViewModel(
                         if (boleto.gameID == "LNAC") {
                             networkRepo.getPremioLNAC(boleto)
                         } else {
-//                            networkRepo.getPremios(boleto).firstOrNull()?.removeSuffix("€")
-//                                ?.replace(",", ".")
-//                                ?: " "
-                          networkRepo.getPremios(boleto).removeSuffix("€").replace(",", ".")
+
+                            networkRepo.getPremios(boleto).removeSuffix("€").replace(",", ".")
 
                         }
                     }

@@ -26,6 +26,7 @@ suspend fun fetchData(
                     continuation.resume(data) // Resume the coroutine with the result
                     post {
                         destroy()
+
                     }
                 }, "AndroidInterface"
             )
