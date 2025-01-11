@@ -54,7 +54,7 @@ fun getPremio(gameID: String): String {
                             var premioElement = document.getElementById('qa_comprobador-cantidadPremio-$gameID-1');
                             var premioText = premioElement ? premioElement.innerText : "0.0";
                             AndroidInterface.sendData(premioText);
-                        }, 500);
+                        }, 1000);
                     } else {
                         AndroidInterface.sendData("Botón no encontrado");
                     }
@@ -71,7 +71,7 @@ fun getInfo(): String {
                  var preContent = document.querySelector('pre')?.innerText
                  AndroidInterface.sendData(preContent);
           
-             }, 1000); 
+             }, 500); 
              })(); 
            """
 }

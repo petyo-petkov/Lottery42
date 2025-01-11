@@ -37,7 +37,7 @@ class DetailsViewModel(
             }
             if (esAnterior) {
                 try {
-                    val premio = withTimeout(5000) {
+                    val premio = withTimeout(3000) {
                         if (boleto.gameID == "LNAC") {
                             networkRepo.getPremioLNAC(boleto)
                         } else {

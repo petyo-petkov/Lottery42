@@ -20,7 +20,7 @@ class ExtraInfoViewModel(
     val infoState: StateFlow<InfoSorteoState<Any>> = _infoState
 
     fun infoSorteoCelebrado(boleto: Boleto) {
-        _infoState.value = InfoSorteoState.Loading
+
         viewModelScope.launch(Dispatchers.IO) {
             val esAnterior = try {
                 esAnterior(boleto.cierre)
@@ -29,28 +29,27 @@ class ExtraInfoViewModel(
                 _infoState.value = InfoSorteoState.Error(e)
                 false
             }
+            if (esAnterior) {
+                _infoState.value = InfoSorteoState.Loading
+                val info = networkRepo.fetchExtraInfo(boleto)
+                val infoLNAC = networkRepo.fetchExtraInfoLNAC(boleto)
 
-            val info = networkRepo.fetchExtraInfo(boleto)
-            val infoLNAC = networkRepo.fetchExtraInfoLNAC(boleto)
+                Log.i("info", info.toString())
+                Log.i("infoLNAC", infoLNAC.toString())
 
-            Log.i("info", info.toString())
-            Log.i("infoLNAC", infoLNAC.toString())
-
-            _infoState.value = if (esAnterior) {
-                try {
+                _infoState.value = try {
                     if (info.isNotEmpty()) {
                         InfoSorteoState.Success(info = info[0])
                     } else {
                         InfoSorteoState.Success(info = infoLNAC[0])
                     }
-
                 } catch (e: Exception) {
                     Log.e("ERROR en obtenerInfoResultado", e.message.toString())
                     InfoSorteoState.Error(e)
                 }
 
             } else {
-                InfoSorteoState.Empty
+                _infoState.value = InfoSorteoState.Empty
             }
         }
     }
