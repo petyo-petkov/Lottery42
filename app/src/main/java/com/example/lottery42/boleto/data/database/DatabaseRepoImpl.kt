@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import kotlin.coroutines.CoroutineContext
 import kotlin.math.round
+import kotlin.text.Typography.euro
 
 class DatabaseRepoImpl(
     db: AppDatabase
@@ -27,7 +28,7 @@ class DatabaseRepoImpl(
 
     }
 
-    override  fun getAllBoletos(): Flow<List<Boleto>> {
+    override fun getAllBoletos(): Flow<List<Boleto>> {
         return queries.getAllBoletos()
             .asFlow()
             .mapToList(context)
@@ -37,15 +38,20 @@ class DatabaseRepoImpl(
 
     }
 
-    override  fun getBalance(): Flow<BalanceState> {
+    override fun getBalance(): Flow<BalanceState> {
         return getAllBoletos().map { boletos ->
             val ganado = boletos.sumOf { it.premio.toDouble() }
             val gastado = boletos.sumOf { it.precio.toDouble() }
             val balance = ganado - gastado
             BalanceState(
-                ganado = redondear(ganado).toString(),
-                gastado = redondear(gastado).toString(),
-                balance = redondear(balance).toString(),
+                ganado = "${ redondear(ganado) } $euro",
+                gastado = "${ redondear(gastado) } $euro",
+                balance = if (balance < 0) {
+                    "- ${redondear(balance)} $euro"
+                } else {
+                    "+ ${redondear(balance)} $euro"
+                }
+
             )
         }
     }

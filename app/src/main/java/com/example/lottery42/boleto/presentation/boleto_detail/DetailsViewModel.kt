@@ -21,18 +21,21 @@ class DetailsViewModel(
     private val networkRepo: NetworkRepo
 ) : ViewModel() {
 
-    private val _premioState = MutableStateFlow<PremioState>(PremioState.Empty)
-    val premioState: StateFlow<PremioState> = _premioState
+//    private val _premioState = MutableStateFlow<PremioState>(PremioState.Empty)
+//    val premioState: StateFlow<PremioState> = _premioState
+
+    val premioState: StateFlow<PremioState>
+        field = MutableStateFlow<PremioState>(PremioState.Empty)
 
 
     fun getPremio(boleto: Boleto) {
-        _premioState.value = PremioState.Loading
+        premioState.value = PremioState.Loading
         viewModelScope.launch(Dispatchers.Default) {
             val esAnterior = try {
                 esAnterior(boleto.cierre)
             } catch (e: DateTimeParseException) {
                 Log.e("Error", "Error al parsear la fecha: ${e.message}")
-                _premioState.value = PremioState.Error(e)
+                premioState.value = PremioState.Error(e)
                 false
             }
             if (esAnterior) {
@@ -49,13 +52,13 @@ class DetailsViewModel(
                     manejarResultadoPremio(premio, boleto)
                 } catch (e: TimeoutCancellationException) {
                     Log.e("ERROR en obtenerPremio", e.message.toString())
-                    _premioState.value = PremioState.Timeout
+                    premioState.value = PremioState.Timeout
                 } catch (e: Exception) {
                     Log.e("ERROR en obtenerPremio", e.message.toString())
-                    _premioState.value = PremioState.Error(e)
+                    premioState.value = PremioState.Error(e)
                 }
             } else {
-                _premioState.value = PremioState.Empty
+                premioState.value = PremioState.Empty
             }
 
         }
@@ -64,10 +67,10 @@ class DetailsViewModel(
 
     private suspend fun manejarResultadoPremio(premio: String?, boleto: Boleto) {
         if (premio == "0.0") {
-            _premioState.value = PremioState.Success("NO PREMIADO")
+            premioState.value = PremioState.Success("NO PREMIADO")
         } else if (premio != null) {
             databaseRepo.updateBoleto(boleto.copy(premio = premio).toEntity())
-            _premioState.value = PremioState.Success("$premio €")
+            premioState.value = PremioState.Success("$premio €")
         }
     }
 

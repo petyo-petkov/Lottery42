@@ -26,7 +26,6 @@ suspend fun fetchData(
                     continuation.resume(data) // Resume the coroutine with the result
                     post {
                         destroy()
-
                     }
                 }, "AndroidInterface"
             )
@@ -56,7 +55,7 @@ fun getPremio(gameID: String): String {
                             AndroidInterface.sendData(premioText);
                         }, 1000);
                     } else {
-                        AndroidInterface.sendData("Botón no encontrado");
+                        AndroidInterface.sendData("0.0");
                     }
               }
               )();

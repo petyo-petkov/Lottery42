@@ -83,7 +83,7 @@ fun balanceDate(
         )
         Text(
             text = data,
-            style = MaterialTheme.typography.headlineLarge
+            style = MaterialTheme.typography.headlineSmall
 
         )
 
