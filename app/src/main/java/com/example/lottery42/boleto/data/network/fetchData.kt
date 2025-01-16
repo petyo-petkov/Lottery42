@@ -55,7 +55,7 @@ fun getPremio(gameID: String): String {
                             AndroidInterface.sendData(premioText);
                         }, 1000);
                     } else {
-                        AndroidInterface.sendData("0.0");
+                        AndroidInterface.sendData("Error Boton");
                     }
               }
               )();

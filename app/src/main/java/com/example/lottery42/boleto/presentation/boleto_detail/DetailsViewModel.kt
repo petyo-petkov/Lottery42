@@ -44,9 +44,7 @@ class DetailsViewModel(
                         if (boleto.gameID == "LNAC") {
                             networkRepo.getPremioLNAC(boleto)
                         } else {
-
-                            networkRepo.getPremios(boleto).removeSuffix("€").replace(",", ".")
-
+                            networkRepo.getPremios(boleto)
                         }
                     }
                     manejarResultadoPremio(premio, boleto)
@@ -65,12 +63,18 @@ class DetailsViewModel(
 
     }
 
-    private suspend fun manejarResultadoPremio(premio: String?, boleto: Boleto) {
-        if (premio == "0.0") {
-            premioState.value = PremioState.Success("NO PREMIADO")
-        } else if (premio != null) {
-            databaseRepo.updateBoleto(boleto.copy(premio = premio).toEntity())
-            premioState.value = PremioState.Success("$premio €")
+    private suspend fun manejarResultadoPremio(rawPremio: String?, boleto: Boleto) {
+        val premio = rawPremio?.removeSuffix("€")?.replace(",", ".")
+        when (premio) {
+            "0.0" -> premioState.value = PremioState.Success("NO PREMIADO")
+            "Error Boton" -> premioState.value =
+                PremioState.Error(Exception("Error obtener el premio"))
+
+            else -> {
+                databaseRepo.updateBoleto(boleto.copy(premio = premio!!).toEntity())
+                premioState.value = PremioState.Success("$premio €")
+            }
+
         }
     }
 
