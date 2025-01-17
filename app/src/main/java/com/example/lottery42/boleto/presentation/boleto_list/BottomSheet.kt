@@ -31,7 +31,8 @@ import com.example.lottery42.boleto.presentation.DialogoBorrar
 fun BottomSheet(
     onBorrarClick: () -> Unit,
     onDismiss: () -> Unit,
-    showBottomSheet: Boolean
+    showBottomSheet: Boolean,
+    order: (String) -> Unit
 ) {
     var showDialogoBorrar by remember { mutableStateOf(false) }
     val sheetState = rememberModalBottomSheetState()
@@ -58,11 +59,11 @@ fun BottomSheet(
                             selectedIndex = index
                             when (selectedIndex) {
 
-                                0 -> {}
+                                0 -> { order("fecha") }
 
-                                1 -> {}
+                                1 -> { order("tipo") }
 
-                                2 -> {}
+                                2 -> { order("premio") }
 
                                 3 -> {}
 

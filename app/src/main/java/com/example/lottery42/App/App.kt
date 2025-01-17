@@ -1,6 +1,5 @@
 package com.example.lottery42.App
 
-import android.webkit.WebView
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -32,7 +31,6 @@ import com.example.lottery42.boleto.presentation.boleto_list.ListScreenViewModel
 import com.example.lottery42.boleto.presentation.extra_info.ExtraInfoViewModel
 import com.example.lottery42.boleto.presentation.extra_info.ExtraPaneScreen
 import org.koin.androidx.compose.koinViewModel
-import org.koin.compose.koinInject
 
 @OptIn(ExperimentalMaterial3AdaptiveApi::class)
 @Composable
@@ -43,7 +41,7 @@ fun App() {
     val vmExtra: ExtraInfoViewModel = koinViewModel()
     val vmDetails: DetailsViewModel = koinViewModel()
 
-    val boletos by vm.boletos.collectAsStateWithLifecycle(emptyList())
+    val boletos by vm.boletosState.collectAsStateWithLifecycle()
     val balance by vm.balance.collectAsStateWithLifecycle(BalanceState())
     val boleto by vm.boletoState.collectAsStateWithLifecycle()
     val infoState by vmExtra.infoState.collectAsStateWithLifecycle()
@@ -80,10 +78,9 @@ fun App() {
                             vm.getBoletoByID(it.id)
                             navigator.navigateTo(pane = ListDetailPaneScaffoldRole.Detail)
                         },
-                        onBorrarClick = {
-                            vm.deleteAllBoletos()
-                        },
-                        boletos = boletos
+                        onBorrarClick = { vm.deleteAllBoletos() },
+                        boletos = boletos,
+                        onOrdenar = { vm.ordenarBoletos(it) }
                     )
                 }
             },

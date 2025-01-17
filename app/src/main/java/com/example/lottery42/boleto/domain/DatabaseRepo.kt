@@ -11,6 +11,10 @@ interface DatabaseRepo {
 
      fun getAllBoletos(): Flow<List<Boleto>>
 
+    fun getByType(): Flow<List<Boleto>>
+
+    fun getByPremio(): Flow<List<Boleto>>
+
      fun getBalance(): Flow<BalanceState>
 
     suspend fun insertBoleto(boleto: BoletoEntity)

@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropUp
 import androidx.compose.material3.Icon
@@ -32,11 +33,13 @@ fun ListScreen(
     boletos: List<Boleto>,
     onBoletoClick: (Boleto) -> Unit,
     onBorrarClick: () -> Unit,
+    onOrdenar: (order: String) -> Unit
 ) {
     var showBottomSheet by remember { mutableStateOf(false) }
     val rotationState by animateFloatAsState(
         targetValue = if (showBottomSheet) 180f else 0f, label = ""
     )
+    val listState = rememberLazyListState()
 
     Column(
         modifier = Modifier
@@ -64,13 +67,14 @@ fun ListScreen(
             )
         }
         LazyColumn(
-            modifier = Modifier
+            modifier = Modifier,
+            state = listState
         ) {
             items(boletos, key = { it.id }) { boleto ->
                 BoletoItem(
                     boleto,
                     onBoletoClick
-                    )
+                )
                 Spacer(modifier = Modifier.height(6.dp))
             }
             item {
@@ -82,7 +86,9 @@ fun ListScreen(
         BottomSheet(
             onDismiss = { showBottomSheet = false },
             showBottomSheet = showBottomSheet,
-            onBorrarClick = onBorrarClick
+            onBorrarClick = onBorrarClick,
+            order = onOrdenar
+
         )
 
 

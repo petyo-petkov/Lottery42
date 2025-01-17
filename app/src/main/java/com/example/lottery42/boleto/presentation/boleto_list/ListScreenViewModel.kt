@@ -20,6 +20,10 @@ class ListScreenViewModel(
     private val networkRepo: NetworkRepo
 ) : ViewModel() {
 
+    init {
+        getAllBoletos()
+    }
+
     fun startScanning() {
         viewModelScope.launch(Dispatchers.IO) {
             scannerRepo.startScanning()
@@ -40,7 +44,6 @@ class ListScreenViewModel(
     }
 
 
-    val boletos = databaseRepo.getAllBoletos()
     val balance = databaseRepo.getBalance()
 
 
@@ -50,6 +53,27 @@ class ListScreenViewModel(
     val boletoState: StateFlow<Boleto?>
         field = MutableStateFlow<Boleto?>(null)
 
+    val boletosState: StateFlow<List<Boleto>>
+        field = MutableStateFlow<List<Boleto>>(emptyList())
+
+
+    fun getAllBoletos() {
+        viewModelScope.launch(Dispatchers.IO) {
+            databaseRepo.getAllBoletos().collect { boletos ->
+                boletosState.value = boletos
+            }
+        }
+    }
+
+    fun ordenarBoletos(order: String ) {
+        viewModelScope.launch(Dispatchers.IO) {
+            boletosState.value = when (order) {
+                "tipo" -> boletosState.value.sortedBy { it.tipo }
+                "premio" -> boletosState.value.sortedByDescending { it.premio.toDouble() }
+                else -> boletosState.value.sortedByDescending { it.fecha }
+            }
+        }
+    }
 
     fun getBoletoByID(id: Long) {
         viewModelScope.launch(Dispatchers.IO) {
