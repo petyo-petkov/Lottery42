@@ -35,15 +35,6 @@ getBoletoById:
 SELECT *
 FROM BoletoEntity WHERE id = ?;
 
-getByType:
-SELECT *
-FROM BoletoEntity
-ORDER BY tipo;
-
-getByPremio:
-SELECT *
-FROM BoletoEntity
-ORDER BY premio DESC;
 
 updateBoleto:
 UPDATE BoletoEntity

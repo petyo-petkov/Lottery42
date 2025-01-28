@@ -1,5 +1,6 @@
 package com.example.lottery42.boleto.presentation.boleto_list
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -31,10 +32,14 @@ fun BalanceCard(
 
     Card(
         modifier = Modifier
-            .size(390.dp, 80.dp),
+            .size(420.dp, 180.dp),
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant,
+            containerColor = Color.Transparent,
+        ),
+        border = BorderStroke(
+            width = 1.dp,
+            color = MaterialTheme.colorScheme.secondary
         ),
     ) {
         Row(
@@ -42,19 +47,19 @@ fun BalanceCard(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
-            balanceDate(
+            balanceData(
                 nombre = "GASTADO",
                 color = rojo,
                 data = gastado
             )
             VerticalDivider(color = MaterialTheme.colorScheme.background)
-            balanceDate(
+            balanceData(
                 nombre = "BALANCE",
                 color = amarillo,
                 data = balance
             )
             VerticalDivider(color = MaterialTheme.colorScheme.background)
-            balanceDate(
+            balanceData(
                 nombre = "GANADO",
                 color = verde,
                 data = ganado
@@ -66,7 +71,7 @@ fun BalanceCard(
 }
 
 @Composable
-fun balanceDate(
+fun balanceData(
     nombre: String,
     data: String,
     color: Color

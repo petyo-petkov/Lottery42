@@ -65,7 +65,7 @@ class ListScreenViewModel(
         }
     }
 
-    fun ordenarBoletos(order: String ) {
+    fun ordenarBoletos(order: String = "fecha") {
         viewModelScope.launch(Dispatchers.IO) {
             boletosState.value = when (order) {
                 "tipo" -> boletosState.value.sortedBy { it.tipo }

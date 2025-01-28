@@ -38,23 +38,6 @@ class DatabaseRepoImpl(
 
     }
 
-    override fun getByType(): Flow<List<Boleto>> {
-        return queries.getByType()
-            .asFlow()
-            .mapToList(context)
-            .map { value ->
-                value.map { it.toDomain() }
-            }
-    }
-
-    override fun getByPremio(): Flow<List<Boleto>> {
-        return queries.getByPremio()
-            .asFlow()
-            .mapToList(context)
-            .map { value ->
-                value.map { it.toDomain() }
-            }
-    }
 
     override fun getBalance(): Flow<BalanceState> {
         return getAllBoletos().map { boletos ->

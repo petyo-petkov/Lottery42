@@ -1,7 +1,9 @@
 package com.example.lottery42.boleto.presentation.boleto_list
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -41,7 +43,14 @@ fun BoletoItem(
         headlineContent = { Text(boleto.tipo) },
         modifier = Modifier
             .fillMaxWidth()
-            .clip(shape = RoundedCornerShape(16.dp))
+            .border(
+                border = BorderStroke(
+                    width = 1.dp,
+                    color = MaterialTheme.colorScheme.primary
+                ),
+                shape = RoundedCornerShape(16.dp)
+                )
+            //.clip(shape = RoundedCornerShape(16.dp))
             .clickable {
                onBoletoClick(boleto)
             },
@@ -92,7 +101,7 @@ fun BoletoItem(
             }
         },
         colors = ListItemDefaults.colors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant
+            containerColor = Color.Transparent
         )
 
     )
