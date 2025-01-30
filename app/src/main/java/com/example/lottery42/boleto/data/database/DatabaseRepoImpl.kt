@@ -1,8 +1,11 @@
 package com.example.lottery42.boleto.data.database
 
+import androidx.compose.ui.graphics.Color
 import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
 import com.example.lottery42.boleto.domain.DatabaseRepo
+import com.example.lottery42.ui.theme.MiRojo
+import com.example.lottery42.ui.theme.MiVerde
 import com.example.sqldelight.AppDatabase
 import com.lottery42.BoletoEntity
 import kotlinx.coroutines.Dispatchers
@@ -51,11 +54,13 @@ class DatabaseRepoImpl(
                     "- ${redondear(balance)} $euro"
                 } else {
                     "+ ${redondear(balance)} $euro"
-                }
+                },
+                color = if (balance >= 0.0) MiVerde else MiRojo
 
             )
         }
     }
+
 
     override suspend fun insertBoleto(boleto: BoletoEntity) =
         withContext(Dispatchers.IO) {
@@ -86,6 +91,7 @@ data class BalanceState(
     val ganado: String = "",
     val gastado: String = "",
     val balance: String = "",
+    val color: Color = Color.Unspecified
 )
 
 

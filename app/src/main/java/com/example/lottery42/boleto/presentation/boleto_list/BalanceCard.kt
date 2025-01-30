@@ -17,19 +17,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.example.lottery42.ui.theme.MiAmarillo
+import com.example.lottery42.ui.theme.MiRojo
+import com.example.lottery42.ui.theme.MiVerde
 
 
 @Composable
 fun BalanceCard(
     ganado: String,
     gastado: String,
-    balance: String
+    balance: String,
+    color: Color
 ) {
-
-    val rojo = Color(0xFFF44336)
-    val amarillo = Color(0xFFFDD835)
-    val verde = Color(0xFF4CAF50)
-
     Card(
         modifier = Modifier
             .size(420.dp, 180.dp),
@@ -39,7 +38,7 @@ fun BalanceCard(
         ),
         border = BorderStroke(
             width = 1.dp,
-            color = MaterialTheme.colorScheme.secondary
+            color = color
         ),
     ) {
         Row(
@@ -49,19 +48,19 @@ fun BalanceCard(
         ) {
             balanceData(
                 nombre = "GASTADO",
-                color = rojo,
+                color = MiRojo,
                 data = gastado
             )
             VerticalDivider(color = MaterialTheme.colorScheme.background)
             balanceData(
                 nombre = "BALANCE",
-                color = amarillo,
+                color = MiAmarillo,
                 data = balance
             )
             VerticalDivider(color = MaterialTheme.colorScheme.background)
             balanceData(
                 nombre = "GANADO",
-                color = verde,
+                color = MiVerde,
                 data = ganado
             )
 
@@ -76,6 +75,7 @@ fun balanceData(
     data: String,
     color: Color
 ) {
+
     Column(
         modifier = Modifier,
         verticalArrangement = Arrangement.spacedBy(8.dp),

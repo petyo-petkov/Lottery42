@@ -30,6 +30,12 @@ import androidx.compose.ui.unit.dp
 import com.example.lottery42.R.drawable
 import com.example.lottery42.boleto.data.database.Boleto
 import com.example.lottery42.boleto.data.toFormattedDate
+import com.example.lottery42.ui.theme.Bonoloto
+import com.example.lottery42.ui.theme.ElGodo
+import com.example.lottery42.ui.theme.EuroDreams
+import com.example.lottery42.ui.theme.EuroMillones
+import com.example.lottery42.ui.theme.LoteriaNacional
+import com.example.lottery42.ui.theme.Primitiva
 import java.lang.ref.WeakReference
 import kotlin.text.Typography.euro
 
@@ -39,6 +45,15 @@ fun BoletoItem(
     boleto: Boleto,
     onBoletoClick: (Boleto) -> Unit
 ) {
+    val color = when (boleto.gameID) {
+        "LAPR" -> Primitiva
+        "BONO" -> Bonoloto
+        "EMIL" -> EuroMillones
+        "ELGR" -> ElGodo
+        "EDMS" -> EuroDreams
+        "LNAC" -> LoteriaNacional
+        else -> MaterialTheme.colorScheme.error
+    }
     ListItem(
         headlineContent = { Text(boleto.tipo) },
         modifier = Modifier
@@ -46,11 +61,11 @@ fun BoletoItem(
             .border(
                 border = BorderStroke(
                     width = 1.dp,
-                    color = MaterialTheme.colorScheme.primary
+                    color = color
                 ),
                 shape = RoundedCornerShape(16.dp)
                 )
-            //.clip(shape = RoundedCornerShape(16.dp))
+            .clip(shape = RoundedCornerShape(16.dp))
             .clickable {
                onBoletoClick(boleto)
             },

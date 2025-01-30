@@ -52,7 +52,8 @@ fun ListScreen(
         BalanceCard(
             ganado = balanceState.ganado,
             gastado = balanceState.gastado,
-            balance = balanceState.balance
+            balance = balanceState.balance,
+            color = balanceState.color
         )
 
         IconButton(
