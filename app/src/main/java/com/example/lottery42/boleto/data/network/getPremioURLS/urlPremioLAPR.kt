@@ -7,7 +7,7 @@ fun urlPremioLAPR(boleto: Boleto): String {
     val idSorteo = boleto.idSorteo
     val combinaciones = boleto.combinaciones
     val reintegro = boleto.reintegro
-    val joker = boleto.joker
+    val joker = if(boleto.joker == "NO") "" else boleto.joker
     val modalidad = "simple"
 
     val combinacionesString = transformList(combinaciones)
