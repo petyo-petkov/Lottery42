@@ -51,9 +51,9 @@ class DatabaseRepoImpl(
                 ganado = "${redondear(ganado)} $euro",
                 gastado = "${redondear(gastado)} $euro",
                 balance = if (balance < 0) {
-                    "- ${redondear(balance)} $euro"
+                    "${redondear(balance)} $euro"
                 } else {
-                    "+ ${redondear(balance)} $euro"
+                    "${redondear(balance)} $euro"
                 },
                 color = if (balance >= 0.0) MiVerde else MiRojo
 
