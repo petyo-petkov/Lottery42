@@ -24,37 +24,32 @@ class ListScreenViewModel(
         getAllBoletos()
     }
 
-    fun startScanning() {
-        viewModelScope.launch(Dispatchers.IO) {
-            scannerRepo.startScanning()
-                .collect { data ->
-                    if (!data.isNullOrBlank()) {
-                        Log.d("RawData", data)
-                        try {
-                            val boleto = crearBoleto(data, networkRepo)
-                            Log.d("Boleto", boleto.toEntity().toString())
-                            databaseRepo.insertBoleto(boleto.toEntity())
-                        } catch (e: Exception) {
-                            Log.d("Error insertar boleto", e.toString())
-                        }
-
-                    }
-                }
-        }
-    }
-
-
     val balance = databaseRepo.getBalance()
-
-
-//    private val _boletoState = MutableStateFlow<Boleto?>(null)
-//    val boletoState: StateFlow<Boleto?> = _boletoState
 
     val boletoState: StateFlow<Boleto?>
         field = MutableStateFlow<Boleto?>(null)
 
     val boletosState: StateFlow<List<Boleto>>
         field = MutableStateFlow<List<Boleto>>(emptyList())
+
+
+    fun startScanning() {
+        viewModelScope.launch(Dispatchers.IO) {
+            scannerRepo.startScanning().collect { data ->
+                if (!data.isNullOrBlank()) {
+                    Log.d("RawData", data)
+                    try {
+                        val boleto = crearBoleto(data, networkRepo)
+                        Log.d("Boleto", boleto.toEntity().toString())
+                        databaseRepo.insertBoleto(boleto.toEntity())
+                    } catch (e: Exception) {
+                        Log.d("Error insertar boleto", e.toString())
+                    }
+
+                }
+            }
+        }
+    }
 
 
     fun getAllBoletos() {
@@ -64,6 +59,7 @@ class ListScreenViewModel(
             }
         }
     }
+
 
     fun ordenarBoletos(order: String = "fecha") {
         viewModelScope.launch(Dispatchers.IO) {
@@ -94,6 +90,4 @@ class ListScreenViewModel(
             databaseRepo.deleteBoletoById(id)
         }
     }
-
 }
-

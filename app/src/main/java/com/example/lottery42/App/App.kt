@@ -57,6 +57,7 @@ fun App() {
                 FAB(
                     onFABClick = {
                         vm.startScanning()
+
                     }
                 )
             }
@@ -76,7 +77,7 @@ fun App() {
                             navigator.navigateTo(pane = ListDetailPaneScaffoldRole.Detail)
                         },
                         onBorrarClick = { vm.deleteAllBoletos() },
-                        boletos = boletos,
+                        listaBoletos = boletos,
                         onOrdenar = { vm.ordenarBoletos(it) }
                     )
                 }
@@ -133,3 +134,7 @@ fun EmptyScreen() {
         )
     }
 }
+
+
+
+
