@@ -4,8 +4,10 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -45,7 +47,6 @@ fun App() {
     val infoState by vmExtra.infoState.collectAsStateWithLifecycle()
     val premioState by vmDetails.premioState.collectAsStateWithLifecycle()
 
-
     Scaffold(
         modifier = Modifier.fillMaxWidth(),
         floatingActionButton = {
@@ -63,8 +64,9 @@ fun App() {
             }
         },
         containerColor = MaterialTheme.colorScheme.background,
+        contentWindowInsets = WindowInsets.safeDrawing
 
-        ) { innerPadding ->
+    ) { innerPadding ->
         NavigableListDetailPaneScaffold(
             modifier = Modifier.padding(innerPadding),
             navigator = navigator,

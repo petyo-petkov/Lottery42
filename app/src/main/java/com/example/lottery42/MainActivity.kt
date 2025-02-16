@@ -13,7 +13,9 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             Lottery42Theme {
+
                 App()
+
             }
         }
     }

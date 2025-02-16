@@ -3,11 +3,7 @@ package com.example.lottery42.boleto.presentation.boleto_list
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropUp
 import androidx.compose.material3.Icon
@@ -40,9 +36,7 @@ fun ListScreen(
 
     Column(
         modifier = Modifier
-            .padding(horizontal = 8.dp)
-        //.statusBarsPadding()
-        ,
+            .padding(horizontal = 8.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp), // 64.dp by default
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -65,21 +59,10 @@ fun ListScreen(
                 tint = Color(0xFFFFE082)
             )
         }
-        LazyColumn(
-            modifier = Modifier,
-        ) {
-            items(listaBoletos, key = { it.id }) { boleto ->
-                BoletoItem(
-                    boleto,
-                    onBoletoClick
-                )
-                Spacer(modifier = Modifier.height(6.dp))
-            }
-            item {
-                Spacer(modifier = Modifier.height(80.dp))
-            }
-
-        }
+        BoletoList(
+            listaBoletos = listaBoletos,
+            onBoletoClick = onBoletoClick
+        )
 
         BottomSheet(
             onDismiss = { showBottomSheet = false },
@@ -87,12 +70,7 @@ fun ListScreen(
             onBorrarClick = onBorrarClick,
             order = onOrdenar
 
-
         )
-
-
     }
-
-
 }
 
