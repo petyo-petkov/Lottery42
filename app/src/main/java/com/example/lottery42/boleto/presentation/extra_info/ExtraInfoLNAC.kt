@@ -56,29 +56,36 @@ fun ExtraInfoLNAC(boleto: Boleto, resultado: ResultadosLoteriaNacional) {
 
         HorizontalDivider(modifier = Modifier, color = Color.White)
 
-        Row(
+        Column(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceEvenly
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            Premio("Primer premio", resultado.primerPremio.decimo)
-            Premio("Segundo premio", resultado.segundoPremio.decimo)
-            if (resultado.tercerosPremios.isNotEmpty()) {
-                Premio("Tercer premio", resultado.tercerosPremios[0].decimo)
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
+                Premio("Primer premio", resultado.primerPremio.decimo)
+                Premio("Segundo premio", resultado.segundoPremio.decimo)
+                if (resultado.tercerosPremios.isNotEmpty()) {
+                    Premio("Tercer premio", resultado.tercerosPremios[0].decimo)
+                }
             }
-        }
-        HorizontalDivider(modifier = Modifier, color = Color.White)
-        if (resultado.cuartosPremios.isNotEmpty()) {
-            Premio(
-                "Cuartos premios",
-                resultado.cuartosPremios.joinToString("   ") { it.decimo }
-            )
-        }
-        HorizontalDivider(modifier = Modifier, color = Color.White)
-        if (resultado.quintosPremios.isNotEmpty()) {
-            Premio(
-                "Quintos premios",
-                resultado.quintosPremios.joinToString("   ") { it.decimo }
-            )
+            if (resultado.cuartosPremios.isNotEmpty() && resultado.quintosPremios.isNotEmpty()) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceEvenly
+                ) {
+                    Premio(
+                        "Cuartos premios",
+                        resultado.cuartosPremios.joinToString("   ") { it.decimo }
+                    )
+                    Premio(
+                        "Quintos premios",
+                        resultado.quintosPremios.joinToString("   ") { it.decimo }
+                    )
+                }
+            }
         }
 
         HorizontalDivider(modifier = Modifier, color = Color.White)

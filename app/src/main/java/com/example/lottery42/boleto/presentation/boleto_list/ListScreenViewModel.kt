@@ -21,7 +21,7 @@ class ListScreenViewModel(
 ) : ViewModel() {
 
     init {
-        getAllBoletos()
+        getAllBoletos("fecha")
     }
 
     val balance = databaseRepo.getBalance()
@@ -52,24 +52,18 @@ class ListScreenViewModel(
     }
 
 
-    fun getAllBoletos() {
+    fun getAllBoletos(order: String) {
         viewModelScope.launch(Dispatchers.IO) {
             databaseRepo.getAllBoletos().collect { boletos ->
-                boletosState.value = boletos
+                boletosState.value = when (order) {
+                    "tipo" -> boletos.sortedBy { it.tipo }
+                    "premio" -> boletos.sortedByDescending { it.premio.toDouble() }
+                    else -> boletos.sortedByDescending { it.fecha }
+                }
             }
         }
     }
 
-
-    fun ordenarBoletos(order: String = "fecha") {
-        viewModelScope.launch(Dispatchers.IO) {
-            boletosState.value = when (order) {
-                "tipo" -> boletosState.value.sortedBy { it.tipo }
-                "premio" -> boletosState.value.sortedByDescending { it.premio.toDouble() }
-                else -> boletosState.value.sortedByDescending { it.fecha }
-            }
-        }
-    }
 
     fun getBoletoByID(id: Long) {
         viewModelScope.launch(Dispatchers.IO) {

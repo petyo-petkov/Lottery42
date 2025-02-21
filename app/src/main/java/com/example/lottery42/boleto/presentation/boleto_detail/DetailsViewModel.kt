@@ -66,7 +66,9 @@ class DetailsViewModel(
     private suspend fun manejarResultadoPremio(rawPremio: String?, boleto: Boleto) {
         val premio = rawPremio?.removeSuffix("€")?.replace(",", ".")
         when (premio) {
-            "0.0" -> premioState.value = PremioState.Success("NO PREMIADO")
+            "0.0" -> {
+                premioState.value = PremioState.Success("NO PREMIADO")
+            }
             "Error Boton" -> premioState.value =
                 PremioState.Error(Exception("Error obtener el premio"))
 

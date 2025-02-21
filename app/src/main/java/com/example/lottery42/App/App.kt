@@ -80,7 +80,7 @@ fun App() {
                         },
                         onBorrarClick = { vm.deleteAllBoletos() },
                         listaBoletos = boletos,
-                        onOrdenar = { vm.ordenarBoletos(it) }
+                        onOrdenar = { vm.getAllBoletos(it) }
                     )
                 }
             },
