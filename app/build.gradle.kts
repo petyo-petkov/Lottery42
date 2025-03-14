@@ -11,12 +11,12 @@ plugins {
 
 android {
     namespace = "com.example.lottery42"
-    compileSdkPreview = "Baklava"
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.example.lottery42"
-        minSdkPreview = "35"
-        targetSdkPreview = "Baklava"
+        minSdk = 35
+        targetSdk = 36
         versionCode = 1
         versionName = "1.0"
 
@@ -99,8 +99,6 @@ dependencies {
     implementation(libs.ktor.client.cio)
     implementation(libs.ktor.network.tls.certificates)
     implementation(libs.ktor.client.serialization)
-
-    implementation("com.squareup.okhttp3:okhttp:4.12.0")
 
 
     testImplementation(libs.junit)

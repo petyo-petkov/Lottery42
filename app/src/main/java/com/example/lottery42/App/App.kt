@@ -19,6 +19,7 @@ import androidx.compose.material3.adaptive.navigation.NavigableListDetailPaneSca
 import androidx.compose.material3.adaptive.navigation.rememberListDetailPaneScaffoldNavigator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -30,6 +31,7 @@ import com.example.lottery42.boleto.presentation.boleto_list.ListScreen
 import com.example.lottery42.boleto.presentation.boleto_list.ListScreenViewModel
 import com.example.lottery42.boleto.presentation.extra_info.ExtraInfoViewModel
 import com.example.lottery42.boleto.presentation.extra_info.ExtraPaneScreen
+import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3AdaptiveApi::class)
@@ -46,6 +48,8 @@ fun App() {
     val boleto by vm.boletoState.collectAsStateWithLifecycle()
     val infoState by vmExtra.infoState.collectAsStateWithLifecycle()
     val premioState by vmDetails.premioState.collectAsStateWithLifecycle()
+
+    val coroutine = rememberCoroutineScope()
 
     Scaffold(
         modifier = Modifier.fillMaxWidth(),
@@ -76,7 +80,9 @@ fun App() {
                         balanceState = balance,
                         onBoletoClick = {
                             vm.getBoletoByID(it.id)
-                            navigator.navigateTo(pane = ListDetailPaneScaffoldRole.Detail)
+                            coroutine.launch {
+                                navigator.navigateTo(pane = ListDetailPaneScaffoldRole.Detail)
+                            }
                         },
                         onBorrarClick = { vm.deleteAllBoletos() },
                         listaBoletos = boletos,
@@ -92,11 +98,15 @@ fun App() {
                             boleto = boleto!!,
                             onDeleteBoleto = {
                                 vm.deleteBoleto(boleto!!.id)
-                                navigator.navigateBack()
+                                coroutine.launch {
+                                    navigator.navigateBack()
+                                }
                             },
                             onExtraInfoClick = {
                                 vmExtra.infoSorteoCelebrado(boleto!!)
-                                navigator.navigateTo(pane = ListDetailPaneScaffoldRole.Extra)
+                                coroutine.launch {
+                                    navigator.navigateTo(pane = ListDetailPaneScaffoldRole.Extra)
+                                }
                             },
                             onComprobarClick = {
                                 vmDetails.getPremio(boleto!!)

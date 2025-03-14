@@ -22,6 +22,7 @@ class ListScreenViewModel(
 
     init {
         getAllBoletos("fecha")
+
     }
 
     val balance = databaseRepo.getBalance()
