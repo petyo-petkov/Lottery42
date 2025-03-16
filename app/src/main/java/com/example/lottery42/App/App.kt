@@ -75,7 +75,11 @@ fun App() {
             modifier = Modifier.padding(innerPadding),
             navigator = navigator,
             listPane = {
-                AnimatedPane {
+                AnimatedPane(
+                    modifier = Modifier,
+                    enterTransition = fadeIn(),
+                    exitTransition = fadeOut()
+                ) {
                     ListScreen(
                         balanceState = balance,
                         onBoletoClick = {
@@ -91,7 +95,11 @@ fun App() {
                 }
             },
             detailPane = {
-                AnimatedPane {
+                AnimatedPane(
+                    modifier = Modifier,
+                    enterTransition = fadeIn(),
+                    exitTransition = fadeOut()
+                ) {
                     if (boleto != null) {
                         DetailScreen(
                             premioState = premioState,
@@ -121,7 +129,11 @@ fun App() {
                 }
             },
             extraPane = {
-                AnimatedPane {
+                AnimatedPane(
+                    modifier = Modifier,
+                    enterTransition = fadeIn(),
+                    exitTransition = fadeOut()
+                ) {
                     ExtraPaneScreen(
                         infoState = infoState,
                         boleto = boleto!!

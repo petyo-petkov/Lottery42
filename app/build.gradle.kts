@@ -71,12 +71,9 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.androidx.material.icons.extended)
 
-
-    implementation(libs.androidx.material3.adaptive.navigation.suite)
     implementation(libs.androidx.adaptive)
-    implementation(libs.androidx.adaptive.layout)
-    implementation(libs.androidx.compose.material3.adaptive.navigation.suite)
-    implementation(libs.androidx.compose.material3.adaptive.navigation)
+    implementation (libs.androidx.adaptive.layout)
+    implementation (libs.androidx.adaptive.navigation)
 
     // Json
     implementation(libs.kotlinx.serialization.json)
