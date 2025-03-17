@@ -3,6 +3,7 @@ package com.example.lottery42.App
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -77,7 +78,7 @@ fun App() {
             listPane = {
                 AnimatedPane(
                     modifier = Modifier,
-                    enterTransition = fadeIn(),
+                    enterTransition = scaleIn(),
                     exitTransition = fadeOut()
                 ) {
                     ListScreen(
@@ -93,11 +94,12 @@ fun App() {
                         onOrdenar = { vm.getAllBoletos(it) }
                     )
                 }
+
             },
             detailPane = {
                 AnimatedPane(
                     modifier = Modifier,
-                    enterTransition = fadeIn(),
+                    enterTransition = scaleIn(),
                     exitTransition = fadeOut()
                 ) {
                     if (boleto != null) {
@@ -131,7 +133,7 @@ fun App() {
             extraPane = {
                 AnimatedPane(
                     modifier = Modifier,
-                    enterTransition = fadeIn(),
+                    enterTransition = scaleIn(),
                     exitTransition = fadeOut()
                 ) {
                     ExtraPaneScreen(
@@ -142,6 +144,7 @@ fun App() {
             },
             defaultBackBehavior = BackNavigationBehavior.PopUntilContentChange,
         )
+
     }
 
 }
