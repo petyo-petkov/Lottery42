@@ -22,7 +22,6 @@ class ListScreenViewModel(
 
     init {
         getAllBoletos("fecha")
-
     }
 
     val balance = databaseRepo.getBalance()
@@ -41,7 +40,7 @@ class ListScreenViewModel(
                     Log.d("RawData", data)
                     try {
                         val boleto = crearBoleto(data, networkRepo)
-                        Log.d("Boleto", boleto.toEntity().toString())
+                        Log.d("Boleto", "$boleto")
                         databaseRepo.insertBoleto(boleto.toEntity())
                     } catch (e: Exception) {
                         Log.d("Error insertar boleto", e.toString())

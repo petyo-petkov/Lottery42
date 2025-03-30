@@ -19,7 +19,7 @@ suspend fun crearBoletoFromQR(data: String, networkRepo: NetworkRepo?): Boleto {
     var joker = ""
     var apuestaMultiple = false
     val combiPosibles: Int
-    val columnas = mutableListOf<String>()
+    val columnas: MutableList<String> = mutableListOf()
     var numeroClaveElGordo: List<String> = emptyList()
     var estrellasEuromillones: List<String> = emptyList()
     var numeroELMillon: List<String> = emptyList()
@@ -68,10 +68,10 @@ suspend fun crearBoletoFromQR(data: String, networkRepo: NetworkRepo?): Boleto {
             //idSorteoBoleto = idSorteoPrimeraParte + "04" + numeroSorteo
             reintegro = info["R"]?.jsonPrimitive?.content ?: ""
             val jokerRaw = info["J"]?.jsonPrimitive?.content ?: ""
-            joker = if (jokerRaw.length == 6) "0".plus(jokerRaw) else jokerRaw
-            columnas.addAll(combinaciones.map {
+            joker = if (jokerRaw.length == 6) "0$jokerRaw" else jokerRaw
+            columnas += combinaciones.map {
                 it.substringAfter("=").chunked(2).joinToString(" ")
-            })
+            }
             val combinacionesJugadas = columnas[0].split(" ").size
             apuestaMultiple = combinacionesJugadas > 6 || combinacionesJugadas == 5
             if (combinacionesJugadas == 5) {
@@ -90,9 +90,9 @@ suspend fun crearBoletoFromQR(data: String, networkRepo: NetworkRepo?): Boleto {
         "BONO" -> {
             //idSorteoBoleto = idSorteoPrimeraParte + "01" + numeroSorteo
             reintegro = info["R"]?.jsonPrimitive?.content ?: ""
-            columnas.addAll(combinaciones.map {
+            columnas += combinaciones.map {
                 it.substringAfter("=").chunked(2).joinToString(" ")
-            })
+            }
             val combinacion = columnas[0].split(" ")
             apuestaMultiple = combinacion.size > 6 || combinacion.size == 5
             if (combinacion.size == 5) {
@@ -109,9 +109,9 @@ suspend fun crearBoletoFromQR(data: String, networkRepo: NetworkRepo?): Boleto {
 
         "ELGR" -> {
             //idSorteoBoleto = idSorteoPrimeraParte + "05" + numeroSorteo
-            columnas.addAll(combinaciones.map {
+            columnas += combinaciones.map {
                 it.substringAfter("=").chunked(2).dropLast(2).joinToString(" ")
-            })
+            }
             numeroClaveElGordo = combinaciones.map {
                 it.substringAfter(":").chunked(2).joinToString(" ")
             }
@@ -129,9 +129,9 @@ suspend fun crearBoletoFromQR(data: String, networkRepo: NetworkRepo?): Boleto {
             //idSorteoBoleto = idSorteoPrimeraParte + "02" + numeroSorteo
             numeroELMillon = data.split(";")[6].substringAfter(",").dropLast(1).split("-")
             lluviaMillones = data.split(";")[7].substringAfter(",").dropLast(1)
-            columnas.addAll(combinaciones.map {
+            columnas += combinaciones.map {
                 it.substringAfter("=").substringBefore(":").chunked(2).joinToString(" ")
-            })
+            }
             estrellasEuromillones = combinaciones.map {
                 it.substringAfter(":").chunked(2).joinToString(" ")
             }
@@ -151,9 +151,9 @@ suspend fun crearBoletoFromQR(data: String, networkRepo: NetworkRepo?): Boleto {
 
         "EDMS" -> {
             //idSorteoBoleto = idSorteoPrimeraParte + "14" + numeroSorteo
-            columnas.addAll(combinaciones.map {
+            columnas += combinaciones.map {
                 it.substringAfter("=").chunked(2).dropLast(2).joinToString(" ")
-            })
+            }
             suenos = combinaciones.map {
                 it.substringAfter(":").chunked(2).joinToString(" ")
             }
@@ -181,7 +181,7 @@ suspend fun crearBoletoFromQR(data: String, networkRepo: NetworkRepo?): Boleto {
         id = idBoleto,
         gameID = gameId,
         fecha = fechaParaGuardar(fecha),
-        precio = precioBoleto.toString(),
+        precio = "$precioBoleto",
         idSorteo = idSorteoBoleto,
         numSorteo = numeroSorteo,
         apuestaMultiple = apuestaMultiple,
