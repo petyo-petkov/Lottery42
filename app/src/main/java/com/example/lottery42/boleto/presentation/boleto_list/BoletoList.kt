@@ -14,7 +14,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Paid
+import androidx.compose.material.icons.filled.ThumbDownOffAlt
+import androidx.compose.material.icons.filled.ThumbUpOffAlt
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
@@ -37,6 +38,8 @@ import com.example.lottery42.ui.theme.ElGodo
 import com.example.lottery42.ui.theme.EuroDreams
 import com.example.lottery42.ui.theme.EuroMillones
 import com.example.lottery42.ui.theme.LoteriaNacional
+import com.example.lottery42.ui.theme.MiRojo
+import com.example.lottery42.ui.theme.MiVerde
 import com.example.lottery42.ui.theme.Primitiva
 import java.lang.ref.WeakReference
 import kotlin.text.Typography.euro
@@ -109,18 +112,26 @@ fun BoletoList(
 
                 },
                 trailingContent = {
-                    if (boleto.premio != "0.0") {
-                        Column(
-                            modifier = Modifier,
-                            verticalArrangement = Arrangement.spacedBy(8.dp),
-                        ) {
-                            Icon(
-                                imageVector = Icons.Default.Paid,
-                                contentDescription = null,
-                                tint = Color(0xFF4CAF50)
-                            )
-                            Text("${boleto.premio} $euro ")
-                        }
+                    when {
+                        boleto.premio > "0.0" ->
+                            Column(
+                                modifier = Modifier,
+                                verticalArrangement = Arrangement.spacedBy(8.dp),
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.ThumbUpOffAlt,
+                                    contentDescription = null,
+                                    tint = MiVerde
+                                )
+                                Text("${boleto.premio} $euro ")
+                            }
+
+                        boleto.premio == "0.0" -> Icon(
+                            imageVector = Icons.Default.ThumbDownOffAlt,
+                            contentDescription = null,
+                            modifier = Modifier.padding(16.dp),
+                            tint = MiRojo
+                        )
                     }
                 },
                 colors = ListItemDefaults.colors(

@@ -185,7 +185,7 @@ suspend fun crearBoletoFromQR(data: String, networkRepo: NetworkRepo?): Boleto {
         idSorteo = idSorteoBoleto,
         numSorteo = numeroSorteo,
         apuestaMultiple = apuestaMultiple,
-        premio = "0.0",
+        premio = "-0.0",
         apertura = aperturaSorteo,
         cierre = cierreSorteo,
         tipo = tipo,

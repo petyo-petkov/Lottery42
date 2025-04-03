@@ -1,5 +1,6 @@
 package com.example.lottery42.boleto.data
 
+import android.util.Log
 import com.example.lottery42.boleto.domain.ScannerRepo
 import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanner
@@ -8,10 +9,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.launch
 
-class ScannerRepoImpl(
-    val scanner: GmsBarcodeScanner,
-
-    ) : ScannerRepo {
+class ScannerRepoImpl(private val scanner: GmsBarcodeScanner) : ScannerRepo {
     override fun startScanning(): Flow<String?> {
         return callbackFlow {
             scanner.startScan()
@@ -20,7 +18,7 @@ class ScannerRepoImpl(
                         send(getTypes(barcode))
                     }
                 }.addOnFailureListener {
-                    it.printStackTrace()
+                    Log.e("ScannerRepo", it.message.toString())
                 }
             awaitClose { }
         }

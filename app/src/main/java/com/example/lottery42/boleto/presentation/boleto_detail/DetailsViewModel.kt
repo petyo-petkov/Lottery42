@@ -67,6 +67,7 @@ class DetailsViewModel(
         val premio = rawPremio?.removeSuffix("€")?.replace(",", ".")
         when (premio) {
             "0.0" -> {
+                databaseRepo.updateBoleto(boleto.copy(premio = premio).toEntity())
                 premioState.value = PremioState.Success("NO PREMIADO")
             }
             "Error Boton" -> premioState.value =

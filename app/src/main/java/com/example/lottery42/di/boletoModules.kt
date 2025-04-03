@@ -1,7 +1,6 @@
 package com.example.lottery42.di
 
 import android.app.Application
-import android.content.Context
 import app.cash.sqldelight.db.SqlDriver
 import app.cash.sqldelight.driver.android.AndroidSqliteDriver
 import com.example.lottery42.boleto.data.ScannerRepoImpl
@@ -15,34 +14,30 @@ import com.example.lottery42.boleto.presentation.boleto_list.ListScreenViewModel
 import com.example.lottery42.boleto.presentation.extra_info.ExtraInfoViewModel
 import com.example.sqldelight.AppDatabase
 import com.google.mlkit.vision.barcode.common.Barcode
+import com.google.mlkit.vision.codescanner.GmsBarcodeScanner
 import com.google.mlkit.vision.codescanner.GmsBarcodeScannerOptions
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanning
-import io.ktor.client.HttpClient
+import org.koin.core.module.Module
 import org.koin.core.module.dsl.singleOf
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.bind
 import org.koin.dsl.module
 
-val scannerModule = module {
+val scannerModule: Module = module {
 
-    single<Context> { get<Application>().applicationContext }
-
-    single {
-        GmsBarcodeScannerOptions.Builder()
-            .setBarcodeFormats(
-                Barcode.FORMAT_QR_CODE,
-                Barcode.FORMAT_CODE_128
-            )
-            .build()
+    single<GmsBarcodeScanner> {
+        val app: Application = get()
+        val options: GmsBarcodeScannerOptions =
+            GmsBarcodeScannerOptions.Builder()
+                .setBarcodeFormats(
+                    Barcode.FORMAT_QR_CODE,
+                    Barcode.FORMAT_CODE_128
+                )
+                .build()
+        GmsBarcodeScanning.getClient(app.applicationContext, options)
     }
 
-    single {
-        val context: Context = get()
-        val options: GmsBarcodeScannerOptions = get()
-        GmsBarcodeScanning.getClient(context, options)
-    }
-
-    singleOf(::ScannerRepoImpl).bind<ScannerRepo>()
+    singleOf(::ScannerRepoImpl) bind ScannerRepo::class
 
 }
 
@@ -63,13 +58,13 @@ val databaseModule = module {
         get<AppDatabase>().boletoQueries
     }
 
-    singleOf(::DatabaseRepoImpl).bind<DatabaseRepo>()
+    singleOf(::DatabaseRepoImpl) bind DatabaseRepo::class
 
 }
 
 val networkModule = module {
 
-    singleOf<HttpClient>(::HttpClient)
+    //singleOf<HttpClient>(::HttpClient)
 
     singleOf(::NetworkRepoImpl).bind<NetworkRepo>()
 

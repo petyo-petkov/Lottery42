@@ -49,7 +49,6 @@ fun DetailScreen(
     var showDialogoPremio by rememberSaveable { mutableStateOf(false) }
     val smallStyle = MaterialTheme.typography.headlineSmall
 
-    val boleto = boleto
     val premio = when (premioState) {
         is DetailsViewModel.PremioState.Success -> premioState.premio
         is DetailsViewModel.PremioState.Error -> "Error obtener el premio"
@@ -119,8 +118,11 @@ fun DetailScreen(
                     style = smallStyle
                 )
                 Text(
-                    text = if (boleto.premio == "0.0") "No Premiado" else
-                        "Premiado con: ${boleto.premio} $euro",
+                    text = when (boleto.premio) {
+                        "-0.0" -> "Sin Comprobar"
+                        "0.0" -> "No Premiado"
+                        else -> "Premiado con: ${boleto.premio} $euro"
+                    },
                     style = smallStyle
                 )
                 Divisor()
