@@ -66,7 +66,7 @@ val networkModule = module {
 
     //singleOf<HttpClient>(::HttpClient)
 
-    singleOf(::NetworkRepoImpl).bind<NetworkRepo>()
+    singleOf(::NetworkRepoImpl) bind NetworkRepo::class
 
 }
 

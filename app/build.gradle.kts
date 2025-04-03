@@ -96,6 +96,11 @@ dependencies {
     implementation(libs.ktor.client.cio)
     implementation(libs.ktor.network.tls.certificates)
     implementation(libs.ktor.client.serialization)
+    implementation(libs.ktor.client.content.negotiation)
+    implementation(libs.ktor.serialization.kotlinx.json)
+
+    // jsoup para parsing HTML
+    implementation("org.jsoup:jsoup:1.19.1")
 
 
     testImplementation(libs.junit)

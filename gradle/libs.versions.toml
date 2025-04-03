@@ -47,11 +47,14 @@ koin-bom = { module = "io.insert-koin:koin-bom", version.ref = "koinAndroid" }
 koin-core = { module = "io.insert-koin:koin-core" }
 
 ktor-client-cio = { module = "io.ktor:ktor-client-cio", version.ref = "ktor_version" }
+ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor_version" }
 ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor_version" }
 ktor-client-serialization = { module = "io.ktor:ktor-client-serialization", version.ref = "ktor_version" }
+ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor_version" }
 ktor-network-tls-certificates = { module = "io.ktor:ktor-network-tls-certificates", version.ref = "ktor_version" }
 
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
+
 
 play-services-code-scanner = { module = "com.google.android.gms:play-services-code-scanner", version.ref = "playServicesCodeScanner" }
 
