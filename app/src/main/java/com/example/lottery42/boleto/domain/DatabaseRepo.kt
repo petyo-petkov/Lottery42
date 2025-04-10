@@ -11,6 +11,8 @@ interface DatabaseRepo {
 
     fun getAllBoletos(): Flow<List<Boleto>>
 
+    fun getBoletosByDateRange(startDate: String, endDate: String): Flow<List<Boleto>>
+
     fun getBalance(): Flow<BalanceState>
 
     suspend fun insertBoleto(boleto: BoletoEntity)

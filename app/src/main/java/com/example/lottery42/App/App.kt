@@ -19,6 +19,7 @@ import androidx.compose.material3.adaptive.navigation.BackNavigationBehavior
 import androidx.compose.material3.adaptive.navigation.NavigableListDetailPaneScaffold
 import androidx.compose.material3.adaptive.navigation.rememberListDetailPaneScaffoldNavigator
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -51,6 +52,8 @@ fun App() {
     val premioState by vmDetails.premioState.collectAsStateWithLifecycle()
 
     val coroutine = rememberCoroutineScope()
+
+    LaunchedEffect(boletos.size) { boletos }
 
     Scaffold(
         modifier = Modifier.fillMaxWidth(),
@@ -148,6 +151,7 @@ fun App() {
     }
 
 }
+
 
 @Composable
 fun EmptyScreen() {

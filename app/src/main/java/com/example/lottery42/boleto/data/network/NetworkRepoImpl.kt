@@ -75,7 +75,7 @@ class NetworkRepoImpl(
                 Log.i("proximos", proximos.toString())
                 Log.i("ultimos", ultimos.toString())
 
-                var jsonObject = proximos ?: ultimos ?:
+                val jsonObject = proximos ?: ultimos ?:
                 async { findSorteo(urlUltimosTresMeses, gameId, numSorteo) }.await()
 
                 getMissingInfoL(jsonObject!!)

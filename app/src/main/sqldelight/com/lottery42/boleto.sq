@@ -29,11 +29,17 @@ VALUES ?;
 getAllBoletos:
 SELECT *
 FROM BoletoEntity
-ORDER BY fecha DESC;
+ORDER BY fecha;
 
 getBoletoById:
 SELECT *
 FROM BoletoEntity WHERE id = ?;
+
+getBoletosByDateRange:
+SELECT *
+FROM BoletoEntity
+WHERE fecha BETWEEN ? AND ?
+ORDER BY fecha;
 
 
 updateBoleto:

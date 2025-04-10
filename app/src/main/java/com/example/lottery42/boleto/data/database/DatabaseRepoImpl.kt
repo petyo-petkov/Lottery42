@@ -41,6 +41,15 @@ class DatabaseRepoImpl(
 
     }
 
+    override fun getBoletosByDateRange(startDate: String, endDate: String): Flow<List<Boleto>> {
+        return queries.getBoletosByDateRange(startDate, endDate)
+            .asFlow()
+            .mapToList(context)
+            .map { value ->
+                value.map { it.toDomain() }
+            }
+    }
+
 
     override fun getBalance(): Flow<BalanceState> {
         return getAllBoletos().map { boletos ->

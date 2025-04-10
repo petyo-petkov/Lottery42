@@ -26,7 +26,7 @@ suspend fun crearBoletoFromBarcode(data: String, networkRepo: NetworkRepo?): Bol
         idSorteo = infoSorteo?.idSorteo ?: "",
         numSorteo = numeroSorteo,
         apuestaMultiple = false,
-        premio = "0.0",
+        premio = "-0.0",
         apertura = infoSorteo?.apertura ?: "",
         cierre = infoSorteo?.cierre ?: "",
         tipo = tipo,

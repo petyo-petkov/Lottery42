@@ -58,7 +58,7 @@ class ListScreenViewModel(
                 boletosState.value = when (order) {
                     "tipo" -> boletos.sortedBy { it.tipo }
                     "premio" -> boletos.sortedByDescending { it.premio.toDouble() }
-                    else -> boletos.sortedByDescending { it.fecha }
+                    else -> boletos.sortedByDescending { it.fecha }.take(20)
                 }
             }
         }
