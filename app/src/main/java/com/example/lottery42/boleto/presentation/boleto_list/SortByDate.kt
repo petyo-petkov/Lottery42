@@ -16,7 +16,7 @@ import io.ktor.websocket.Frame
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RangoDeFechas(
+fun SortByDate(
     showDatePicker: Boolean,
     onDateRangeSelected: (Pair<Long?, Long?>) -> Unit,
     onDismiss: () -> Unit
