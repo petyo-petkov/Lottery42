@@ -13,6 +13,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import kotlin.time.ExperimentalTime
+import kotlin.time.Instant
 
 class ListScreenViewModel(
     private val databaseRepo: DatabaseRepo,
@@ -24,13 +26,14 @@ class ListScreenViewModel(
         getAllBoletos("fecha")
     }
 
-    val balance = databaseRepo.getBalance()
-
     val boletoState: StateFlow<Boleto?>
         field = MutableStateFlow<Boleto?>(null)
 
     val boletosState: StateFlow<List<Boleto>>
         field = MutableStateFlow<List<Boleto>>(emptyList())
+
+    val balance = databaseRepo.getBalance(boletosState)
+
 
 
     fun startScanning() {
@@ -58,17 +61,30 @@ class ListScreenViewModel(
                 boletosState.value = when (order) {
                     "tipo" -> boletos.sortedBy { it.tipo }
                     "premio" -> boletos.sortedByDescending { it.premio.toDouble() }
-                    else -> boletos.sortedByDescending { it.fecha }.take(20)
+                    else -> boletos.sortedByDescending { it.fecha }
                 }
             }
         }
     }
 
 
+
+
     fun getBoletoByID(id: Long) {
         viewModelScope.launch(Dispatchers.IO) {
             databaseRepo.getBoletoByID(id).collect { boleto ->
                 boletoState.value = boleto
+            }
+        }
+    }
+
+    @OptIn(ExperimentalTime::class)
+    fun sortBoletosByDate(startDate: Long, endDate: Long) {
+        val start = Instant.fromEpochMilliseconds(startDate).toString()
+        val end = Instant.fromEpochMilliseconds(endDate).toString()
+        viewModelScope.launch(Dispatchers.IO) {
+            databaseRepo.getBoletosByDateRange(start, end).collect { boletos ->
+                boletosState.value = boletos.sortedByDescending { it.fecha }
             }
         }
     }

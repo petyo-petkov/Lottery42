@@ -94,7 +94,14 @@ fun App() {
                         },
                         onBorrarClick = { vm.deleteAllBoletos() },
                         listaBoletos = boletos,
-                        onOrdenar = { vm.getAllBoletos(it) }
+                        onOrdenar = { vm.getAllBoletos(it) },
+                        onDateRangeSelected = {
+                            vm.sortBoletosByDate(
+                                startDate = it.first!!,
+                                endDate = it.second!!
+                            )
+                        }
+
                     )
                 }
 
@@ -149,7 +156,6 @@ fun App() {
         )
 
     }
-
 }
 
 

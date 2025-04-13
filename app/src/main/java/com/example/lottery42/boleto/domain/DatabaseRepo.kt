@@ -13,7 +13,7 @@ interface DatabaseRepo {
 
     fun getBoletosByDateRange(startDate: String, endDate: String): Flow<List<Boleto>>
 
-    fun getBalance(): Flow<BalanceState>
+    fun getBalance(boletos: Flow<List<Boleto>>): Flow<BalanceState>
 
     suspend fun insertBoleto(boleto: BoletoEntity)
 

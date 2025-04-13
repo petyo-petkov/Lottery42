@@ -36,14 +36,17 @@ fun SortByDate(
                             )
                         )
                         onDismiss()
+
                     }
                 ) {
                     Text("OK")
                 }
             },
             dismissButton = {
-                TextButton(onClick = onDismiss) {
-                    Frame.Text("Cancel")
+                TextButton(
+                    onClick = { onDismiss() }
+                ) {
+                    Text("Cancel")
                 }
             }
         ) {

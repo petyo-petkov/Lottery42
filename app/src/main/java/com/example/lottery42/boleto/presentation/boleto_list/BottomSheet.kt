@@ -32,10 +32,14 @@ fun BottomSheet(
     onBorrarClick: () -> Unit,
     onDismiss: () -> Unit,
     showBottomSheet: Boolean,
-    order: (String) -> Unit
+    order: (String) -> Unit,
+    onDateRangeSelected: (Pair<Long?, Long?>) -> Unit
+
 ) {
     var showDialogoBorrar by remember { mutableStateOf(false) }
     val sheetState = rememberModalBottomSheetState()
+
+   var showDatePicker by remember { mutableStateOf(false) }
 
     // Segmented button
     var selectedIndex by remember { mutableIntStateOf(0) }
@@ -59,14 +63,20 @@ fun BottomSheet(
                             selectedIndex = index
                             when (selectedIndex) {
 
-                                0 -> { order("fecha") }
+                                0 -> {
+                                    order("fecha")
+                                }
 
-                                1 -> { order("tipo") }
+                                1 -> {
+                                    order("tipo")
+                                }
 
-                                2 -> { order("premio") }
+                                2 -> {
+                                    order("premio")
+                                }
 
                                 3 -> {
-
+                                    showDatePicker = true
                                 }
 
                             }
@@ -120,5 +130,11 @@ fun BottomSheet(
         },
         show = showDialogoBorrar,
         mensaje = "Borrar todos los boletos?"
+    )
+
+    SortByDate(
+        showDatePicker = showDatePicker,
+        onDateRangeSelected = { onDateRangeSelected(it) },
+        onDismiss = { showDatePicker = false }
     )
 }

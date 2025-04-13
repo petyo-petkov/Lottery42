@@ -51,8 +51,9 @@ class DatabaseRepoImpl(
     }
 
 
-    override fun getBalance(): Flow<BalanceState> {
-        return getAllBoletos().map { boletos ->
+    override fun getBalance(boletos: Flow<List<Boleto>>): Flow<BalanceState> {
+        // return getAllBoletos().map { boletos ->
+        return boletos.map { boletos ->
             val ganado = boletos.sumOf { it.premio.toDouble() }
             val gastado = boletos.sumOf { it.precio.toDouble() }
             val balance = ganado - gastado
