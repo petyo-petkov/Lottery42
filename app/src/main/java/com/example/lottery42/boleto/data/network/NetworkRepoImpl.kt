@@ -23,9 +23,7 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.jsonPrimitive
 
-class NetworkRepoImpl(
-    val context: Context,
-) : NetworkRepo {
+class NetworkRepoImpl(private val context: Context) : NetworkRepo {
 
     private suspend inline fun <reified T> getInfoFromURL(url: String): List<T> {
         val json = Json {
@@ -75,8 +73,13 @@ class NetworkRepoImpl(
                 Log.i("proximos", proximos.toString())
                 Log.i("ultimos", ultimos.toString())
 
-                val jsonObject = proximos ?: ultimos ?:
-                async { findSorteo(urlUltimosTresMeses, gameId, numSorteo) }.await()
+                val jsonObject = proximos ?: ultimos ?: async {
+                    findSorteo(
+                        urlUltimosTresMeses,
+                        gameId,
+                        numSorteo
+                    )
+                }.await()
 
                 getMissingInfoL(jsonObject!!)
             }
