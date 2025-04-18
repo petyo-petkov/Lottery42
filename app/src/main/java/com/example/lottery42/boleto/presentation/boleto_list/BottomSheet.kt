@@ -39,7 +39,7 @@ fun BottomSheet(
     var showDialogoBorrar by remember { mutableStateOf(false) }
     val sheetState = rememberModalBottomSheetState()
 
-   var showDatePicker by remember { mutableStateOf(false) }
+    var showDatePicker by remember { mutableStateOf(false) }
 
     // Segmented button
     var selectedIndex by remember { mutableIntStateOf(0) }
@@ -80,11 +80,12 @@ fun BottomSheet(
                                 }
 
                             }
+                            onDismiss()
 
                         },
                         selected = index == selectedIndex,
                         colors = SegmentedButtonDefaults.colors(
-                            activeContainerColor = MaterialTheme.colorScheme.inversePrimary
+                            activeContainerColor = MaterialTheme.colorScheme.tertiaryContainer
                         )
                     ) {
                         Text(label)
@@ -106,13 +107,13 @@ fun BottomSheet(
                     modifier = Modifier
                         .padding(6.dp),
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.error,
+                        containerColor = MaterialTheme.colorScheme.errorContainer,
                     )
 
                 ) {
                     Text(
                         text = "Borrar todo",
-                        color = MaterialTheme.colorScheme.onError
+                        color = MaterialTheme.colorScheme.onErrorContainer
                     )
 
                 }
@@ -134,7 +135,9 @@ fun BottomSheet(
 
     SortByDate(
         showDatePicker = showDatePicker,
-        onDateRangeSelected = { onDateRangeSelected(it) },
+        onDateRangeSelected = {
+            onDateRangeSelected(it)
+        },
         onDismiss = { showDatePicker = false }
     )
 }

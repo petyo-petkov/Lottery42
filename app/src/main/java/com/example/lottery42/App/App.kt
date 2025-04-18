@@ -53,7 +53,6 @@ fun App() {
 
     val coroutine = rememberCoroutineScope()
 
-    // launched
     LaunchedEffect(boletos.size) { boletos }
 
     Scaffold(
