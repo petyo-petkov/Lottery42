@@ -97,8 +97,8 @@ fun App() {
                         onOrdenar = { vm.getAllBoletos(it) },
                         onDateRangeSelected = {
                             vm.sortBoletosByDate(
-                                startDate = it.first!!,
-                                endDate = it.second!!
+                                startDate = it.first ?: 0,
+                                endDate = it.second ?: 0
                             )
                         }
 

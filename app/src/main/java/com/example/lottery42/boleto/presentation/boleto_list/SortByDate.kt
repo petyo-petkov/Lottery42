@@ -1,28 +1,24 @@
 package com.example.lottery42.boleto.presentation.boleto_list
 
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.DateRangePicker
+import androidx.compose.material3.DateRangePickerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.rememberDateRangePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import io.ktor.websocket.Frame
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SortByDate(
     showDatePicker: Boolean,
     onDateRangeSelected: (Pair<Long?, Long?>) -> Unit,
+    dateRangePickerState: DateRangePickerState,
     onDismiss: () -> Unit
 ) {
-    val dateRangePickerState = rememberDateRangePickerState()
-
     if (showDatePicker) {
         DatePickerDialog(
             onDismissRequest = onDismiss,
@@ -36,7 +32,6 @@ fun SortByDate(
                             )
                         )
                         onDismiss()
-
                     }
                 ) {
                     Text("OK")
@@ -46,23 +41,22 @@ fun SortByDate(
                 TextButton(
                     onClick = { onDismiss() }
                 ) {
-                    Text("Cancel")
+                    Text("Cancelar")
                 }
             }
         ) {
             DateRangePicker(
                 state = dateRangePickerState,
+                modifier = Modifier.weight(1f),
                 title = {
                     Text(
-                        text = "Select date range"
+                        text = "Select date range",
+                        modifier = Modifier.padding(16.dp)
                     )
                 },
                 showModeToggle = false,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(500.dp)
-                    .padding(16.dp)
-            )
+
+                )
         }
     }
 }

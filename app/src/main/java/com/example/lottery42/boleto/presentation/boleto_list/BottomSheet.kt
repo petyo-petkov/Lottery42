@@ -14,6 +14,7 @@ import androidx.compose.material3.SegmentedButton
 import androidx.compose.material3.SegmentedButtonDefaults
 import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberDateRangePickerState
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -40,6 +41,7 @@ fun BottomSheet(
     val sheetState = rememberModalBottomSheetState()
 
     var showDatePicker by remember { mutableStateOf(false) }
+    val dateRangePickerState = rememberDateRangePickerState()
 
     // Segmented button
     var selectedIndex by remember { mutableIntStateOf(0) }
@@ -138,6 +140,10 @@ fun BottomSheet(
         onDateRangeSelected = {
             onDateRangeSelected(it)
         },
-        onDismiss = { showDatePicker = false }
+        dateRangePickerState = dateRangePickerState,
+        onDismiss = {
+            dateRangePickerState.setSelection(null, null)
+            showDatePicker = false
+        }
     )
 }

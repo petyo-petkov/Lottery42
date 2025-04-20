@@ -32,6 +32,7 @@ class ListScreenViewModel(
     val boletosState: StateFlow<List<Boleto>>
         field = MutableStateFlow<List<Boleto>>(emptyList())
 
+
     val balance = databaseRepo.getBalance(boletosState)
 
 
@@ -58,9 +59,10 @@ class ListScreenViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             databaseRepo.getAllBoletos().collect { boletos ->
                 boletosState.value = when (order) {
+                    "fecha" -> boletos.sortedByDescending { it.fecha }
                     "tipo" -> boletos.sortedBy { it.tipo }
                     "premio" -> boletos.sortedByDescending { it.premio.toDouble() }
-                    else -> boletos.sortedByDescending { it.fecha }
+                    else -> boletos
                 }
             }
         }
@@ -83,6 +85,7 @@ class ListScreenViewModel(
             databaseRepo.getBoletosByDateRange(start, end).collect { boletos ->
                 boletosState.value = boletos.sortedByDescending { it.fecha }
             }
+
         }
     }
 
