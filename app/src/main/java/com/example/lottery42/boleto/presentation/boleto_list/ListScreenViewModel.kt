@@ -35,7 +35,6 @@ class ListScreenViewModel(
 
     val balance = databaseRepo.getBalance(boletosState)
 
-
     fun startScanning() {
         viewModelScope.launch(Dispatchers.IO) {
             scannerRepo.startScanning().collect { data ->
@@ -54,7 +53,6 @@ class ListScreenViewModel(
         }
     }
 
-
     fun getAllBoletos(order: String) {
         viewModelScope.launch(Dispatchers.IO) {
             databaseRepo.getAllBoletos().collect { boletos ->
@@ -67,7 +65,6 @@ class ListScreenViewModel(
             }
         }
     }
-
 
     fun getBoletoByID(id: Long) {
         viewModelScope.launch(Dispatchers.IO) {
