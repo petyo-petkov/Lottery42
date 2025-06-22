@@ -180,7 +180,7 @@ fun Escrutionio(escrutinio: List<Escrutinio>) {
             Text(text = "Ganadores:", style = styleMedium)
             escrutinio.forEach { escrutinioItem ->
                 Text(
-                    escrutinioItem.ganadores,
+                    escrutinioItem.ganadores.toString(),
                     style = styleSmall
                 )
             }

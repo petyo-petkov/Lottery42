@@ -25,7 +25,10 @@ import com.example.lottery42.boleto.data.network.models.loteriaNacional.resultad
 import com.example.lottery42.boleto.data.toFormattedDate
 
 @Composable
-fun ExtraInfoLNAC(boleto: Boleto, resultado: ResultadosLoteriaNacional) {
+fun ExtraInfoLNAC(
+    boleto: Boleto,
+    resultado: ResultadosLoteriaNacional
+) {
 
     Column(
         modifier = Modifier.fillMaxSize(),

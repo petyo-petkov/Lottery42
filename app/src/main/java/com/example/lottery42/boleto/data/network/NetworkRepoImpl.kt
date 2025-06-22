@@ -29,9 +29,15 @@ class NetworkRepoImpl(private val context: Context) : NetworkRepo {
         val json = Json {
             coerceInputValues = true
             ignoreUnknownKeys = true
+            isLenient = true
+            allowSpecialFloatingPointValues = true
+            prettyPrint = true
+            useArrayPolymorphism = true
+            allowStructuredMapKeys = true
         }
         try {
             val jsonString = fetchData(context, url, ::getInfo)
+            Log.i("JSON", jsonString)
             return json.decodeFromString(jsonString)
 
         } catch (e: IOException) {
