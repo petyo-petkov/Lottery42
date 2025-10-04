@@ -62,10 +62,12 @@ fun ExtraInfo(
 
                 Text("Combinación ganadora:", style = style)
 
-                Text(
-                    text = resultado.combinacion,
-                    style = style
-                )
+                resultado.combinacion?.let {
+                    Text(
+                        text = it,
+                        style = style
+                    )
+                }
 
                 Divisor()
 

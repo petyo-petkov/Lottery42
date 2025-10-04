@@ -25,7 +25,7 @@ data class ResultadosLoteriaNacional(
     val fondo_bote: String,
     val id_sorteo: String,
     val lugar: String,
-    val managedBySync: String,
+    val managedBySync: String = "",
     val modelDraw: Int,
     val mostrarConsignacion: Boolean,
     val mostrarVentas: Boolean,

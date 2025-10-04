@@ -2,6 +2,7 @@ package com.example.lottery42.boleto.data.network
 
 import android.content.Context
 import android.util.Log
+
 import com.example.lottery42.boleto.data.database.Boleto
 import com.example.lottery42.boleto.data.network.getPremioURLS.urlPremioBONO
 import com.example.lottery42.boleto.data.network.getPremioURLS.urlPremioEDMS
@@ -137,6 +138,7 @@ class NetworkRepoImpl(private val context: Context) : NetworkRepo {
 
     override suspend fun getPremioLNAC(boleto: Boleto): String {
         val urlLNAC = urlPremioLNACPorNumero(boleto.numeroLoteria!!, boleto.idSorteo)
+        if (urlLNAC.isEmpty()) return ("0.0")
         return (getInfoFromURL<ResultadoPorNumeroLoteria>(urlLNAC)[0]
             .premioEnCentimos / 100).toDouble().toString()
 
@@ -166,7 +168,8 @@ class NetworkRepoImpl(private val context: Context) : NetworkRepo {
     private fun urlExtraInfo(boleto: Boleto): String {
         val gameId = boleto.gameID
         val fecha = boleto.fecha.replace("-", "")
-        return urlResultadosPorFechas(gameId, fecha, fecha)
+        val urlPorFechas = urlResultadosPorFechas(gameId, fecha, fecha)
+        return urlPorFechas
     }
 }
 

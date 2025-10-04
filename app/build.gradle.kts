@@ -3,8 +3,8 @@ import org.gradle.api.JavaVersion.VERSION_11
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.sqldelight)
 
 }
@@ -33,11 +33,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = VERSION_11
-        targetCompatibility = VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = "17"
     }
     buildFeatures {
         compose = true
@@ -101,7 +101,8 @@ dependencies {
     implementation(libs.ktor.serialization.kotlinx.json)
 
     // jsoup para parsing HTML
-    implementation("org.jsoup:jsoup:1.19.1")
+    implementation("org.jsoup:jsoup:1.21.2")
+    implementation(libs.androidx.media3.common.ktx)
 
 
     testImplementation(libs.junit)
