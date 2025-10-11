@@ -1,10 +1,8 @@
 package com.example.lottery42.boleto.presentation.extra_info
 
-import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.LoadingIndicator
 import androidx.compose.material3.LoadingIndicatorDefaults
@@ -36,6 +34,7 @@ fun ExtraPaneScreen(
                     is ResultadosLoteriaNacional -> {
                         ExtraInfoLNAC(boleto = boleto, resultado = info)
                     }
+
                     is LotteryModel -> {
                         ExtraInfo(boleto = boleto, resultado = info)
                     }
@@ -78,6 +77,6 @@ fun LoadingInfo() {
             color = Color(0xFFFFE082),
             polygons = LoadingIndicatorDefaults.DeterminateIndicatorPolygons
 
-            )
+        )
     }
 }

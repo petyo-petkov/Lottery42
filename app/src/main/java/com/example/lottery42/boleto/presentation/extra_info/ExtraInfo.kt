@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -31,7 +33,7 @@ fun ExtraInfo(
     val style = MaterialTheme.typography.titleMedium
 
     Column(
-        modifier = Modifier,
+        modifier = Modifier.verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.spacedBy(4.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -49,104 +51,103 @@ fun ExtraInfo(
 
         Divisor()
 
-        LazyColumn(
+        Column(
             modifier = Modifier,
             horizontalAlignment = Alignment.CenterHorizontally,
 
             ) {
-            item {
-                Text("Mis combinaciones:", style = style)
-                DetallesBoleto(boleto, style = style)
 
-                Divisor()
+            Text("Mis combinaciones:", style = style)
+            DetallesBoleto(boleto, style = style)
 
-                Text("Combinación ganadora:", style = style)
+            Divisor()
 
-                resultado.combinacion?.let {
-                    Text(
-                        text = it,
-                        style = style
-                    )
-                }
+            Text("Combinación ganadora:", style = style)
 
-                Divisor()
+            resultado.combinacion?.let {
+                Text(
+                    text = it,
+                    style = style
+                )
+            }
 
-                Column(
-                    modifier = Modifier,
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.spacedBy(4.dp)
-                ) {
-                    when (boleto.gameID) {
+            Divisor()
 
-                        "LAPR" -> {
+            Column(
+                modifier = Modifier,
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(4.dp)
+            ) {
+                when (boleto.gameID) {
 
-                            Text(
-                                "Joker ganador: ${resultado.joker?.combinacion}",
-                                style = style
-                            )
+                    "LAPR" -> {
 
-                            Divisor()
+                        Text(
+                            "Joker ganador: ${resultado.joker?.combinacion}",
+                            style = style
+                        )
 
-                            Escrutionio(
-                                resultado.escrutinio,
-                            )
+                        Divisor()
 
-                            Divisor()
+                        Escrutionio(
+                            resultado.escrutinio,
+                        )
 
-                            Text("Escrutinio Joker:", style = style)
+                        Divisor()
 
-                            EscrutinioJoker(resultado.escrutinioJoker!!)
+                        Text("Escrutinio Joker:", style = style)
 
-                        }
-
-                        "BONO" -> {
-                            Escrutionio(
-                                resultado.escrutinio,
-                            )
-                        }
-
-                        "EDMS" -> {
-                            Escrutionio(
-                                resultado.escrutinio,
-                            )
-                        }
-
-                        "EMIL" -> {
-
-                            Text(
-                                "Numero millon ganador: ${resultado.millon?.combinacion}",
-                                style = style
-                            )
-
-                            Divisor()
-
-                            Escrutionio(
-                                resultado.escrutinio
-                            )
-
-                            if (resultado.lluvia != null) {
-
-                                Divisor()
-
-                                Text(
-                                    "Lluvia de millones:",
-                                    style = style
-                                )
-
-                                Lluvia(resultado.lluvia)
-                            }
-                        }
-
-                        "ELGR" -> {
-                            Escrutionio(
-                                resultado.escrutinio
-                            )
-                        }
+                        EscrutinioJoker(resultado.escrutinioJoker!!)
 
                     }
-                }
 
+                    "BONO" -> {
+                        Escrutionio(
+                            resultado.escrutinio,
+                        )
+                    }
+
+                    "EDMS" -> {
+                        Escrutionio(
+                            resultado.escrutinio,
+                        )
+                    }
+
+                    "EMIL" -> {
+
+                        Text(
+                            "Numero millon ganador: ${resultado.millon?.combinacion}",
+                            style = style
+                        )
+
+                        Divisor()
+
+                        Escrutionio(
+                            resultado.escrutinio
+                        )
+
+                        if (resultado.lluvia != null) {
+
+                            Divisor()
+
+                            Text(
+                                "Lluvia de millones:",
+                                style = style
+                            )
+
+                            Lluvia(resultado.lluvia)
+                        }
+                    }
+
+                    "ELGR" -> {
+                        Escrutionio(
+                            resultado.escrutinio
+                        )
+                    }
+
+                }
             }
+
 
         }
 
