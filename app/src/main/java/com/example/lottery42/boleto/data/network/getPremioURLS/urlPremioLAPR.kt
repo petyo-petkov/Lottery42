@@ -1,27 +1,51 @@
 package com.example.lottery42.boleto.data.network.getPremioURLS
 
 import com.example.lottery42.boleto.data.database.Boleto
+import io.ktor.http.URLBuilder
+import io.ktor.http.appendPathSegments
 
 fun urlPremioLAPR(boleto: Boleto): String {
 
-    val idSorteo = boleto.idSorteo
-    val combinaciones = boleto.combinaciones
-    val reintegro = boleto.reintegro
-    val joker = if(boleto.joker == "NO") "" else boleto.joker
-    val modalidad = "simple"
+    val combinacionesParams = transformListToParams(boleto.combinaciones)
+    val modalidad = if (boleto.apuestaMultiple) "multiple" else "simple"
 
-    val combinacionesString = transformList(combinaciones)
+    return URLBuilder("https://www.loteriasyapuestas.es").apply {
+        appendPathSegments("es", "resultados", "primitiva", "comprobar")
+        parameters.append("drawId", boleto.idSorteo)
+        parameters.append("modalidad", modalidad)
 
-    val url = "https://www.loteriasyapuestas.es/es/resultados/primitiva/comprobar?" +
-            "drawId=$idSorteo" +
-            "&modalidad=$modalidad" +
-            "&$combinacionesString" +
-            "&reintegro=$reintegro" +
-            "&joker=$joker"
+        combinacionesParams.forEach { (key, value) ->
+            parameters.append(key, value)
+        }
 
-    return url
-
+        parameters.append("reintegro", boleto.reintegro!!)
+        if (boleto.joker != "NO") {
+            parameters.append("joker", boleto.joker!!)
+        }
+    }.buildString()
 }
+
+
+//fun urlPremioLAPR(boleto: Boleto): String {
+//
+//    val idSorteo = boleto.idSorteo
+//    val combinaciones = boleto.combinaciones
+//    val reintegro = boleto.reintegro
+//    val joker = if(boleto.joker == "NO") "" else boleto.joker
+//    val modalidad = "simple"
+//
+//    val combinacionesString = transformList(combinaciones)
+//
+//    val url = "https://www.loteriasyapuestas.es/es/resultados/primitiva/comprobar?" +
+//            "drawId=$idSorteo" +
+//            "&modalidad=$modalidad" +
+//            "&$combinacionesString" +
+//            "&reintegro=$reintegro" +
+//            "&joker=$joker"
+//
+//    return url
+//
+//}
 
 
 // LAPR

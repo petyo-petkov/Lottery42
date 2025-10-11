@@ -165,12 +165,7 @@ class NetworkRepoImpl(private val context: Context) : NetworkRepo {
 
     }
 
-    private fun urlExtraInfo(boleto: Boleto): String {
-        val gameId = boleto.gameID
-        val fecha = boleto.fecha.replace("-", "")
-        val urlPorFechas = urlResultadosPorFechas(gameId, fecha, fecha)
-        return urlPorFechas
-    }
+
 }
 
 

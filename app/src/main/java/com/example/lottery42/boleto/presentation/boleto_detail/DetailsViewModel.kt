@@ -21,26 +21,26 @@ class DetailsViewModel(
     private val networkRepo: NetworkRepo
 ) : ViewModel() {
 
-//    private val _premioState = MutableStateFlow<PremioState>(PremioState.Empty)
-//    val premioState: StateFlow<PremioState> = _premioState
+    private val _premioState = MutableStateFlow<PremioState>(PremioState.Empty)
+    val premioState: StateFlow<PremioState> = _premioState
 
-    val premioState: StateFlow<PremioState>
-        field = MutableStateFlow<PremioState>(PremioState.Empty)
+//    val premioState: StateFlow<PremioState>
+//        field = MutableStateFlow<PremioState>(PremioState.Empty)
 
 
     fun getPremio(boleto: Boleto) {
-        premioState.value = PremioState.Loading
+        _premioState.value = PremioState.Loading
         viewModelScope.launch(Dispatchers.Default) {
             val esAnterior = try {
                 esAnterior(boleto.cierre)
             } catch (e: DateTimeParseException) {
                 Log.e("Error", "Error al parsear la fecha: ${e.message}")
-                premioState.value = PremioState.Error(e)
+                _premioState.value = PremioState.Error(e)
                 false
             }
             if (esAnterior) {
                 try {
-                    val premio = withTimeout(3000) {
+                    val premio = withTimeout(5000) {
                         if (boleto.gameID == "LNAC") {
                             networkRepo.getPremioLNAC(boleto)
                         } else {
@@ -50,13 +50,13 @@ class DetailsViewModel(
                     manejarResultadoPremio(premio, boleto)
                 } catch (e: TimeoutCancellationException) {
                     Log.e("ERROR en obtenerPremio", e.message.toString())
-                    premioState.value = PremioState.Timeout
+                    _premioState.value = PremioState.Timeout
                 } catch (e: Exception) {
                     Log.e("ERROR en obtenerPremio", e.message.toString())
-                    premioState.value = PremioState.Error(e)
+                    _premioState.value = PremioState.Error(e)
                 }
             } else {
-                premioState.value = PremioState.Empty
+                _premioState.value = PremioState.Empty
             }
 
         }
@@ -68,14 +68,14 @@ class DetailsViewModel(
         when (premio) {
             "0.0" -> {
                 databaseRepo.updateBoleto(boleto.copy(premio = premio).toEntity())
-                premioState.value = PremioState.Success("NO PREMIADO")
+                _premioState.value = PremioState.Success("NO PREMIADO")
             }
-            "Error Boton" -> premioState.value =
+            "Error Boton" -> _premioState.value =
                 PremioState.Error(Exception("Error obtener el premio"))
 
             else -> {
                 databaseRepo.updateBoleto(boleto.copy(premio = premio!!).toEntity())
-                premioState.value = PremioState.Success("$premio €")
+                _premioState.value = PremioState.Success("$premio €")
             }
 
         }

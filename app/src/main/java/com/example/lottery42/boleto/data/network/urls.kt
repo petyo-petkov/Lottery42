@@ -1,5 +1,6 @@
 package com.example.lottery42.boleto.data.network
 
+import com.example.lottery42.boleto.data.database.Boleto
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -32,4 +33,11 @@ fun urlResultadosPorFechas(gameId: String, fechaInicio: String, fechaFin: String
 fun urlPremioLNACPorNumero(numeroLoteria: String, idSorteo: String) : String {
     return  "https://www.loteriasyapuestas.es/servicios/premioDecimoWebParaVariosSorteos?decimo=$numeroLoteria&serie=&fraccion=&importeComunEnCentimos&idSorteos=$idSorteo"
 
+}
+
+fun urlExtraInfo(boleto: Boleto): String {
+    val gameId = boleto.gameID
+    val fecha = boleto.fecha.replace("-", "")
+    val urlPorFechas = urlResultadosPorFechas(gameId, fecha, fecha)
+    return urlPorFechas
 }

@@ -1,13 +1,31 @@
 package com.example.lottery42.boleto.data.network
 
-import kotlin.random.Random
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material3.LoadingIndicator
+import androidx.compose.material3.MaterialShapes
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
 
 
-fun main() {
-    val numeros = listOf(1, 2, 3, 4, 5)
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
+@Preview
+@Composable
+fun Prueba() {
 
- val numerosRandom = Random.nextInt(1, 5)
-
- println(numerosRandom)
+        LoadingIndicator(
+            color = Color.Blue,
+            polygons = listOf(
+                MaterialShapes.SoftBurst,
+                MaterialShapes.Cookie9Sided,
+                MaterialShapes.Pentagon,
+                MaterialShapes.Pill,
+                MaterialShapes.Sunny,
+                MaterialShapes.Cookie4Sided,
+                MaterialShapes.Oval
+            )
+        )
 
 }
+
+

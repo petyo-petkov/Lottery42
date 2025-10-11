@@ -16,11 +16,11 @@ class ExtraInfoViewModel(
     val networkRepo: NetworkRepo
 ) : ViewModel() {
 
-//    private val _infoState = MutableStateFlow<InfoSorteoState<Any>>(InfoSorteoState.Empty)
-//    val infoState: StateFlow<InfoSorteoState<Any>> = _infoState
+    private val _infoState = MutableStateFlow<InfoSorteoState<Any>>(InfoSorteoState.Empty)
+    val infoState: StateFlow<InfoSorteoState<Any>> = _infoState
 
-    val infoState: StateFlow<InfoSorteoState<Any>>
-        field = MutableStateFlow<InfoSorteoState<Any>>(InfoSorteoState.Empty)
+//    val infoState: StateFlow<InfoSorteoState<Any>>
+//        field = MutableStateFlow<InfoSorteoState<Any>>(InfoSorteoState.Empty)
 
     fun infoSorteoCelebrado(boleto: Boleto) {
 
@@ -29,18 +29,18 @@ class ExtraInfoViewModel(
                 esAnterior(boleto.cierre)
             } catch (e: DateTimeParseException) {
                 Log.e("Error", "Error al parsear la fecha: ${e.message}")
-                infoState.value = InfoSorteoState.Error(e)
+                _infoState.value = InfoSorteoState.Error(e)
                 false
             }
             if (esAnterior) {
-                infoState.value = InfoSorteoState.Loading
+                _infoState.value = InfoSorteoState.Loading
                 val info = networkRepo.fetchExtraInfo(boleto)
                 val infoLNAC = networkRepo.fetchExtraInfoLNAC(boleto)
 
                 Log.i("info", info.toString())
                 Log.i("infoLNAC", infoLNAC.toString())
 
-                infoState.value = try {
+                _infoState.value = try {
                     if (info.isNotEmpty()) {
                         InfoSorteoState.Success(info = info[0])
                     } else {
@@ -52,7 +52,7 @@ class ExtraInfoViewModel(
                 }
 
             } else {
-                infoState.value = InfoSorteoState.Empty
+                _infoState.value = InfoSorteoState.Empty
             }
         }
     }

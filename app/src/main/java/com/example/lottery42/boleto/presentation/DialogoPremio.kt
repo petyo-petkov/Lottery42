@@ -10,6 +10,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LoadingIndicator
+import androidx.compose.material3.LoadingIndicatorDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -60,6 +61,7 @@ fun DialogoPremio(
                         modifier = Modifier
                             .size(48.dp),
                         color = Color(0xFFFFE082),
+                        polygons = LoadingIndicatorDefaults.DeterminateIndicatorPolygons
                     )
                 } else {
                     Text(

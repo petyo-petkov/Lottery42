@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.LoadingIndicator
+import androidx.compose.material3.LoadingIndicatorDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -75,6 +76,7 @@ fun LoadingInfo() {
                 .size(96.dp)
                 .align(Alignment.Center),
             color = Color(0xFFFFE082),
+            polygons = LoadingIndicatorDefaults.DeterminateIndicatorPolygons
 
             )
     }

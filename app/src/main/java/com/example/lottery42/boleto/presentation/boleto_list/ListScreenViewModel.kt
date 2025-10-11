@@ -11,7 +11,10 @@ import com.example.lottery42.boleto.domain.NetworkRepo
 import com.example.lottery42.boleto.domain.ScannerRepo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlin.time.ExperimentalTime
 import kotlin.time.Instant
@@ -22,16 +25,22 @@ class ListScreenViewModel(
     private val networkRepo: NetworkRepo
 ) : ViewModel() {
 
-    init {
-        getAllBoletos("fecha")
-    }
+//    init {
+//        getAllBoletos("fecha")
+//    }
 
-    val boletoState: StateFlow<Boleto?>
-        field = MutableStateFlow<Boleto?>(null)
+    val _boletoState = MutableStateFlow<Boleto?>(null)
+    val boletoState: StateFlow<Boleto?> = _boletoState
 
-    val boletosState: StateFlow<List<Boleto>>
-        field = MutableStateFlow<List<Boleto>>(emptyList())
 
+    val _boletosState = MutableStateFlow<List<Boleto>>(emptyList())
+    val boletosState: StateFlow<List<Boleto>> = _boletosState
+        .onStart { getAllBoletos("fecha") }
+        .stateIn(
+            viewModelScope,
+            SharingStarted.WhileSubscribed(5000),
+            initialValue = emptyList()
+        )
 
     val balance = databaseRepo.getBalance(boletosState)
 
@@ -56,7 +65,7 @@ class ListScreenViewModel(
     fun getAllBoletos(order: String) {
         viewModelScope.launch(Dispatchers.IO) {
             databaseRepo.getAllBoletos().collect { boletos ->
-                boletosState.value = when (order) {
+                _boletosState.value = when (order) {
                     "fecha" -> boletos.sortedByDescending { it.fecha }
                     "tipo" -> boletos.sortedBy { it.tipo }
                     "premio" -> boletos.sortedByDescending { it.premio.toDouble() }
@@ -69,7 +78,7 @@ class ListScreenViewModel(
     fun getBoletoByID(id: Long) {
         viewModelScope.launch(Dispatchers.IO) {
             databaseRepo.getBoletoByID(id).collect { boleto ->
-                boletoState.value = boleto
+                _boletoState.value = boleto
             }
         }
     }
@@ -80,7 +89,7 @@ class ListScreenViewModel(
         val end = Instant.fromEpochMilliseconds(endDate).toString()
         viewModelScope.launch(Dispatchers.IO) {
             databaseRepo.getBoletosByDateRange(start, end).collect { boletos ->
-                boletosState.value = boletos.sortedByDescending { it.fecha }
+                _boletosState.value = boletos.sortedByDescending { it.fecha }
             }
 
         }

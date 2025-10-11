@@ -1,26 +1,27 @@
 package com.example.lottery42.boleto.data.network.getPremioURLS
 
 import com.example.lottery42.boleto.data.database.Boleto
+import io.ktor.http.URLBuilder
+import io.ktor.http.appendPathSegments
 
 fun urlPremioBONO(boleto: Boleto): String {
 
-    val idSorteo = boleto.idSorteo
-    val combinaciones = boleto.combinaciones
-    val reintegro = boleto.reintegro
-    val modalidad = "simple"
+    val combinacionesParams = transformListToParams(boleto.combinaciones)
+    val modalidad = if (boleto.apuestaMultiple) "multiple" else "simple"
 
+    return URLBuilder("https://www.loteriasyapuestas.es").apply {
+        appendPathSegments("es", "resultados", "bonoloto", "comprobar")
+        parameters.append("drawId", boleto.idSorteo)
+        parameters.append("modalidad", modalidad)
 
-    val combinacionesString = transformList(combinaciones)
-    val url = "https://www.loteriasyapuestas.es/es/resultados/bonoloto/comprobar?" +
-            "drawId=$idSorteo" +
-            "&modalidad=$modalidad" +
-            "&$combinacionesString" +
-            "&reintegro=$reintegro"
+        combinacionesParams.forEach { (key, value) ->
+            parameters.append(key, value)
+        }
+        parameters.append("reintegro", boleto.reintegro!!)
 
-    return url
+    }.buildString()
+
 }
-
-
 
 
 // BONO
