@@ -1,22 +1,17 @@
 package com.example.lottery42.boleto.presentation.extra_info
 
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.size
-import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
-import androidx.compose.material3.LoadingIndicator
-import androidx.compose.material3.LoadingIndicatorDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.lottery42.boleto.data.database.Boleto
 import com.example.lottery42.boleto.data.network.models.LotteryModel
 import com.example.lottery42.boleto.data.network.models.loteriaNacional.resultadoLNAC.ResultadosLoteriaNacional
+import com.example.lottery42.boleto.presentation.CustomLoadingIndicator
 import com.example.lottery42.boleto.presentation.extra_info.ExtraInfoViewModel.InfoSorteoState
 
 @Composable
@@ -26,7 +21,7 @@ fun ExtraPaneScreen(
 ) {
     Surface(modifier = Modifier) {
         when (val currentResult = infoState) {
-            is InfoSorteoState.Loading -> LoadingInfo()
+            is InfoSorteoState.Loading -> CustomLoadingIndicator(200.dp)
             is InfoSorteoState.Empty -> EmptyInfo()
             is InfoSorteoState.Error -> Text(text = "Error al obtener los resultados")
             is InfoSorteoState.Success<*> -> {
@@ -63,6 +58,7 @@ fun EmptyInfo() {
     }
 }
 
+/*
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun LoadingInfo() {
@@ -80,3 +76,5 @@ fun LoadingInfo() {
         )
     }
 }
+
+ */
