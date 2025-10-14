@@ -1,13 +1,98 @@
 package com.example.lottery42.boleto.data.network
 
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material3.LoadingIndicator
+import androidx.compose.material3.MaterialShapes
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.TransformOrigin
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 
 
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun Prueba() {
+    val tamano = 300.dp
 
+    val infiniteTransition = rememberInfiniteTransition(label = "infinite transition")
+    val rotation by infiniteTransition.animateFloat(
+        initialValue = 0f,
+        targetValue = 360f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(durationMillis = 2000),
+            repeatMode = RepeatMode.Restart
+        ), label = "rotation"
+    )
+
+    Box(
+        modifier = Modifier.size(tamano),
+        contentAlignment = Alignment.Center
+    ) {
+        Box(
+            modifier = Modifier
+        ){
+            // 3
+            LoadingIndicator(
+                modifier = Modifier
+                    .size(tamano * 0.38f)
+                    .offset(x = tamano * -0.1f, y = tamano * 0.26f)
+                    .graphicsLayer(
+                        rotationZ = rotation,
+                        transformOrigin = TransformOrigin(0.6f, 0.6f)
+                    ),
+                color = MaterialTheme.colorScheme.tertiary,
+                polygons = listOf(
+                    MaterialShapes.Cookie4Sided,
+                    MaterialShapes.Oval
+                )
+            )
+            // 1
+            LoadingIndicator(
+                modifier = Modifier
+                    .size(tamano * 0.46f)
+                    .graphicsLayer(
+                        rotationZ = rotation,
+                        transformOrigin = TransformOrigin(0.6f, 0.7f)
+                    ),
+                color = MaterialTheme.colorScheme.primary,
+                polygons = listOf(
+                    MaterialShapes.SoftBurst,
+                    MaterialShapes.Cookie9Sided,
+                )
+            )
+            // 2
+            LoadingIndicator(
+                modifier = Modifier
+                    .size(tamano * 0.33f)
+                    .offset(x = tamano * 0.3f, y = tamano * 0.16f)
+                    .graphicsLayer(
+                        rotationZ = rotation,
+                        transformOrigin = TransformOrigin(0.6f, 0.6f)
+                    ),
+                color = MaterialTheme.colorScheme.secondary,
+                polygons = listOf(
+                    MaterialShapes.Pill,
+                    MaterialShapes.Sunny,
+                )
+            )
+
+
+        }
+    }
 
 }
 
