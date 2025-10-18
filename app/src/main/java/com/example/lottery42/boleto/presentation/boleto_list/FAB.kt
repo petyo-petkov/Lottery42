@@ -6,6 +6,7 @@ import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import com.example.lottery42.ui.theme.MiAmarillo
 
 @Composable
 fun FAB(
@@ -13,7 +14,7 @@ fun FAB(
 ) {
     ExtendedFloatingActionButton(
         onClick = { onFABClick() },
-        containerColor = Color(0xFFFFE082),
+        containerColor = MiAmarillo,
         contentColor = Color.Black,
     ) {
         Icon(

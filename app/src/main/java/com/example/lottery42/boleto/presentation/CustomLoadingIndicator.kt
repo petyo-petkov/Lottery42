@@ -21,6 +21,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.Dp
+import com.example.lottery42.ui.theme.MiAmarillo
+import com.example.lottery42.ui.theme.MiVerde
 
 @Composable
 fun CustomLoadingIndicator(tamano: Dp) {
@@ -43,20 +45,20 @@ fun CustomLoadingIndicator(tamano: Dp) {
             modifier = Modifier
         ){
             // 3
-            LoadingIndicator(
-                modifier = Modifier
-                    .size(tamano * 0.38f)
-                    .offset(x = tamano * -0.1f, y = tamano * 0.26f)
-                    .graphicsLayer(
-                        rotationZ = rotation,
-                        transformOrigin = TransformOrigin(0.6f, 0.6f)
-                    ),
-                color = MaterialTheme.colorScheme.tertiary,
-                polygons = listOf(
-                    MaterialShapes.Cookie4Sided,
-                    MaterialShapes.Oval
-                )
-            )
+//            LoadingIndicator(
+//                modifier = Modifier
+//                    .size(tamano * 0.38f)
+//                    .offset(x = tamano * -0.1f, y = tamano * 0.26f)
+//                    .graphicsLayer(
+//                        rotationZ = rotation,
+//                        transformOrigin = TransformOrigin(0.6f, 0.6f)
+//                    ),
+//                color = MaterialTheme.colorScheme.tertiary,
+//                polygons = listOf(
+//                    MaterialShapes.Cookie4Sided,
+//                    MaterialShapes.Oval
+//                )
+//            )
 
             // 1
             LoadingIndicator(
@@ -64,12 +66,12 @@ fun CustomLoadingIndicator(tamano: Dp) {
                     .size(tamano * 0.46f)
                     .graphicsLayer(
                         rotationZ = rotation,
-                        transformOrigin = TransformOrigin(0.6f, 0.7f)
+                        transformOrigin = TransformOrigin(0.5f, 0.5f)
                     ),
-                color = MaterialTheme.colorScheme.primary,
+                color = MiAmarillo,
                 polygons = listOf(
-                    MaterialShapes.SoftBurst,
-                    MaterialShapes.Cookie9Sided,
+                    MaterialShapes.Triangle,
+                    MaterialShapes.Arrow,
                 )
             )
             // 2
@@ -79,12 +81,12 @@ fun CustomLoadingIndicator(tamano: Dp) {
                     .offset(x = tamano * 0.3f, y = tamano * 0.16f)
                     .graphicsLayer(
                         rotationZ = rotation,
-                        transformOrigin = TransformOrigin(0.6f, 0.6f)
+                        transformOrigin = TransformOrigin(0f, 0f)
                     ),
-                color = MaterialTheme.colorScheme.secondary,
+                color = MiVerde,
                 polygons = listOf(
-                    MaterialShapes.Pill,
-                    MaterialShapes.Sunny,
+                    MaterialShapes.Pentagon,
+                    MaterialShapes.Diamond,
                 )
             )
 
