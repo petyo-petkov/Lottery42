@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.LoadingIndicator
 import androidx.compose.material3.MaterialShapes
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -43,23 +42,7 @@ fun CustomLoadingIndicator(tamano: Dp) {
     ) {
         Box(
             modifier = Modifier
-        ){
-            // 3
-//            LoadingIndicator(
-//                modifier = Modifier
-//                    .size(tamano * 0.38f)
-//                    .offset(x = tamano * -0.1f, y = tamano * 0.26f)
-//                    .graphicsLayer(
-//                        rotationZ = rotation,
-//                        transformOrigin = TransformOrigin(0.6f, 0.6f)
-//                    ),
-//                color = MaterialTheme.colorScheme.tertiary,
-//                polygons = listOf(
-//                    MaterialShapes.Cookie4Sided,
-//                    MaterialShapes.Oval
-//                )
-//            )
-
+        ) {
             // 1
             LoadingIndicator(
                 modifier = Modifier
