@@ -28,7 +28,9 @@ fun ListScreen(
     onBoletoClick: (Boleto) -> Unit,
     onBorrarClick: () -> Unit,
     onOrdenar: (order: String) -> Unit,
-    onDateRangeSelected: (Pair<Long?, Long?>) -> Unit
+    onDateRangeSelected: (Pair<Long?, Long?>) -> Unit,
+    onBackupClick: () -> Unit,
+    onRestoreClick: () -> Unit
 ) {
     var showBottomSheet by remember { mutableStateOf(false) }
     val rotationState by animateFloatAsState(
@@ -70,7 +72,9 @@ fun ListScreen(
             showBottomSheet = showBottomSheet,
             onBorrarClick = onBorrarClick,
             order = onOrdenar,
-            onDateRangeSelected = onDateRangeSelected
+            onDateRangeSelected = onDateRangeSelected,
+            onBackupClick = onBackupClick,
+            onRestoreClick = onRestoreClick
         )
     }
 }

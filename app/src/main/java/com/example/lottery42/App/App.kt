@@ -1,5 +1,8 @@
 package com.example.lottery42.App
 
+import android.content.Intent
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -24,6 +27,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.lottery42.boleto.data.database.BalanceState
 import com.example.lottery42.boleto.presentation.boleto_detail.DetailScreen
@@ -52,6 +56,28 @@ fun App() {
     val premioState by vmDetails.premioState.collectAsStateWithLifecycle()
 
     val coroutine = rememberCoroutineScope()
+    val context = LocalContext.current
+
+    val backupLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.CreateDocument("application/octet-stream")
+    ) { uri ->
+        uri?.let { vm.backupDatabase(it) }
+    }
+
+    val restoreLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.OpenDocument()
+    ) { uri ->
+        uri?.let {
+            vm.restoreDatabase(it) {
+                // Restart app
+                val intent = context.packageManager.getLaunchIntentForPackage(context.packageName)
+                val componentName = intent?.component
+                val mainIntent = Intent.makeRestartActivityTask(componentName)
+                context.startActivity(mainIntent)
+                Runtime.getRuntime().exit(0)
+            }
+        }
+    }
 
     LaunchedEffect(boletos.size) { boletos }
 
@@ -100,7 +126,9 @@ fun App() {
                                 startDate = it.first ?: 0,
                                 endDate = it.second ?: 0
                             )
-                        }
+                        },
+                        onBackupClick = { backupLauncher.launch("boletos_DB_backup.db") },
+                        onRestoreClick = { restoreLauncher.launch(arrayOf("application/octet-stream", "*/*")) }
 
                     )
                 }

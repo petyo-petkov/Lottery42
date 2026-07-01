@@ -35,7 +35,9 @@ fun BottomSheet(
     onDismiss: () -> Unit,
     showBottomSheet: Boolean,
     order: (String) -> Unit,
-    onDateRangeSelected: (Pair<Long?, Long?>) -> Unit
+    onDateRangeSelected: (Pair<Long?, Long?>) -> Unit,
+    onBackupClick: () -> Unit,
+    onRestoreClick: () -> Unit
 
 ) {
     var showDialogoBorrar by remember { mutableStateOf(false) }
@@ -98,6 +100,27 @@ fun BottomSheet(
             HorizontalDivider()
 
             // Boton Borrar Todos los boletos
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(6.dp),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Button(
+                    onClick = { onBackupClick() },
+                    modifier = Modifier.padding(horizontal = 4.dp)
+                ) {
+                    Text("Hacer Backup")
+                }
+                Button(
+                    onClick = { onRestoreClick() },
+                    modifier = Modifier.padding(horizontal = 4.dp)
+                ) {
+                    Text("Restaurar Backup")
+                }
+            }
+
             Row(
                 modifier = Modifier
                     .fillMaxWidth()

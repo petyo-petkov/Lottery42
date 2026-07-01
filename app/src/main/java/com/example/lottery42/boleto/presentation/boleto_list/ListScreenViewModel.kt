@@ -1,11 +1,13 @@
 package com.example.lottery42.boleto.presentation.boleto_list
 
 import android.util.Log
+import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.lottery42.boleto.data.crearBoleto
 import com.example.lottery42.boleto.data.database.Boleto
 import com.example.lottery42.boleto.data.database.toEntity
+import com.example.lottery42.boleto.domain.BackupRepo
 import com.example.lottery42.boleto.domain.DatabaseRepo
 import com.example.lottery42.boleto.domain.NetworkRepo
 import com.example.lottery42.boleto.domain.ScannerRepo
@@ -22,7 +24,8 @@ import kotlin.time.Instant
 class ListScreenViewModel(
     private val databaseRepo: DatabaseRepo,
     private val scannerRepo: ScannerRepo,
-    private val networkRepo: NetworkRepo
+    private val networkRepo: NetworkRepo,
+    private val backupRepo: BackupRepo
 ) : ViewModel() {
 
 //    init {
@@ -104,6 +107,27 @@ class ListScreenViewModel(
     fun deleteBoleto(id: Long) {
         viewModelScope.launch(Dispatchers.IO) {
             databaseRepo.deleteBoletoById(id)
+        }
+    }
+
+    fun backupDatabase(uri: Uri) {
+        viewModelScope.launch {
+            backupRepo.backupDatabase(uri).onSuccess {
+                Log.d("Backup", "Backup successful")
+            }.onFailure {
+                Log.e("Backup", "Backup failed", it)
+            }
+        }
+    }
+
+    fun restoreDatabase(uri: Uri, onSuccess: () -> Unit) {
+        viewModelScope.launch {
+            backupRepo.restoreDatabase(uri).onSuccess {
+                Log.d("Restore", "Restore successful")
+                onSuccess()
+            }.onFailure {
+                Log.e("Restore", "Restore failed", it)
+            }
         }
     }
 }

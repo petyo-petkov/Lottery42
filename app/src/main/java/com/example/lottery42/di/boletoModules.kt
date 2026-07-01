@@ -3,9 +3,11 @@ package com.example.lottery42.di
 import android.app.Application
 import app.cash.sqldelight.db.SqlDriver
 import app.cash.sqldelight.driver.android.AndroidSqliteDriver
+import com.example.lottery42.boleto.data.BackupRepoImpl
 import com.example.lottery42.boleto.data.ScannerRepoImpl
 import com.example.lottery42.boleto.data.database.DatabaseRepoImpl
 import com.example.lottery42.boleto.data.network.NetworkRepoImpl
+import com.example.lottery42.boleto.domain.BackupRepo
 import com.example.lottery42.boleto.domain.DatabaseRepo
 import com.example.lottery42.boleto.domain.NetworkRepo
 import com.example.lottery42.boleto.domain.ScannerRepo
@@ -59,6 +61,7 @@ val databaseModule = module {
     }
 
     singleOf(::DatabaseRepoImpl) bind DatabaseRepo::class
+    singleOf(::BackupRepoImpl) bind BackupRepo::class
 
 }
 
