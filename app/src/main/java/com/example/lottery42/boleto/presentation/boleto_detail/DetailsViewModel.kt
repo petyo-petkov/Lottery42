@@ -15,6 +15,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeout
 import java.time.format.DateTimeParseException
+import kotlin.time.Duration.Companion.milliseconds
 
 class DetailsViewModel(
     private val databaseRepo: DatabaseRepo,
@@ -40,7 +41,7 @@ class DetailsViewModel(
             }
             if (esAnterior) {
                 try {
-                    val premio = withTimeout(5000) {
+                    val premio = withTimeout(5000.milliseconds) {
                         if (boleto.gameID == "LNAC") {
                             networkRepo.getPremioLNAC(boleto)
                         } else {
