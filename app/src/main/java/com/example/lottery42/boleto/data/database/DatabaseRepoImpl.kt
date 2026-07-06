@@ -56,10 +56,12 @@ class DatabaseRepoImpl(
             val ganado = boletos.sumOf { it.premio.toDouble() }
             val gastado = boletos.sumOf { it.precio.toDouble() }
             val balance = ganado - gastado
+            val porcentaje = if (gastado > 0.0) ((ganado - gastado) / gastado) * 100 else 0.0
             BalanceState(
                 ganado = "${redondear(ganado)} $euro",
                 gastado = "${redondear(gastado)} $euro",
                 balance = "${redondear(balance)} $euro",
+                porcentaje = "${redondear(porcentaje)}%",
                 color = if (balance >= 0.0) MiVerde else MiRojo
             )
         }
@@ -95,6 +97,7 @@ data class BalanceState(
     val ganado: String = "",
     val gastado: String = "",
     val balance: String = "",
+    val porcentaje: String = "",
     val color: Color = Color.Unspecified
 )
 

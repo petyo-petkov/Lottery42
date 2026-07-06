@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
@@ -27,6 +28,7 @@ fun BalanceCard(
     ganado: String,
     gastado: String,
     balance: String,
+    porcentaje: String,
     color: Color
 ) {
     Card(
@@ -42,26 +44,33 @@ fun BalanceCard(
         ),
     ) {
         Row(
-            modifier = Modifier.fillMaxSize(),
-            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.fillMaxSize().padding(top = 56.dp),
+            verticalAlignment = Alignment.Top,
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
-            balanceData(
+            BalanceData(
                 nombre = "GASTADO",
                 color = MiRojo,
                 data = gastado
             )
-            VerticalDivider(color = MaterialTheme.colorScheme.background)
-            balanceData(
+            VerticalDivider(
+                modifier = Modifier.padding(vertical = 16.dp),
+                color = MaterialTheme.colorScheme.background
+            )
+            BalanceData(
                 nombre = "BALANCE",
                 color = MiAmarillo,
                 data = balance
             )
-            VerticalDivider(color = MaterialTheme.colorScheme.background)
-            balanceData(
+            VerticalDivider(
+                modifier = Modifier.padding(vertical = 16.dp),
+                color = MaterialTheme.colorScheme.background
+            )
+            BalanceData(
                 nombre = "GANADO",
                 color = MiVerde,
-                data = ganado
+                data = ganado,
+                extraData = porcentaje
             )
 
         }
@@ -70,10 +79,11 @@ fun BalanceCard(
 }
 
 @Composable
-fun balanceData(
+fun BalanceData(
     nombre: String,
     data: String,
-    color: Color
+    color: Color,
+    extraData: String? = null
 ) {
 
     Column(
@@ -91,6 +101,13 @@ fun balanceData(
             style = MaterialTheme.typography.headlineSmall
 
         )
+        if (extraData != null) {
+            Text(
+                text = extraData,
+                style = MaterialTheme.typography.bodySmall,
+                color = Color.White
+            )
+        }
 
     }
 

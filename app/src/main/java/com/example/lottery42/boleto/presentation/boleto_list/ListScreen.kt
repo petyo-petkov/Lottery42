@@ -48,6 +48,7 @@ fun ListScreen(
             ganado = balanceState.ganado,
             gastado = balanceState.gastado,
             balance = balanceState.balance,
+            porcentaje = balanceState.porcentaje,
             color = balanceState.color
         )
 
