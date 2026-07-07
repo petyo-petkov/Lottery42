@@ -105,7 +105,7 @@ fun BalanceData(
             Text(
                 text = extraData,
                 style = MaterialTheme.typography.bodySmall,
-                color = Color.White
+                color = MaterialTheme.colorScheme.tertiary
             )
         }
 

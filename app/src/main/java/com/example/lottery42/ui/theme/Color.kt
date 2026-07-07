@@ -20,3 +20,7 @@ val LoteriaNacional = Color(0xFF1976D2)
 val MiRojo = Color(0xFFF44336)
 val MiAmarillo = Color(0xFFFDD835)
 val MiVerde = Color(0xFF4CAF50)
+
+val MiBlanco = Color(0xFFCCC1C1)
+
+val MiNegro = Color(0xFF000000)
