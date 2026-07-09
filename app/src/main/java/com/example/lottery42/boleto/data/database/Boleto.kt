@@ -1,12 +1,14 @@
 package com.example.lottery42.boleto.data.database
 
+import androidx.compose.runtime.Immutable
 import kotlinx.serialization.Serializable
 
+@Immutable
 @Serializable
 data class Boleto(
     val id: Long = 0L,
-    var gameID: String = "",
-    var tipo: String = "",
+    val gameID: String = "",
+    val tipo: String = "",
     val fecha: String = "",
     val apertura: String = "",
     val cierre: String = "",

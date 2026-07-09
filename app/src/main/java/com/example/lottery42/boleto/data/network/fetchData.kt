@@ -6,6 +6,8 @@ import android.view.View
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
@@ -17,27 +19,46 @@ suspend fun fetchData(
     fetchFun: () -> String,
 ): String = withContext(Dispatchers.Main) {
 
-    suspendCoroutine { continuation ->
-       val webView = WebView(context).apply {
-            settings.javaScriptEnabled = true
+    suspendCancellableCoroutine { continuation ->
+        val webView = WebView(context)
+        webView.apply {
+            settings.apply {
+                javaScriptEnabled = true
+                domStorageEnabled = true
+                loadsImagesAutomatically = false // Optimización: no cargar imágenes para scraping
+                blockNetworkImage = true
+            }
             visibility = View.INVISIBLE
             addJavascriptInterface(
                 JavaScriptInterface { data ->
-                    continuation.resume(data) // Resume the coroutine with the result
+                    if (continuation.context.isActive) {
+                        continuation.resume(data)
+                    }
                     post {
                         destroy()
                     }
                 }, "AndroidInterface"
             )
-            loadUrl(url)
-        }
 
-        webView.webViewClient = object : WebViewClient() {
-            override fun onPageFinished(view: WebView?, url: String?) {
-                webView.evaluateJavascript(
-                    fetchFun()
-                ) { }
+            webViewClient = object : WebViewClient() {
+                override fun onPageFinished(view: WebView?, url: String?) {
+                    evaluateJavascript(fetchFun()) { }
+                }
+
+                @Deprecated("Deprecated in Java")
+                override fun onReceivedError(
+                    view: WebView?,
+                    errorCode: Int,
+                    description: String?,
+                    failingUrl: String?
+                ) {
+                    if (continuation.context.isActive) {
+                        continuation.resume("Error: $description")
+                    }
+                    post { destroy() }
+                }
             }
+            loadUrl(url)
         }
     }
 }

@@ -31,8 +31,14 @@ class DatabaseRepoImpl(
 
     }
 
-    override fun getAllBoletos(): Flow<List<Boleto>> {
-        return queries.getAllBoletos()
+    override fun getAllBoletos(order: String): Flow<List<Boleto>> {
+        val query = when (order) {
+            "fecha" -> queries.getAllBoletos()
+            "tipo" -> queries.getAllBoletosByTipo()
+            "premio" -> queries.getAllBoletosByPremio()
+            else -> queries.getAllBoletos()
+        }
+        return query
             .asFlow()
             .mapToList(context)
             .map { value ->

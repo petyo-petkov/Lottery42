@@ -25,7 +25,8 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -101,7 +102,7 @@ dependencies {
     implementation(libs.ktor.serialization.kotlinx.json)
 
     // jsoup para parsing HTML
-    implementation("org.jsoup:jsoup:1.21.2")
+    implementation(libs.jsoup)
     implementation(libs.androidx.media3.common.ktx)
 
 

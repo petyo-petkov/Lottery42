@@ -10,7 +10,7 @@ interface DatabaseRepo {
 
     suspend fun getBoletoByID(id: Long): Flow<Boleto>
 
-    fun getAllBoletos(): Flow<List<Boleto>>
+    fun getAllBoletos(order: String = "fecha"): Flow<List<Boleto>>
 
     fun getBoletosByDateRange(startDate: String, endDate: String): Flow<List<Boleto>>
 

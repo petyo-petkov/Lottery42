@@ -32,7 +32,7 @@ import com.example.lottery42.boleto.data.toFormattedDate
 import com.example.lottery42.boleto.presentation.DialogoBorrar
 import com.example.lottery42.boleto.presentation.DialogoPremio
 import com.example.lottery42.boleto.presentation.Divisor
-import com.example.lottery42.boleto.presentation.boleto_list.loadImage
+import androidx.compose.ui.res.painterResource
 import kotlin.text.Typography.euro
 
 
@@ -60,8 +60,8 @@ fun DetailScreen(
 
     Box(modifier = Modifier) {
         Image(
-            painter = loadImage(
-                when (boleto.gameID) {
+            painter = painterResource(
+                id = when (boleto.gameID) {
                     "LAPR" -> R.drawable.la_primitiva
                     "BONO" -> R.drawable.bonoloto
                     "EMIL" -> R.drawable.euromillones

@@ -1,6 +1,7 @@
 [versions]
 adaptive = "1.2.0"
-agp = "9.4.0-alpha02"
+agp = "9.4.0-alpha03"
+jsoup = "1.22.2"
 kotlin = "2.4.0"
 coreKtx = "1.19.0"
 junit = "4.13.2"
@@ -17,6 +18,7 @@ material3 = "1.5.0-alpha23"
 playServicesCodeScanner = "16.1.0"
 ktor_version = "3.5.1"
 media3CommonKtx = "1.10.1"
+baselineprofile = "1.4.1"
 
 
 [libraries]
@@ -26,6 +28,7 @@ androidx-adaptive-navigation = { module = "androidx.compose.material3.adaptive:a
 
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 
+jsoup = { module = "org.jsoup:jsoup", version.ref = "jsoup" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
@@ -61,6 +64,8 @@ kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serializa
 
 play-services-code-scanner = { module = "com.google.android.gms:play-services-code-scanner", version.ref = "playServicesCodeScanner" }
 androidx-media3-common-ktx = { group = "androidx.media3", name = "media3-common-ktx", version.ref = "media3CommonKtx" }
+androidx-benchmark-macro-junit4 = { group = "androidx.benchmark", name = "benchmark-macro-junit4", version.ref = "baselineprofile" }
+androidx-profileinstaller = { group = "androidx.profileinstaller", name = "profileinstaller", version.ref = "baselineprofile" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
@@ -68,4 +73,5 @@ kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 sqldelight = { id = "app.cash.sqldelight", version.ref = "androidDriver" }
+baselineprofile = { id = "androidx.baselineprofile", version.ref = "baselineprofile" }
 

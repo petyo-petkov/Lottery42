@@ -67,13 +67,8 @@ class ListScreenViewModel(
 
     fun getAllBoletos(order: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            databaseRepo.getAllBoletos().collect { boletos ->
-                _boletosState.value = when (order) {
-                    "fecha" -> boletos.sortedByDescending { it.fecha }
-                    "tipo" -> boletos.sortedBy { it.tipo }
-                    "premio" -> boletos.sortedByDescending { it.premio.toDouble() }
-                    else -> boletos
-                }
+            databaseRepo.getAllBoletos(order).collect { boletos ->
+                _boletosState.value = boletos
             }
         }
     }

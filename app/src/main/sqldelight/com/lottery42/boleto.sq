@@ -31,6 +31,16 @@ SELECT *
 FROM BoletoEntity
 ORDER BY fecha DESC;
 
+getAllBoletosByTipo:
+SELECT *
+FROM BoletoEntity
+ORDER BY tipo ASC;
+
+getAllBoletosByPremio:
+SELECT *
+FROM BoletoEntity
+ORDER BY CAST(premio AS REAL) DESC;
+
 getBoletoById:
 SELECT *
 FROM BoletoEntity WHERE id = ?;

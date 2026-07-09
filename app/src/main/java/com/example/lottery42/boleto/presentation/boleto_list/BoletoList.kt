@@ -2,7 +2,6 @@ package com.example.lottery42.boleto.presentation.boleto_list
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -55,8 +54,10 @@ fun BoletoList(
 ) {
     val listState = rememberLazyListState()
 
-    LaunchedEffect(listaBoletos) {
-        listState.animateScrollToItem(0)
+    LaunchedEffect(listaBoletos.size) {
+        if (listaBoletos.isNotEmpty()) {
+            listState.animateScrollToItem(0)
+        }
     }
 
     LazyColumn(
@@ -65,117 +66,89 @@ fun BoletoList(
     )
     {
         items(listaBoletos, key = { it.id }) { boleto ->
-            val color = when (boleto.gameID) {
-                "LAPR" -> Primitiva
-                "BONO" -> Bonoloto
-                "EMIL" -> EuroMillones
-                "ELGR" -> ElGodo
-                "EDMS" -> EuroDreams
-                "LNAC" -> LoteriaNacional
-                else -> MaterialTheme.colorScheme.error
+            val color = remember(boleto.gameID) {
+                when (boleto.gameID) {
+                    "LAPR" -> Primitiva
+                    "BONO" -> Bonoloto
+                    "EMIL" -> EuroMillones
+                    "ELGR" -> ElGodo
+                    "EDMS" -> EuroDreams
+                    "LNAC" -> LoteriaNacional
+                    else -> Color.Gray
+                }
             }
+
+            val iconRes = remember(boleto.gameID) {
+                when (boleto.gameID) {
+                    "LAPR" -> drawable.la_primitiva
+                    "BONO" -> drawable.bonoloto
+                    "EMIL" -> drawable.euromillones
+                    "ELGR" -> drawable.el_godo
+                    "EDMS" -> drawable.euro_dreams
+                    "LNAC" -> drawable.loteria_nacional
+                    else -> drawable.logo
+                }
+            }
+
             ListItem(
                 modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(vertical = 3.dp)
-                                .border(
-                                    border = BorderStroke(
-                                        width = 1.dp,
-                                        color = color
-                                    ),
-                                    shape = RoundedCornerShape(16.dp)
-                                )
-                                .clip(shape = RoundedCornerShape(16.dp))
-                                .clickable {
-                                    onBoletoClick(boleto)
-                                },
+                    .fillMaxWidth()
+                    .padding(horizontal = 8.dp, vertical = 4.dp)
+                    .border(
+                        border = BorderStroke(1.dp, color),
+                        shape = RoundedCornerShape(16.dp)
+                    )
+                    .clip(RoundedCornerShape(16.dp))
+                    .clickable { onBoletoClick(boleto) },
                 leadingContent = {
-                                Image(
-                                    painter = loadImage(
-                                        when (boleto.gameID) {
-                                            "LAPR" -> drawable.la_primitiva
-
-                                            "BONO" -> drawable.bonoloto
-
-                                            "EMIL" -> drawable.euromillones
-
-                                            "ELGR" -> drawable.el_godo
-
-                                            "EDMS" -> drawable.euro_dreams
-
-                                            "LNAC" -> drawable.loteria_nacional
-
-                                            else -> drawable.logo
-                                        }
-                                    ),
-                                    contentDescription = null,
-                                    modifier = Modifier
-                                        .padding(top = 3.dp)
-                                        .clip(shape = RoundedCornerShape(2.dp))
-                                        .size(24.dp)
-                                        .background(Color.Transparent),
-                                    alignment = Alignment.BottomCenter
-                                )
-
-                            },
+                    Image(
+                        painter = painterResource(id = iconRes),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .size(32.dp)
+                            .padding(4.dp)
+                    )
+                },
                 trailingContent = {
-                                when {
-                                    boleto.premio == "-0.0" -> Icon(
-                                        imageVector = Icons.Default.QuestionMark,
-                                        contentDescription = null,
-                                        modifier = Modifier.padding(16.dp),
-                                        tint = MiAmarillo
-                                    )
-
-                                    boleto.premio > "0.0" ->
-                                        Column(
-                                            modifier = Modifier,
-                                            verticalArrangement = Arrangement.spacedBy(8.dp),
-                                        ) {
-                                            Icon(
-                                                imageVector = Icons.Default.ThumbUp,
-                                                contentDescription = null,
-                                                tint = MiVerde
-                                            )
-                                            Text("${boleto.premio} $euro ")
-                                        }
-
-                                    boleto.premio == "0.0" -> Icon(
-                                        imageVector = Icons.Default.ThumbDown,
-                                        contentDescription = null,
-                                        modifier = Modifier.padding(16.dp),
-                                        tint = MiRojo
-                                    )
-                                }
-                            },
+                    BoletoStatusIcon(boleto)
+                },
                 overlineContent = { Text(boleto.fecha.toFormattedDate()) },
                 supportingContent = { Text("${boleto.precio} $euro") },
-                colors = ListItemDefaults.colors(
-                                containerColor = Color.Transparent
-                            ),
-                elevation = ListItemDefaults.elevation(ListItemDefaults.Elevation),
-                content = { Text(boleto.tipo) },
+                colors = ListItemDefaults.colors(containerColor = Color.Transparent),
+                content = { Text(boleto.tipo, style = MaterialTheme.typography.bodyLarge) },
             )
-
         }
     }
-
 }
 
-// Funcioón para carga de imagenes optimizada
 @Composable
-fun loadImage(imageResourceId: Int): Painter {
-    val imageCache = remember { mutableMapOf<Int, WeakReference<Painter>>() }
-    val cachedImage = imageCache[imageResourceId]?.get()
-    when (cachedImage) {
-        null -> {
-            val image = painterResource(id = imageResourceId)
-            imageCache[imageResourceId] = WeakReference(image)
-            return image
-        }
+private fun BoletoStatusIcon(boleto: Boleto) {
+    when {
+        boleto.premio == "-0.0" -> Icon(
+            imageVector = Icons.Default.QuestionMark,
+            contentDescription = null,
+            modifier = Modifier.padding(8.dp),
+            tint = MiAmarillo
+        )
 
-        else -> {
-            return cachedImage
-        }
+        (boleto.premio.toDoubleOrNull() ?: 0.0) > 0.0 ->
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(4.dp),
+            ) {
+                Icon(
+                    imageVector = Icons.Default.ThumbUp,
+                    contentDescription = null,
+                    tint = MiVerde
+                )
+                Text("${boleto.premio} $euro", style = MaterialTheme.typography.labelSmall)
+            }
+
+        else -> Icon(
+            imageVector = Icons.Default.ThumbDown,
+            contentDescription = null,
+            modifier = Modifier.padding(8.dp),
+            tint = MiRojo
+        )
     }
 }
