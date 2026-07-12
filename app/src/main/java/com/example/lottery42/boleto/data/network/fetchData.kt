@@ -10,7 +10,6 @@ import kotlinx.coroutines.isActive
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
 import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
 
 @SuppressLint("SetJavaScriptEnabled")
 suspend fun fetchData(
@@ -21,6 +20,9 @@ suspend fun fetchData(
 
     suspendCancellableCoroutine { continuation ->
         val webView = WebView(context)
+        continuation.invokeOnCancellation {
+            webView.post { webView.destroy() }
+        }
         webView.apply {
             settings.apply {
                 javaScriptEnabled = true
@@ -37,7 +39,7 @@ suspend fun fetchData(
                     post {
                         destroy()
                     }
-                }, "AndroidInterface"
+                }, "AndroidInterface",
             )
 
             webViewClient = object : WebViewClient() {

@@ -17,7 +17,7 @@ import kotlin.math.round
 import kotlin.text.Typography.euro
 
 class DatabaseRepoImpl(
-    db: AppDatabase
+    db: AppDatabase,
 ) : DatabaseRepo {
     private val queries = db.boletoQueries
     private val context: CoroutineContext = Dispatchers.IO

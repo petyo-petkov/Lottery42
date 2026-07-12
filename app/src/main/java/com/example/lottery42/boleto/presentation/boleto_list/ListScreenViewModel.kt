@@ -12,14 +12,21 @@ import com.example.lottery42.boleto.domain.DatabaseRepo
 import com.example.lottery42.boleto.domain.NetworkRepo
 import com.example.lottery42.boleto.domain.ScannerRepo
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlin.time.ExperimentalTime
 import kotlin.time.Instant
+
+sealed class BoletosQuery {
+    data class All(val order: String) : BoletosQuery()
+    data class DateRange(val start: String, val end: String) : BoletosQuery()
+}
 
 class ListScreenViewModel(
     private val databaseRepo: DatabaseRepo,
@@ -28,17 +35,30 @@ class ListScreenViewModel(
     private val backupRepo: BackupRepo
 ) : ViewModel() {
 
-//    init {
-//        getAllBoletos("fecha")
-//    }
+    private val _boletoId = MutableStateFlow<Long?>(null)
 
-    val _boletoState = MutableStateFlow<Boleto?>(null)
-    val boletoState: StateFlow<Boleto?> = _boletoState
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val boletoState: StateFlow<Boleto?> = _boletoId
+        .flatMapLatest { id ->
+            if (id != null) databaseRepo.getBoletoByID(id)
+            else flowOf(null)
+        }
+        .stateIn(
+            viewModelScope,
+            SharingStarted.WhileSubscribed(5000),
+            initialValue = null
+        )
 
+    private val queryState = MutableStateFlow<BoletosQuery>(BoletosQuery.All("fecha"))
 
-    val _boletosState = MutableStateFlow<List<Boleto>>(emptyList())
-    val boletosState: StateFlow<List<Boleto>> = _boletosState
-        .onStart { getAllBoletos("fecha") }
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val boletosState: StateFlow<List<Boleto>> = queryState
+        .flatMapLatest { query ->
+            when (query) {
+                is BoletosQuery.All -> databaseRepo.getAllBoletos(query.order)
+                is BoletosQuery.DateRange -> databaseRepo.getBoletosByDateRange(query.start, query.end)
+            }
+        }
         .stateIn(
             viewModelScope,
             SharingStarted.WhileSubscribed(5000),
@@ -66,31 +86,18 @@ class ListScreenViewModel(
     }
 
     fun getAllBoletos(order: String) {
-        viewModelScope.launch(Dispatchers.IO) {
-            databaseRepo.getAllBoletos(order).collect { boletos ->
-                _boletosState.value = boletos
-            }
-        }
+        queryState.value = BoletosQuery.All(order)
     }
 
     fun getBoletoByID(id: Long) {
-        viewModelScope.launch(Dispatchers.IO) {
-            databaseRepo.getBoletoByID(id).collect { boleto ->
-                _boletoState.value = boleto
-            }
-        }
+        _boletoId.value = id
     }
 
     @OptIn(ExperimentalTime::class)
     fun sortBoletosByDate(startDate: Long, endDate: Long) {
         val start = Instant.fromEpochMilliseconds(startDate).toString()
         val end = Instant.fromEpochMilliseconds(endDate).toString()
-        viewModelScope.launch(Dispatchers.IO) {
-            databaseRepo.getBoletosByDateRange(start, end).collect { boletos ->
-                _boletosState.value = boletos.sortedByDescending { it.fecha }
-            }
-
-        }
+        queryState.value = BoletosQuery.DateRange(start, end)
     }
 
     fun deleteAllBoletos() {
