@@ -60,7 +60,8 @@ fun BalanceCard(
             BalanceData(
                 nombre = "BALANCE",
                 color = MiAmarillo,
-                data = balance
+                data = balance,
+                extraData = porcentaje
             )
             VerticalDivider(
                 modifier = Modifier.padding(vertical = 16.dp),
@@ -70,7 +71,6 @@ fun BalanceCard(
                 nombre = "GANADO",
                 color = MiVerde,
                 data = ganado,
-                extraData = porcentaje
             )
 
         }
@@ -104,8 +104,8 @@ fun BalanceData(
         if (extraData != null) {
             Text(
                 text = extraData,
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.tertiary
+                style = MaterialTheme.typography.bodyLarge,
+
             )
         }
 

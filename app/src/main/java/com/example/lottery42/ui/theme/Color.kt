@@ -23,4 +23,4 @@ val MiVerde = Color(0xFF4CAF50)
 
 val MiBlanco = Color(0xFFCCC1C1)
 
-val MiNegro = Color(0xFF000000)
+val MiNegro = Color(0xFF070707)
