@@ -32,6 +32,7 @@ fun ExtraInfoLNAC(
     resultado: ResultadosLoteriaNacional
 ) {
 
+
     Column(
         modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.spacedBy(16.dp),
@@ -41,7 +42,7 @@ fun ExtraInfoLNAC(
 
         Text(text = boleto.tipo, style = MaterialTheme.typography.displaySmall)
 
-        HorizontalDivider(modifier = Modifier, color = Color.White)
+        HorizontalDivider(modifier = Modifier, color = MaterialTheme.colorScheme.tertiary)
 
         Text("Fecha:", style = MaterialTheme.typography.headlineMedium)
 
@@ -50,7 +51,7 @@ fun ExtraInfoLNAC(
             style = MaterialTheme.typography.headlineMedium
         )
 
-        HorizontalDivider(modifier = Modifier, color = Color.White)
+        HorizontalDivider(modifier = Modifier, color = MaterialTheme.colorScheme.tertiary)
 
         Text("Mi numero:", style = MaterialTheme.typography.headlineMedium)
 
@@ -59,7 +60,7 @@ fun ExtraInfoLNAC(
             style = MaterialTheme.typography.headlineMedium
         )
 
-        HorizontalDivider(modifier = Modifier, color = Color.White)
+        HorizontalDivider(modifier = Modifier, color = MaterialTheme.colorScheme.tertiary)
 
         Column(
             modifier = Modifier.fillMaxWidth(),
@@ -93,7 +94,7 @@ fun ExtraInfoLNAC(
             }
         }
 
-        HorizontalDivider(modifier = Modifier, color = Color.White)
+        HorizontalDivider(modifier = Modifier, color = MaterialTheme.colorScheme.tertiary)
 
         Text("Reintegros:", style = MaterialTheme.typography.headlineMedium)
 
@@ -111,7 +112,7 @@ fun ExtraInfoLNAC(
                 Spacer(modifier = Modifier)
 
                 Reintegro(resultado.reintegros[2].decimo)
-            } else ""
+            }
 
 
         }
