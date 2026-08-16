@@ -1,6 +1,7 @@
 package com.example.lottery42.boleto.presentation.extra_info
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -19,13 +20,13 @@ fun ExtraPaneScreen(
     infoState: InfoSorteoState<Any>,
     boleto: Boleto
 ) {
-    Surface(modifier = Modifier) {
-        when (val currentResult = infoState) {
+    Surface(modifier = Modifier.fillMaxSize()) {
+        when (infoState) {
             is InfoSorteoState.Loading -> CustomLoadingIndicator(200.dp)
             is InfoSorteoState.Empty -> EmptyInfo()
             is InfoSorteoState.Error -> Text(text = "Error al obtener los resultados")
             is InfoSorteoState.Success<*> -> {
-                when (val info = currentResult.info) {
+                when (val info = infoState.info) {
                     is ResultadosLoteriaNacional -> {
                         ExtraInfoLNAC(boleto = boleto, resultado = info)
                     }

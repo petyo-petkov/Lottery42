@@ -40,39 +40,35 @@ fun CustomLoadingIndicator(tamano: Dp) {
         modifier = Modifier.size(tamano),
         contentAlignment = Alignment.Center
     ) {
-        Box(
+        // 1
+        LoadingIndicator(
             modifier = Modifier
-        ) {
-            // 1
-            LoadingIndicator(
-                modifier = Modifier
-                    .size(tamano * 0.46f)
-                    .graphicsLayer(
-                        rotationZ = rotation,
-                        transformOrigin = TransformOrigin(0.5f, 0.5f)
-                    ),
-                color = MiAmarillo,
-                polygons = listOf(
-                    MaterialShapes.Triangle,
-                    MaterialShapes.Arrow,
-                )
+                .size(tamano * 0.46f)
+                .graphicsLayer(
+                    rotationZ = rotation,
+                    transformOrigin = TransformOrigin(0.5f, 0.5f)
+                ),
+            color = MiAmarillo,
+            polygons = listOf(
+                MaterialShapes.Triangle,
+                MaterialShapes.Arrow,
             )
-            // 2
-            LoadingIndicator(
-                modifier = Modifier
-                    .size(tamano * 0.33f)
-                    .offset(x = tamano * 0.3f, y = tamano * 0.16f)
-                    .graphicsLayer(
-                        rotationZ = rotation,
-                        transformOrigin = TransformOrigin(0f, 0f)
-                    ),
-                color = MiVerde,
-                polygons = listOf(
-                    MaterialShapes.Pentagon,
-                    MaterialShapes.Diamond,
-                )
+        )
+        // 2
+        LoadingIndicator(
+            modifier = Modifier
+                .size(tamano * 0.33f)
+                .offset(x = tamano * 0.3f, y = tamano * 0.16f)
+                .graphicsLayer(
+                    rotationZ = rotation,
+                    transformOrigin = TransformOrigin(0f, 0f)
+                ),
+            color = MiVerde,
+            polygons = listOf(
+                MaterialShapes.Pentagon,
+                MaterialShapes.Diamond,
             )
+        )
 
-        }
     }
 }
