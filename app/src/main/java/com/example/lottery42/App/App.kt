@@ -79,8 +79,6 @@ fun App() {
         }
     }
 
-    LaunchedEffect(boletos.size) { boletos }
-
     Scaffold(
         modifier = Modifier.fillMaxWidth(),
         floatingActionButton = {

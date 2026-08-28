@@ -45,10 +45,10 @@ fun CustomLoadingIndicator(tamano: Dp) {
         LoadingIndicator(
             modifier = Modifier
                 .size(tamano * 0.46f)
-                .graphicsLayer(
-                    rotationZ = rotation,
+                .graphicsLayer {
+                    rotationZ = rotation
                     transformOrigin = TransformOrigin(0.5f, 0.5f)
-                ),
+                },
             color = MaterialTheme.colorScheme.primary,
             polygons = listOf(
                 MaterialShapes.Triangle,
@@ -60,10 +60,10 @@ fun CustomLoadingIndicator(tamano: Dp) {
             modifier = Modifier
                 .size(tamano * 0.33f)
                 .offset(x = tamano * 0.3f, y = tamano * 0.16f)
-                .graphicsLayer(
-                    rotationZ = rotation,
+                .graphicsLayer {
+                    rotationZ = rotation
                     transformOrigin = TransformOrigin(0f, 0f)
-                ),
+                },
             color = MaterialTheme.colorScheme.secondary,
             polygons = listOf(
                 MaterialShapes.Pentagon,

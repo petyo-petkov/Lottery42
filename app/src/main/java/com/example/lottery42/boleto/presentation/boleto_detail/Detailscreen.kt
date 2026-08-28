@@ -25,6 +25,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.lottery42.R
 import com.example.lottery42.boleto.data.database.Boleto
@@ -32,7 +33,6 @@ import com.example.lottery42.boleto.data.toFormattedDate
 import com.example.lottery42.boleto.presentation.DialogoBorrar
 import com.example.lottery42.boleto.presentation.DialogoPremio
 import com.example.lottery42.boleto.presentation.Divisor
-import androidx.compose.ui.res.painterResource
 import kotlin.text.Typography.euro
 
 
@@ -49,28 +49,32 @@ fun DetailScreen(
     var showDialogoPremio by rememberSaveable { mutableStateOf(false) }
     val smallStyle = MaterialTheme.typography.headlineSmall
 
-    val premio = when (premioState) {
-        is DetailsViewModel.PremioState.Success -> premioState.premio
-        is DetailsViewModel.PremioState.Error -> "Error obtener el premio"
-        is DetailsViewModel.PremioState.Empty -> "Sorteo no celebrado"
-        is DetailsViewModel.PremioState.Loading -> "loading"
-        DetailsViewModel.PremioState.Timeout -> "Ha tardado demasiado en responder \nPrueba de nuevo"
+    val premio = remember(premioState) {
+        when (premioState) {
+            is DetailsViewModel.PremioState.Success -> premioState.premio
+            is DetailsViewModel.PremioState.Error -> "Error obtener el premio"
+            is DetailsViewModel.PremioState.Empty -> "Sorteo no celebrado"
+            is DetailsViewModel.PremioState.Loading -> "loading"
+            DetailsViewModel.PremioState.Timeout -> "Ha tardado demasiado en responder \nPrueba de nuevo"
+        }
+    }
+
+    val iconRes = remember(boleto.gameID) {
+        when (boleto.gameID) {
+            "LAPR" -> R.drawable.la_primitiva
+            "BONO" -> R.drawable.bonoloto
+            "EMIL" -> R.drawable.euromillones
+            "ELGR" -> R.drawable.el_godo
+            "EDMS" -> R.drawable.euro_dreams
+            "LNAC" -> R.drawable.loteria_nacional
+            else -> R.drawable.logo
+        }
     }
 
 
     Box(modifier = Modifier) {
         Image(
-            painter = painterResource(
-                id = when (boleto.gameID) {
-                    "LAPR" -> R.drawable.la_primitiva
-                    "BONO" -> R.drawable.bonoloto
-                    "EMIL" -> R.drawable.euromillones
-                    "ELGR" -> R.drawable.el_godo
-                    "EDMS" -> R.drawable.euro_dreams
-                    "LNAC" -> R.drawable.loteria_nacional
-                    else -> R.drawable.logo
-                }
-            ),
+            painter = painterResource(id = iconRes),
             contentDescription = null,
             modifier = Modifier
                 .fillMaxSize()

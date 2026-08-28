@@ -24,7 +24,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -52,10 +55,12 @@ fun BoletoList(
 ) {
     val listState = rememberLazyListState()
 
+    var prevSize by remember { mutableIntStateOf(listaBoletos.size) }
     LaunchedEffect(listaBoletos.size) {
-        if (listaBoletos.isNotEmpty()) {
+        if (listaBoletos.size > prevSize) {
             listState.animateScrollToItem(0)
         }
+        prevSize = listaBoletos.size
     }
 
     LazyColumn(
@@ -121,6 +126,9 @@ fun BoletoList(
 
 @Composable
 private fun BoletoStatusIcon(boleto: Boleto) {
+    val premioValue = remember(boleto.premio) {
+        boleto.premio.toDoubleOrNull() ?: 0.0
+    }
     when {
         boleto.premio == "-0.0" -> Icon(
             imageVector = Icons.Default.QuestionMark,
@@ -129,7 +137,7 @@ private fun BoletoStatusIcon(boleto: Boleto) {
             tint = MiAmarillo
         )
 
-        (boleto.premio.toDoubleOrNull() ?: 0.0) > 0.0 ->
+        premioValue > 0.0 ->
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(4.dp),

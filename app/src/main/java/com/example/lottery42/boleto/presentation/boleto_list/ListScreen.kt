@@ -15,8 +15,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
 import com.example.lottery42.boleto.data.database.BalanceState
 import com.example.lottery42.boleto.data.database.Boleto
@@ -59,7 +59,7 @@ fun ListScreen(
             Icon(
                 Icons.Default.ArrowDropUp,
                 contentDescription = null,
-                modifier = Modifier.rotate(rotationState),
+                modifier = Modifier.graphicsLayer { rotationZ = rotationState },
                 tint = Color(0xFFFFE082)
             )
         }
