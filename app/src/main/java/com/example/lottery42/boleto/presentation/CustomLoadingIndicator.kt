@@ -13,15 +13,16 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.LoadingIndicator
 import androidx.compose.material3.MaterialShapes
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
-import com.example.lottery42.ui.theme.MiAmarillo
-import com.example.lottery42.ui.theme.MiVerde
+import androidx.compose.ui.unit.dp
 
 @Composable
 fun CustomLoadingIndicator(tamano: Dp) {
@@ -48,7 +49,7 @@ fun CustomLoadingIndicator(tamano: Dp) {
                     rotationZ = rotation,
                     transformOrigin = TransformOrigin(0.5f, 0.5f)
                 ),
-            color = MiAmarillo,
+            color = MaterialTheme.colorScheme.primary,
             polygons = listOf(
                 MaterialShapes.Triangle,
                 MaterialShapes.Arrow,
@@ -63,7 +64,7 @@ fun CustomLoadingIndicator(tamano: Dp) {
                     rotationZ = rotation,
                     transformOrigin = TransformOrigin(0f, 0f)
                 ),
-            color = MiVerde,
+            color = MaterialTheme.colorScheme.secondary,
             polygons = listOf(
                 MaterialShapes.Pentagon,
                 MaterialShapes.Diamond,
@@ -71,4 +72,10 @@ fun CustomLoadingIndicator(tamano: Dp) {
         )
 
     }
+}
+
+@Preview(showBackground = true, showSystemUi = true)
+@Composable
+fun CustomLoadingIndicatorPreview() {
+    CustomLoadingIndicator(tamano = 300.dp)
 }

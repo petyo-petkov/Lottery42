@@ -11,6 +11,6 @@ import androidx.compose.ui.unit.dp
 fun Divisor() {
     HorizontalDivider(
         modifier = Modifier.padding(top = 4.dp, bottom = 4.dp),
-        color = MaterialTheme.colorScheme.onSurface
+        color = MaterialTheme.colorScheme.tertiary
     )
 }
